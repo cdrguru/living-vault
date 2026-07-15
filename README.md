@@ -1,10 +1,14 @@
 # The Living Vault
 
+[![CI](https://img.shields.io/github/actions/workflow/status/cdrguru/living-vault/ci.yml?branch=main&label=CI)](https://github.com/cdrguru/living-vault/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A local-first system of record and effectiveness monitor for your agentic
 assets: skills, subagents, MCP servers, and bundles. Point it at your own
 `~/.claude`, and every asset you have built carries evidence of use, cost,
 measured effectiveness, and governance, so the best assets improve and the
-stale ones retire, with your usage data never leaving your machine.
+stale ones retire, with your usage data never leaving your machine. The full
+privacy contract lives in [docs/PRIVACY.md](docs/PRIVACY.md).
 
 Built with React 19, Vite, and Tailwind on a Microsoft Fabric-native data
 model (TypeScript entity decorators). Runs entirely on deterministic seed
@@ -38,13 +42,13 @@ Collectors record metadata only, never message or command content. See
 
 ## What is inside
 
-| Surface | What it shows |
-| --- | --- |
-| Monitor | Operational health, exception queue, per-harness usage |
-| Effectiveness | Ranked assets with evidence-graded confidence |
-| Cost | Spend by harness and model, wasted-spend estimate |
-| Coverage | Coverage matrix and duplicate clusters |
-| /model | Interactive entity-relationship canvas of the data model |
+| Surface       | What it shows                                            |
+| ------------- | -------------------------------------------------------- |
+| Monitor       | Operational health, exception queue, per-harness usage   |
+| Effectiveness | Ranked assets with evidence-graded confidence            |
+| Cost          | Spend by harness and model, wasted-spend estimate        |
+| Coverage      | Coverage matrix and duplicate clusters                   |
+| /model        | Interactive entity-relationship canvas of the data model |
 
 ![Model canvas](screenshots/06-model-entity-relationship-explorer.png)
 ![Cost analysis](screenshots/10-cost-analysis-and-wasted-spend.png)

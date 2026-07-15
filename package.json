@@ -1,8 +1,14 @@
 {
   "name": "the-living-vault",
+  "description": "Local-first system of record and effectiveness monitor for agentic assets: skills, subagents, MCP servers, and bundles.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdrguru/living-vault"
+  },
+  "homepage": "https://github.com/cdrguru/living-vault#readme",
   "scripts": {
     "dev": "vite --mode public",
     "build": "tsc -b && vite build",
