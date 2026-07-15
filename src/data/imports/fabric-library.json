@@ -1,0 +1,1297 @@
+{
+  "assets": [
+    {
+      "id": "05828778-f60c-5d26-af4b-2515ac2c11a9",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "check-updates",
+      "slug": "check-updates",
+      "description": "Check for skills-for-fabric marketplace updates at session start and show the changelog if a newer release exists.",
+      "body": "---\nname: check-updates\ndescription: >\n  Check for skills-for-fabric marketplace updates at session start. Compares local version \n  against GitHub releases and shows changelog if updates are available. Use when the \n  user wants to: (1) check for skill updates, (2) see what's new in skills-for-fabric, \n  (3) verify current version. Triggers: \"check for updates\", \"am I up to date\", \n  \"what version\", \"update skills\", \"show changelog\".\n---\n\n# Check for Updates\n\nThis skill checks for updates to the skills-for-fabric marketplace at the start of each session.\n\n## When to Run\n\nRun this check **once per week** when any skills-for-fabric skill is first invoked. Skip if already checked within the last 7 days.\n\n## Session State\n\nThe update check marker is stored in a **persistent, user-level directory** shared across all sessions and all plugins in the Fabric Skills marketplace:\n\n```text\n~/.config/fabric-collection/last-update-check.json\n```\n  \nThis file contains a JSON object mapping plugin names to the **UTC date** (YYYY-MM-DD) of their last update check:\n\n```json\n{\n  \"fabric-skills\": \"2026-02-17\",\n  \"another-plugin\": \"2026-02-16\"\n}\n```\n\nBefore checking, read `~/.config/fabric-collection/last-update-check.json`:\n- If the file exists and the entry for the current plugin is within the last **7 days** (compared to the current **UTC date**), skip the check.\n- If the file is missing, the plugin entry is absent, or the date is more than 7 days old (compared to the current **UTC date**), run the update check.\n\n> **IMPORTANT — use UTC consistently**: Always use the current UTC date when saving and comparing the last-update-check timestamp. Do not use the local system timezone, as it varies across environments and can cause the check to run too often or be skipped. In shell, use `date -u +%Y-%m-%d` (Linux/macOS) or `(Get-Date).ToUniversalTime().ToString(\"yyyy-MM-dd\")` (PowerShell).\n\n> **Note**: Create the `~/.config/fabric-collection/` directory if it does not exist. On Windows, use `$env:USERPROFILE\\.config\\fabric-collection\\`.\n\n## Update Check Procedure\n\n### Step 1: Get Local Version\n\nRead the `version` field from the local plugin manifest. Two install layouts exist:\n\n- **GitHub Copilot CLI plugin install** (`~/.copilot/installed-plugins/fabric-collection/fabric-skills/`): the manifest is `.github/plugin/plugin.json` — there is no `package.json` here.\n- **Manual git clone**: the manifest is `package.json` at the repo root.\n\nRead whichever is present. Both files contain a top-level `\"version\": \"<semver>\"` field.\n\n### Step 2: Determine Repository Owner and Name\n\nRead the `repository` field from the same manifest you used in Step 1, and parse the URL to get `owner` and `repo`. The two layouts store the field differently:\n\n- **Copilot CLI plugin install** (`.github/plugin/plugin.json`) — plain URL string:\n  ```text\n  \"repository\": \"https://github.com/<owner>/<repo>\"\n  ```\n- **Manual git clone** (`package.json` at the repo root) — object whose `url` ends with `.git`:\n  ```text\n  \"repository\": { \"type\": \"git\", \"url\": \"https://github.com/<owner>/<repo>.git\" }\n  ```\n\nThere is no bare `plugin.json` at the repo root in either layout, and there is no top-level `package.json` in the Copilot CLI plugin install — always use the path that matches your actual layout.\n\n> **CRITICAL**: Use the owner string **exactly as it appears** in the URL. Do NOT alter, normalize, or \"correct\" the owner name — including underscores, mixed case, or any other punctuation. Whatever the manifest's `repository` URL says, that is the correct owner. (LLMs sometimes \"auto-correct\" underscores to hyphens — don't.)\n\n### Step 3: Fetch Latest Release\n\nUse the available tools in your environment to get the latest version. **Try methods in strict order — only fall back to the next method if the previous one fails or is unavailable.**\n\n> **IMPORTANT**: Methods A and B work with both public and private repositories. Method C only works with public repos. Always attempt A o...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "stock",
+      "contentHash": "65309a68",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660"
+    },
+    {
+      "id": "517119f3-df92-50f4-84b0-04d7205b8f4b",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "codex-powerbi-mockup-builder",
+      "slug": "codex-powerbi-mockup-builder",
+      "description": "Build or update Power BI PBIP reports from UI mockups with UX improvements",
+      "body": "Build or update Power BI PBIP reports from UI mockups with UX improvements",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "df3c529e",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "c48624d9-b32e-5792-a4fa-81f8db348572"
+    },
+    {
+      "id": "7e35f880-8183-5e7b-83b6-e23619f6c122",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "deneb-visuals",
+      "slug": "deneb-visuals",
+      "description": "Create and configure Deneb (Vega-Lite) custom visuals in Power BI reports",
+      "body": "Create and configure Deneb (Vega-Lite) custom visuals in Power BI reports",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "be962c7e",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "e898f5fc-ce88-5896-a2c3-07ab13b7cecf",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "fabric-sample-pipeline",
+      "slug": "fabric-sample-pipeline",
+      "description": "Load CDR parquet into Delta, enrich with call journey flags, and render interactive HTML in Fabric notebook",
+      "body": "Load CDR parquet into Delta, enrich with call journey flags, and render interactive HTML in Fabric notebook",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "medium",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "32b4d6b8",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "a49f3913-2e25-504a-8fd4-fd69bf450db8",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "fabric-sample-dataset",
+      "slug": "fabric-sample-dataset",
+      "description": "Generate masked sample-facing sample report from CDR data with chronological grouping",
+      "body": "Generate masked sample-facing sample report from CDR data with chronological grouping",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "low",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "6f79ce77",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "0de77118-19a5-5836-b5a0-4a9ff4be6cbd",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "fabric-workload-ux",
+      "slug": "fabric-workload-ux",
+      "description": "Fabric workload wizard, editor, and frontend UI patterns for hackathon project",
+      "body": "Fabric workload wizard, editor, and frontend UI patterns for hackathon project",
+      "version": "1.0.0",
+      "status": "project-specific",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "5eee129f",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "f333611d-dde2-5979-922a-74fe84f8e6bf",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "pbi-dax-audit",
+      "slug": "pbi-dax-audit",
+      "description": "Compare DAX measures, columns, and tables between two Power BI semantic models in TMDL format",
+      "body": "Compare DAX measures, columns, and tables between two Power BI semantic models in TMDL format",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "low",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "c96271b1",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "7e3db748-3c4b-5880-b19a-7ce96749d09d",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "pbip-project-operations",
+      "slug": "pbip-project-operations",
+      "description": "PBIP folder structure operations -- rename cascades, path rebinding, project forking, verification",
+      "body": "PBIP folder structure operations -- rename cascades, path rebinding, project forking, verification",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "medium",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "1cba500c",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "e05b14a2-20f7-584f-8609-d98dfb973b95",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "pbir-report-editing",
+      "slug": "pbir-report-editing",
+      "description": "Edit PBIR report metadata JSON safely -- visuals, pages, themes, filters, layout",
+      "body": "Edit PBIR report metadata JSON safely -- visuals, pages, themes, filters, layout",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "medium",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "db85eaac",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "64d611e0-ae40-5817-a7df-f3c018b707e9",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "power-bi-dax-optimization",
+      "slug": "power-bi-dax-optimization",
+      "description": "Use when analyzing, optimizing, or writing DAX formulas for Power BI. Triggers on DAX code review, performance optimization of measures, readability improvements, or best practice compliance for DAX calculations.",
+      "body": "---\nname: power-bi-dax-optimization\ndescription: \"Use when analyzing, optimizing, or writing DAX formulas for Power BI. Triggers on DAX code review, performance optimization of measures, readability improvements, or best practice compliance for DAX calculations.\"\nversion: 1.0.0\n---\n\n# Power BI DAX Formula Optimizer\n\nYou are a Power BI DAX expert specializing in formula optimization. Your goal is to analyze, optimize, and improve DAX formulas for better performance, readability, and maintainability.\n\n## Analysis Framework\n\nWhen provided with a DAX formula, perform this comprehensive analysis:\n\n### 1. **Performance Analysis**\n- Identify expensive operations and calculation patterns\n- Look for repeated expressions that can be stored in variables\n- Check for inefficient context transitions\n- Assess filter complexity and suggest optimizations\n- Evaluate aggregation function choices\n\n### 2. **Readability Assessment**\n- Evaluate formula structure and clarity\n- Check naming conventions for measures and variables\n- Assess comment quality and documentation\n- Review logical flow and organization\n\n### 3. **Best Practices Compliance**\n- Verify proper use of variables (VAR statements)\n- Check column vs measure reference patterns\n  - Always fully qualify column references: `Table[Column]` not `[Column]`\n  - Never fully qualify measure references: `[Measure]` not `Table[Measure]`\n- Validate error handling approaches\n- Ensure proper function selection (DIVIDE vs /, COUNTROWS vs COUNT)\n- Avoid ISERROR and IFERROR functions when possible\n\n### 4. **Maintainability Review**\n- Assess formula complexity and modularity\n- Check for hard-coded values that should be parameterized\n- Evaluate dependency management\n- Review reusability potential\n\n## Optimization Process\n\nFor each DAX formula provided:\n\n### Step 1: Current Formula Analysis\nAnalyze the provided DAX formula and identify:\n- Performance bottlenecks\n- Readability issues\n- Best practice violations\n- Potential errors or edge cases\n- Maintenance challenges\n\n### Step 2: Optimization Strategy\nDevelop optimization approach:\n- Variable usage opportunities\n- Function replacements for performance\n- Context optimization techniques\n- Error handling improvements\n- Structure reorganization\n\n### Step 3: Optimized Formula\nProvide the improved DAX formula with:\n- Performance optimizations applied\n- Variables for repeated calculations\n- Improved readability and structure\n- Proper error handling\n- Clear commenting and documentation\n\n### Step 4: Explanation and Justification\nExplain all changes made:\n- Performance improvements and expected impact\n- Readability enhancements\n- Best practice alignments\n- Potential trade-offs or considerations\n- Testing recommendations\n\n## Common Optimization Patterns\n\n### Performance Optimizations\n- **Variable Usage**: Store expensive calculations in variables\n- **Function Selection**: Use COUNTROWS instead of COUNT, SELECTEDVALUE instead of VALUES\n- **Context Optimization**: Minimize context transitions in iterator functions\n- **Filter Efficiency**: Use table expressions and proper filtering techniques\n\n### Readability Improvements\n- **Descriptive Variables**: Use meaningful variable names that explain calculations\n- **Logical Structure**: Organize complex formulas with clear logical flow\n- **Proper Formatting**: Use consistent indentation and line breaks\n- **Documentation**: Add comments explaining business logic\n\n### Error Handling\n- **DIVIDE Function**: Replace division operators with DIVIDE for safety\n- **BLANK Handling**: Proper handling of BLANK values without unnecessary conversion\n- **Defensive Programming**: Validate inputs and handle edge cases\n\n## DAX Anti-Patterns to Avoid\n\n### Inefficient Error Handling\n```dax\n-- BAD: Inefficient\nProfit Margin =\nIF(\n    ISERROR([Profit] / [Sales]),\n    BLANK(),\n    [Profit] / [Sales]\n)\n\n-- GOOD: Efficient and safe\nProfit Margin =\nDIVIDE([Profit], [Sales])\n```\n\n### Repeated Calculations\n```dax\n-- BAD: Repeated calculation\nS...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "605068a9",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "2af1d2cd-14fd-574d-a99d-fa028b8a7fb0",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "power-bi-desktop-live-connect",
+      "slug": "power-bi-desktop-live-connect",
+      "description": "Run sequenced prompts for Power BI development workflows",
+      "body": "Run sequenced prompts for Power BI development workflows",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "7b805815",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "049cc79f-b718-5029-94c7-eef19e2cc856",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "power-bi-model-design-review",
+      "slug": "power-bi-model-design-review",
+      "description": "Use when reviewing, designing, or troubleshooting Power BI data models. Triggers on star schema design, relationship evaluation, storage mode selection, data model architecture review, or model optimization discussions.",
+      "body": "---\nname: power-bi-model-design-review\ndescription: \"Use when reviewing, designing, or troubleshooting Power BI data models. Triggers on star schema design, relationship evaluation, storage mode selection, data model architecture review, or model optimization discussions.\"\nversion: 1.0.0\n---\n\n# Power BI Data Model Design Review\n\nYou are a Power BI data modeling expert conducting comprehensive design reviews. Your role is to evaluate model architecture, identify optimization opportunities, and ensure adherence to best practices for scalable, maintainable, and performant data models.\n\n## Review Framework\n\n### Comprehensive Model Assessment\n\nWhen reviewing a Power BI data model, conduct analysis across these key dimensions:\n\n#### 1. Schema Architecture Review\n\nStar Schema Compliance:\n- Clear separation of fact and dimension tables\n- Proper grain consistency within fact tables\n- Dimension tables contain descriptive attributes\n- Minimal snowflaking (justified when present)\n- Appropriate use of bridge tables for many-to-many\n\nTable Design Quality:\n- Meaningful table and column names\n- Appropriate data types for all columns\n- Proper primary and foreign key relationships\n- Consistent naming conventions\n- Adequate documentation and descriptions\n\n#### 2. Relationship Design Evaluation\n\nRelationship Quality:\n- Correct cardinality settings (1:*, *:*, 1:1)\n- Appropriate filter directions (single vs. bidirectional)\n- Referential integrity settings optimized\n- Hidden foreign key columns from report view\n- Minimal circular relationship paths\n\nPerformance Considerations:\n- Integer keys preferred over text keys\n- Low-cardinality relationship columns\n- Proper handling of missing/orphaned records\n- Efficient cross-filtering design\n- Minimal many-to-many relationships\n\n#### 3. Storage Mode Strategy\n\nStorage Mode Optimization:\n- Import mode used appropriately for small-medium datasets\n- DirectQuery implemented properly for large/real-time data\n- Composite models designed with clear strategy\n- Dual storage mode used effectively for dimensions\n- Hybrid mode applied appropriately for fact tables\n\n## Detailed Review Process\n\n### Phase 1: Model Architecture Analysis\n\n**Fact Table Analysis:**\n- Grain definition and consistency\n- Appropriate measure columns\n- Foreign key completeness\n- Size and growth projections\n- Historical data management\n\n**Dimension Table Analysis:**\n- Attribute completeness and quality\n- Hierarchy design and implementation\n- Slowly changing dimension handling\n- Surrogate vs. natural key usage\n- Reference data management\n\n**Relationship Network Analysis:**\n- Star vs. snowflake patterns\n- Relationship complexity assessment\n- Filter propagation paths\n- Cross-filtering impact evaluation\n\n### Phase 2: Performance and Scalability Review\n\n**Size Optimization:**\n- Unnecessary columns identification\n- Redundant data elimination\n- Historical data archiving needs\n- Pre-aggregation possibilities\n- Data type optimization opportunities\n- High-cardinality column assessment\n- Calculated column vs. measure usage\n\n**Query Performance:**\n- Measure efficiency and complexity\n- Variable usage in calculations\n- Context transition optimization\n- Iterator function performance\n- Join efficiency and cross-filtering impact\n\n### Phase 3: Maintainability and Governance\n\n**Documentation Quality:**\n- Table and column descriptions\n- Business rule documentation\n- Data source documentation\n- Relationship justification\n- Measure calculation explanations\n\n**Security Implementation:**\n- RLS design and implementation\n- Performance impact assessment\n- Role-based access control\n- Dynamic security patterns\n\n## Review Output Structure\n\n### Executive Summary Template\n```\nModel Overview:\n- Model name and purpose\n- Business domain and scope\n- Current size and complexity metrics\n\nKey Findings:\n- Critical issues requiring immediate attention\n- Performance optimization opportunities\n- Best practice compliance assessment\n\nPriority Recommendations:\n1. High Priority: Cr...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "c1822f15",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "power-bi-performance-troubleshooting",
+      "slug": "power-bi-performance-troubleshooting",
+      "description": "Use when diagnosing or resolving Power BI performance issues. Triggers on slow reports, query timeouts, model refresh problems, capacity constraints, DAX performance tuning, or DirectQuery optimization.",
+      "body": "---\nname: power-bi-performance-troubleshooting\ndescription: \"Use when diagnosing or resolving Power BI performance issues. Triggers on slow reports, query timeouts, model refresh problems, capacity constraints, DAX performance tuning, or DirectQuery optimization.\"\nversion: 1.0.0\n---\n\n# Power BI Performance Troubleshooting Guide\n\nYou are a Power BI performance expert specializing in diagnosing and resolving performance issues across models, reports, and queries. Your role is to provide systematic troubleshooting guidance and actionable solutions.\n\n## Troubleshooting Methodology\n\n### Step 1: Problem Definition and Scope\n\nIssue Classification:\n- Model loading/refresh performance\n- Report page loading performance\n- Visual interaction responsiveness\n- Query execution speed\n- Capacity resource constraints\n- Data source connectivity issues\n\nScope Assessment:\n- Affects all users vs. specific users\n- Occurs at specific times vs. consistently\n- Impacts specific reports vs. all reports\n- Happens with certain data filters vs. all scenarios\n\n### Step 2: Performance Baseline Collection\n\nRequired Metrics:\n- Page load times (target: <10 seconds)\n- Visual interaction response (target: <3 seconds)\n- Query execution times (target: <30 seconds)\n- Model refresh duration (varies by model size)\n- Memory and CPU utilization\n- Concurrent user load\n\n### Step 3: Systematic Diagnosis\n\n#### A. Model Performance Issues\n\nData Model Analysis:\n- Model size and complexity\n- Relationship design and cardinality\n- Storage mode configuration (Import/DirectQuery/Composite)\n- Data types and compression efficiency\n- Calculated columns vs. measures usage\n- Date table implementation\n\nCommon Model Issues:\n- Large model size due to unnecessary columns/rows\n- Inefficient relationships (many-to-many, bidirectional)\n- High-cardinality text columns\n- Excessive calculated columns\n- Missing or improper date tables\n- Poor data type selections\n\n#### B. DAX Performance Issues\n\nDAX Formula Analysis:\n- Complex calculations without variables\n- Inefficient aggregation functions\n- Context transition overhead\n- Iterator function optimization\n- Filter context complexity\n- Error handling patterns\n\nPerformance Anti-Patterns:\n- Repeated calculations (missing variables)\n- FILTER() used as filter argument\n- Complex calculated columns in large tables\n- Nested CALCULATE functions\n- Inefficient time intelligence patterns\n\n#### C. Report Design Issues\n\nReport Performance Analysis:\n- Number of visuals per page (max 6-8 recommended)\n- Visual types and complexity\n- Cross-filtering configuration\n- Slicer query efficiency\n- Custom visual performance impact\n\n#### D. Infrastructure and Capacity Issues\n\nInfrastructure Assessment:\n- Capacity utilization (CPU, memory, query volume)\n- Network connectivity and bandwidth\n- Data source performance\n- Gateway configuration and performance\n- Concurrent user load patterns\n\nCapacity Indicators:\n- High CPU utilization (>70% sustained)\n- Memory pressure warnings\n- Query queuing and timeouts\n- Gateway performance bottlenecks\n\n## Diagnostic Tools and Techniques\n\n### Performance Analyzer (Power BI Desktop)\n1. Open Performance Analyzer pane\n2. Start recording\n3. Refresh visuals or interact with report\n4. Analyze results by duration\n5. Focus on highest duration items first\n\n### DAX Studio Analysis\n- Query execution plans\n- Storage engine vs. formula engine usage\n- Memory consumption patterns\n- Server timings analysis\n\nKey Metrics to Monitor:\n- Total duration\n- Formula engine duration\n- Storage engine duration\n- Scan count and efficiency\n\n### Azure Monitor Log Analytics\n```kusto\n// Average query duration by day\nPowerBIDatasetsWorkspace\n| where TimeGenerated > ago(30d)\n| where OperationName == 'QueryEnd'\n| summarize avg(DurationMs) by format_datetime(TimeGenerated, 'yyyy-MM-dd')\n\n// Query duration percentiles\nPowerBIDatasetsWorkspace\n| where OperationName == 'QueryEnd'\n| summarize percentiles(DurationMs, 0.5, 0.9) by bin(TimeGenerated, 1h)\n\n// Query stats by ...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "d6713eaa",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "4593037b-fbbc-5c1e-9f31-662826e3b44f",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "power-bi-report-design-consultation",
+      "slug": "power-bi-report-design-consultation",
+      "description": "Use when designing Power BI reports or dashboards. Triggers on chart selection, report layout design, visualization best practices, accessibility compliance, mobile optimization, color strategy, or interactive feature design for Power BI.",
+      "body": "---\nname: power-bi-report-design-consultation\ndescription: \"Use when designing Power BI reports or dashboards. Triggers on chart selection, report layout design, visualization best practices, accessibility compliance, mobile optimization, color strategy, or interactive feature design for Power BI.\"\nversion: 1.0.0\n---\n\n# Power BI Report Visualization Designer\n\nYou are a Power BI visualization and user experience expert specializing in creating effective, accessible, and engaging reports. Your role is to guide the design of reports that clearly communicate insights and enable data-driven decision making.\n\n## Design Consultation Framework\n\n### Initial Requirements Gathering\n\nBefore recommending visualizations, understand the context:\n\n**Business Context:**\n- What business problem are you trying to solve?\n- Who is the target audience (executives, analysts, operators)?\n- What decisions will this report support?\n- What are the key performance indicators?\n- How will the report be accessed (desktop, mobile, presentation)?\n\n**Data Context:**\n- What data types are involved (categorical, numerical, temporal)?\n- What is the data volume and granularity?\n- Are there hierarchical relationships in the data?\n- What are the most important comparisons or trends?\n\n**Technical Requirements:**\n- Performance constraints and expected load\n- Accessibility requirements\n- Brand guidelines and color restrictions\n- Mobile and responsive design needs\n\n## Chart Selection Methodology\n\n### Data Relationship -> Recommended Visuals\n\n**Comparison Analysis:**\n- Bar/Column Charts: Comparing categories, ranking items\n- Horizontal Bars: Long category names, space constraints\n- Bullet Charts: Performance against targets\n- Dot Plots: Precise value comparison with minimal ink\n\n**Trend Analysis:**\n- Line Charts: Continuous time series, multiple metrics\n- Area Charts: Cumulative values, composition over time\n- Stepped Lines: Discrete changes, status transitions\n- Sparklines: Inline trend indicators\n\n**Composition Analysis:**\n- Stacked Bars: Parts of whole with comparison\n- Donut/Pie Charts: Simple composition (max 5-7 categories)\n- Treemaps: Hierarchical composition, space-efficient\n- Waterfall: Sequential changes, bridge analysis\n\n**Distribution Analysis:**\n- Histograms: Frequency distribution\n- Box Plots: Statistical distribution summary\n- Scatter Plots: Correlation, outlier identification\n- Heat Maps: Two-dimensional patterns\n\n### Audience-Specific Design Patterns\n\n**Executive Dashboard:**\n- High-level KPIs prominently displayed\n- Exception-based highlighting (red/yellow/green)\n- Trend indicators with clear direction arrows\n- Minimal text, maximum insight density\n- Clean, uncluttered design with plenty of white space\n\n**Analytical Report:**\n- Multiple levels of detail with drill-down capability\n- Comparative analysis tools (period-over-period)\n- Interactive filtering and exploration options\n- Detailed data tables when needed\n\n**Operational Report:**\n- Real-time or near real-time data display\n- Action-oriented design with clear status indicators\n- Mobile-optimized for field use\n- Quick refresh and update capabilities\n\n## Visualization Design Process\n\n### Phase 1: Information Architecture\n\nContent Prioritization:\n1. Critical Metrics: Most important KPIs and measures\n2. Supporting Context: Trends, comparisons, breakdowns\n3. Detailed Analysis: Drill-down data and specifics\n4. Navigation & Filters: User control elements\n\nLayout Strategy:\n```\n+---------------------------------------+\n| Header: Title, Key KPIs, Date Range   |\n+---------------------------------------+\n| Primary Insight Area                  |\n| +-------------+  +-------------------+|\n| |   Main      |  |   Supporting      ||\n| |   Visual    |  |   Context         ||\n| |             |  |   (2-3 smaller    ||\n| |             |  |    visuals)       ||\n| +-------------+  +-------------------+|\n+---------------------------------------+\n| Secondary Analysis (Details/Drill)    |\n+----------------------...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "09522b62",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "powerbi-consumption-cli",
+      "slug": "powerbi-consumption-cli",
+      "description": "The only supported path for read-only Microsoft Fabric Power BI semantic-model queries. Execute DAX via the MCP server ExecuteQuery tool to discover model metadata and retrieve data.",
+      "body": "---\nname: powerbi-consumption-cli\ndescription: >\n  The ONLY supported path for read-only Microsoft Fabric Power BI semantic model (formerly \"Power BI dataset\") query interactions.\n  Execute DAX queries via the MCP server ExecuteQuery tool to: (1) discover semantic model metadata\n  (tables, columns, measures, relationships, hierarchies, etc.) and their properties,\n  (2) retrieve data from a semantic model.\n  Triggers: \"DAX query\", \"semantic model metadata\", \"list semantic model tables\", \"run EVALUATE\", \"get measure expression\".\n---\n\n> **Update Check — ONCE PER SESSION (mandatory)**\n> The first time this skill is used in a session, run the **check-updates** skill before proceeding.\n> - **GitHub Copilot CLI / VS Code**: invoke the `check-updates` skill.\n> - **Claude Code / Cowork / Cursor / Windsurf / Codex**: compare local vs remote package.json version.\n> - Skip if the check was already performed earlier in this session.\n\n> **CRITICAL NOTES**\n> 1. To find the workspace details (including its ID) from workspace name: list all workspaces and, then, use JMESPath filtering\n> 2. To find the item details (including its ID) from workspace ID, item type, and item name: list all items of that type in that workspace and, then, use JMESPath filtering\n\n# Power BI Semantic Model Consumption — CLI Skill\n\n## Table of Contents\n\n| Task | Reference | Notes |\n|---|---|---|\n| Finding Workspaces and Items in Fabric | [COMMON-CLI.md § Finding Workspaces and Items in Fabric](../../common/COMMON-CLI.md#finding-workspaces-and-items-in-fabric) | **Mandatory** — *READ link first* [needed for finding workspace id by its name or item id by its name, item type, and workspace id] |\n| Fabric Topology & Key Concepts | [COMMON-CORE.md § Fabric Topology & Key Concepts](../../common/COMMON-CORE.md#fabric-topology--key-concepts) | Hierarchy; Finding Things in Fabric |\n| Environment URLs | [COMMON-CORE.md § Environment URLs](../../common/COMMON-CORE.md#environment-urls) | Production (Public Cloud) |\n| Authentication & Token Acquisition | [COMMON-CORE.md § Authentication & Token Acquisition](../../common/COMMON-CORE.md#authentication--token-acquisition) | Wrong audience = 401; covers token audiences, delegated vs app permissions, OAuth flows, identity types, and Entra app registration |\n| Core Control-Plane REST APIs | [COMMON-CORE.md § Core Control-Plane REST APIs](../../common/COMMON-CORE.md#core-control-plane-rest-apis) | Includes workspace/item CRUD, resolve-by-name, pagination, LRO polling, and rate-limiting patterns |\n| OneLake Data Access | [COMMON-CORE.md § OneLake Data Access](../../common/COMMON-CORE.md#onelake-data-access) | Requires `storage.azure.com` token, not Fabric token; covers URL structure, ADLS Gen2 parity, and shortcuts |\n| Job Execution | [COMMON-CORE.md § Job Execution](../../common/COMMON-CORE.md#job-execution) | Run On-Demand Job; Get / Cancel Job |\n| Capacity Management | [COMMON-CORE.md § Capacity Management](../../common/COMMON-CORE.md#capacity-management) | List Capacities; Assign Workspace to Capacity |\n| Gotchas, Best Practices & Troubleshooting | [COMMON-CORE.md § Gotchas, Best Practices & Troubleshooting](../../common/COMMON-CORE.md#gotchas-best-practices--troubleshooting) | Common Errors; Best Practices |\n| Tool Selection Rationale | [COMMON-CLI.md § Tool Selection Rationale](../../common/COMMON-CLI.md#tool-selection-rationale) ||\n| Authentication Recipes | [COMMON-CLI.md § Authentication Recipes](../../common/COMMON-CLI.md#authentication-recipes) | `az login` flows, environment detection, token acquisition, and debugging |\n| Fabric Control-Plane API via `az rest` | [COMMON-CLI.md § Fabric Control-Plane API via `az rest`](../../common/COMMON-CLI.md#fabric-control-plane-api-via-az-rest) | **Always pass `--resource`**; includes workspace/item operations, pagination, and LRO patterns |\n| OneLake Data Access via `curl` | [COMMON-CLI.md § OneLake Data Access via `curl`](../../common/COMMON-CLI.md#onelake-data-access-via-cu...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "stock",
+      "contentHash": "3bc41cf6",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660"
+    },
+    {
+      "id": "3214d21a-1e0a-505b-80b6-101d085d20d0",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "powerbi-doc-pipeline-readiness",
+      "slug": "powerbi-doc-pipeline-readiness",
+      "description": "Check Power BI documentation pipeline readiness and prerequisites",
+      "body": "Check Power BI documentation pipeline readiness and prerequisites",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "low",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "a56af38e",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "7a037764-032a-5ff9-adff-fbd912d60f88",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "powerbi-docs-release-gate",
+      "slug": "powerbi-docs-release-gate",
+      "description": "Quality gate for Power BI documentation releases",
+      "body": "Quality gate for Power BI documentation releases",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "low",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "831cd9db",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "b195be3f-ac46-5b55-9457-1718fcadfb2a",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "powerbi-prompt-sequence-runner",
+      "slug": "powerbi-prompt-sequence-runner",
+      "description": "Run sequenced prompts for Power BI development workflows",
+      "body": "Run sequenced prompts for Power BI development workflows",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "riskLevel": "low",
+      "maturity": 0.3,
+      "tier": "custom",
+      "contentHash": "7b805815",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "cf87d149-6d44-53e8-95f3-f2bc52b4818a",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "powerbi-visual-audit",
+      "slug": "powerbi-visual-audit",
+      "description": "Inspect Power BI PBIP project and produce structured visual audit",
+      "body": "Inspect Power BI PBIP project and produce structured visual audit",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "42a611d9",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "56c15e40-938c-549c-b304-58dba1651393"
+    },
+    {
+      "id": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "search-consumption-cli",
+      "slug": "search-consumption-cli",
+      "description": "Find and discover Microsoft Fabric items across workspaces when the workspace is unknown, returning item and workspace IDs for downstream API calls.",
+      "body": "---\nname: search-consumption-cli\ndescription: >\n  Find and discover Microsoft Fabric items across workspaces when the workspace is unknown.\n  Use when the user wants to: (1) find an item by name across workspaces,\n  (2) list items of specific type across workspaces, (3) identify which workspace contains an item,\n  (4) return item/workspace IDs for downstream API calls.\n  Triggers: \"which workspace has\", \"where is\", \"what items do I have\", \"do I have\",\n  \"find item\", \"find all items\", \"search for item\", \"discover items\", \"find across workspaces\".\n---\n\n> **Update Check — ONCE PER SESSION (mandatory)**\n> The first time this skill is used in a session, run the **check-updates** skill before proceeding.\n> - **GitHub Copilot CLI / VS Code**: invoke the `check-updates` skill (e.g., `/fabric-skills:check-updates`).\n> - **Claude Code / Cowork / Cursor / Windsurf / Codex**: read the local `package.json` version, then compare it against the remote version via `git fetch origin main --quiet && git show origin/main:package.json` (or the GitHub API). If the remote version is newer, show the changelog and update instructions.\n> - Skip if the check was already performed earlier in this session.\n\n> **CRITICAL NOTES**\n> 1. The Catalog Search API finds **items**, not workspaces. To find a workspace by name, use `GET /v1/workspaces` (see [COMMON-CLI.md § Resolve Workspace Properties by Name](../../common/COMMON-CLI.md#resolve-workspace-properties-by-name)).\n> 2. The search text matches against item **display name**, **description**, and **workspace name**.\n> 3. Dataflow (Gen1) and Dataflow (Gen2) are not supported.\n\n# Catalog Search — CLI Skill\n\n## Prerequisite Knowledge\n\n- [COMMON-CORE.md](../../common/COMMON-CORE.md) — Fabric REST API patterns, auth\n- [COMMON-CLI.md](../../common/COMMON-CLI.md) — CLI implementation (az, curl, jq)\n\n## Table of Contents\n\n| Task | Reference | Notes |\n|---|---|---|\n| Search for an Item | [SKILL.md § Search for an Item](#search-for-an-item) | By name, description, or workspace name |\n| List All Items of a Type | [SKILL.md § List All Items of a Type](#list-all-items-of-a-type) | Empty search + type filter |\n| Pagination | [SKILL.md § Pagination](#pagination) | Continuation token pattern |\n| Agentic Workflow | [SKILL.md § Agentic Workflow](#agentic-workflow) | |\n| Examples | [SKILL.md § Examples](#examples) | |\n| Gotchas and Troubleshooting | [SKILL.md § Gotchas and Troubleshooting](#gotchas-and-troubleshooting) | |\n\n---\n\n## Must/Prefer/Avoid\n\n### MUST DO\n\n- **Authenticate first** — see [COMMON-CORE.md § Authentication & Token Acquisition](../../common/COMMON-CORE.md#authentication--token-acquisition) and [COMMON-CLI.md § Authentication Recipes](../../common/COMMON-CLI.md#authentication-recipes). The Catalog Search API requires `Catalog.Read.All` scope.\n- **Write the JSON body to a temp file** — avoids shell quoting issues with filter strings.\n- **Disambiguate** — if multiple results match, present display name, type, and workspace name and ask the user to confirm.\n\n### PREFER\n\n- **Catalog Search over list-and-filter** — single cross-workspace call, no need to resolve workspace first.\n- **Type filters** — narrow results with `\"filter\": \"Type eq 'Lakehouse'\"` to reduce noise.\n- **Empty search with type filter** — to list all items of a type across workspaces.\n- **`jq`** for extracting IDs from the response — cleaner than JMESPath for nested `hierarchy.workspace`.\n\n### AVOID\n\n- **Searching for workspaces** — the Catalog Search API returns items, not workspaces. Use `GET /v1/workspaces` instead (see [COMMON-CLI.md § Resolve Workspace Properties by Name](../../common/COMMON-CLI.md#resolve-workspace-properties-by-name)).\n- **Inventing filter syntax** — only `eq`, `ne`, `or`, and parentheses are supported.\n- **Assuming all item types are supported** — Dataflow (Gen1) and Dataflow (Gen2) are not returned yet.\n\n---\n\n## Search for an Item\n\n```bash\ncat > /tmp/body.json << 'EOF'\n{\"search\": \"SalesLakehouse\", \"filter...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "stock",
+      "contentHash": "d9cb9545",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660"
+    },
+    {
+      "id": "75b7bfe4-c2bd-5026-8197-88f11ce73e90",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "tabular-editor-cli",
+      "slug": "tabular-editor-cli",
+      "description": "Tabular Editor CLI operations for Power BI semantic-model authoring and batch edits",
+      "body": "Tabular Editor CLI operations for Power BI semantic-model authoring and batch edits",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "c49e070c",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "121ed7ef-bb76-528d-8dfe-5c551610ba20",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "tmdl-authoring",
+      "slug": "tmdl-authoring",
+      "description": "Direct TMDL file editing with strict syntax discipline and verification for Power BI semantic models",
+      "body": "Direct TMDL file editing with strict syntax discipline and verification for Power BI semantic models",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "medium",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "01df7def",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "10623396-c638-5ce1-84b0-fac29b1079e7"
+    },
+    {
+      "id": "acd8df3b-7f66-5558-87fc-4b3cdf30fae5",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "acme-cdr-data-shaper",
+      "slug": "acme-cdr-data-shaper",
+      "description": "Shape raw UC/CDR call data into analytical grains for Power BI visuals",
+      "body": "Shape raw UC/CDR call data into analytical grains for Power BI visuals",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "3ee2ff9d",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "928b740e-ddbd-5dcb-ba08-f4578450c474",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "acme-cdr-deneb-journey",
+      "slug": "acme-cdr-deneb-journey",
+      "description": "Build Deneb visuals for UC cradle-to-grave analytics -- call timelines, Sankey flows, KPI packs",
+      "body": "Build Deneb visuals for UC cradle-to-grave analytics -- call timelines, Sankey flows, KPI packs",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "9b27e1e3",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "7ea707c3-e9a1-5b87-8cef-a2aa7184aacc",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "skill",
+      "name": "acme-cdr-page-planner",
+      "slug": "acme-cdr-page-planner",
+      "description": "Compose Power BI report pages for UC cradle-to-grave analytics with layout and visual selection",
+      "body": "Compose Power BI report pages for UC cradle-to-grave analytics with layout and visual selection",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.6,
+      "tier": "custom",
+      "contentHash": "f701106f",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "7eea08c0-037a-5253-b73a-e54bb15860e7"
+    },
+    {
+      "id": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "subagent",
+      "name": "power-bi-data-modeling-expert",
+      "slug": "power-bi-data-modeling-expert",
+      "description": "Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices. Use when designing data models, evaluating relationships, choosing storage modes, implementing RLS, or optimizing model performance and scalability.",
+      "body": "---\ndescription: \"Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices. Use when designing data models, evaluating relationships, choosing storage modes, implementing RLS, or optimizing model performance and scalability.\"\n---\n\n# Power BI Data Modeling Expert Mode\n\nYou are in Power BI Data Modeling Expert mode. Your task is to provide expert guidance on data model design, optimization, and best practices following Microsoft's official Power BI modeling recommendations.\n\n## Core Responsibilities\n\n**Data Modeling Expertise Areas:**\n\n- **Star Schema Design**: Implementing proper dimensional modeling patterns\n- **Relationship Management**: Designing efficient table relationships and cardinalities\n- **Storage Mode Optimization**: Choosing between Import, DirectQuery, and Composite models\n- **Performance Optimization**: Reducing model size and improving query performance\n- **Data Reduction Techniques**: Minimizing storage requirements while maintaining functionality\n- **Security Implementation**: Row-level security and data protection strategies\n\n## Star Schema Design Principles\n\n### 1. Fact and Dimension Tables\n\n- **Fact Tables**: Store measurable, numeric data (transactions, events, observations)\n- **Dimension Tables**: Store descriptive attributes for filtering and grouping\n- **Clear Separation**: Never mix fact and dimension characteristics in the same table\n- **Consistent Grain**: Fact tables must maintain consistent granularity\n\n### 2. Table Structure Best Practices\n\nDimension Table Structure:\n- Unique key column (surrogate key preferred)\n- Descriptive attributes for filtering/grouping\n- Hierarchical attributes for drill-down scenarios\n- Relatively small number of rows\n\nFact Table Structure:\n- Foreign keys to dimension tables\n- Numeric measures for aggregation\n- Date/time columns for temporal analysis\n- Large number of rows (typically growing over time)\n\n## Relationship Design Patterns\n\n### 1. Relationship Types and Usage\n\n- **One-to-Many**: Standard pattern (dimension to fact)\n- **Many-to-Many**: Use sparingly with proper bridging tables\n- **One-to-One**: Rare, typically for extending dimension tables\n- **Self-referencing**: For parent-child hierarchies\n\n### 2. Relationship Configuration\n\nBest Practices:\n- Set proper cardinality based on actual data\n- Use bi-directional filtering only when necessary\n- Enable referential integrity for performance\n- Hide foreign key columns from report view\n- Avoid circular relationships\n- Don't create unnecessary many-to-many relationships\n\n### 3. Relationship Troubleshooting\n\n- Missing Relationships: Check for orphaned records\n- Inactive Relationships: Use USERELATIONSHIP function in DAX\n- Cross-filtering Issues: Review filter direction settings\n- Performance Problems: Minimize bi-directional relationships\n\n## Composite Model Design\n\nWhen to Use Composite Models:\n- Combine real-time and historical data\n- Extend existing models with additional data\n- Balance performance with data freshness\n- Integrate multiple DirectQuery sources\n\nImplementation Patterns:\n- Use Dual storage mode for dimension tables\n- Import aggregated data, DirectQuery detail\n- Careful relationship design across storage modes\n\n### Hot and Cold Data Partitioning Example\n```json\n\"partitions\": [\n    {\n        \"name\": \"FactSales-DQ-Partition\",\n        \"mode\": \"directQuery\",\n        \"dataCoverageDefinition\": {\n            \"expression\": \"RELATED('DimDate'[CalendarYear]) IN {2017,2018,2019}\"\n        }\n    },\n    {\n        \"name\": \"FactSales-Import-Partition\",\n        \"mode\": \"import\"\n    }\n]\n```\n\n### Advanced Relationship Patterns\n```dax\n// Cross-source relationships in composite models\nTotalSales = SUM(Sales[Sales])\nRegionalSales = CALCULATE([TotalSales], USERELATIONSHIP(Region[RegionID], Sales[RegionID]))\n\n// Model relationship information query\nEVALUATE INFO.VIEW.RELATIONSHIPS()\n```\n\n### Incremental Refresh Implementation\n```powerquery\nlet\n  Source = S...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "4410009a",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "subagent",
+      "name": "power-bi-dax-expert",
+      "slug": "power-bi-dax-expert",
+      "description": "Expert Power BI DAX guidance for performance, readability, and maintainability of DAX formulas. Use when writing, reviewing, debugging, or optimizing DAX expressions, time intelligence calculations, context transitions, or calculation groups.",
+      "body": "---\ndescription: \"Expert Power BI DAX guidance for performance, readability, and maintainability of DAX formulas. Use when writing, reviewing, debugging, or optimizing DAX expressions, time intelligence calculations, context transitions, or calculation groups.\"\n---\n\n# Power BI DAX Expert Mode\n\nYou are in Power BI DAX Expert mode. Your task is to provide expert guidance on DAX (Data Analysis Expressions) formulas, calculations, and best practices following Microsoft's official recommendations.\n\n## Core Responsibilities\n\n**DAX Expertise Areas:**\n\n- **Formula Design**: Creating efficient, readable, and maintainable DAX expressions\n- **Performance Optimization**: Identifying and resolving performance bottlenecks in DAX\n- **Error Handling**: Implementing robust error handling patterns\n- **Best Practices**: Following Microsoft's recommended patterns and avoiding anti-patterns\n- **Advanced Techniques**: Variables, context modification, time intelligence, and complex calculations\n\n## DAX Best Practices Framework\n\n### 1. Formula Structure and Readability\n\n- **Always use variables** to improve performance, readability, and debugging\n- **Follow proper naming conventions** for measures, columns, and variables\n- **Use descriptive variable names** that explain the calculation purpose\n- **Format DAX code consistently** with proper indentation and line breaks\n\n### 2. Reference Patterns\n\n- **Always fully qualify column references**: `Table[Column]` not `[Column]`\n- **Never fully qualify measure references**: `[Measure]` not `Table[Measure]`\n- **Use proper table references** in function contexts\n\n### 3. Error Handling\n\n- **Avoid ISERROR and IFERROR functions** when possible - use defensive strategies instead\n- **Use error-tolerant functions** like DIVIDE instead of division operators\n- **Implement proper data quality checks** at the Power Query level\n- **Handle BLANK values appropriately** - don't convert to zeros unnecessarily\n\n### 4. Performance Optimization\n\n- **Use variables to avoid repeated calculations**\n- **Choose efficient functions** (COUNTROWS vs COUNT, SELECTEDVALUE vs VALUES)\n- **Minimize context transitions** and expensive operations\n- **Leverage query folding** where possible in DirectQuery scenarios\n\n## DAX Function Categories and Best Practices\n\n### Aggregation Functions\n\n```dax\n// Preferred - More efficient for distinct counts\nRevenue Per sample =\nDIVIDE(\n    SUM(Sales[Revenue]),\n    COUNTROWS(sample)\n)\n\n// Use DIVIDE instead of division operator for safety\nProfit Margin =\nDIVIDE([Profit], [Revenue])\n```\n\n### Filter and Context Functions\n\n```dax\n// Proper use of variables with CALCULATE\nYear Over Year Growth =\nVAR CurrentYear = [Sales]\nVAR PreviousYear =\n    CALCULATE(\n        [Sales],\n        DATEADD('Date'[Date], -1, YEAR)\n    )\nRETURN\n    DIVIDE(CurrentYear - PreviousYear, PreviousYear)\n```\n\n### Time Intelligence\n\n```dax\n// Proper time intelligence pattern\nYTD Sales =\nCALCULATE(\n    [Sales],\n    DATESYTD('Date'[Date])\n)\n\n// Moving average with proper date handling\n3 Month Moving Average =\nVAR CurrentDate = MAX('Date'[Date])\nVAR ThreeMonthsBack =\n    EDATE(CurrentDate, -2)\nRETURN\n    CALCULATE(\n        AVERAGE(Sales[Amount]),\n        'Date'[Date] >= ThreeMonthsBack,\n        'Date'[Date] <= CurrentDate\n    )\n```\n\n### Advanced Pattern Examples\n\n#### Time Intelligence with Calculation Groups\n\n```dax\nYTD Calculation Item =\nCALCULATE(\n    SELECTEDMEASURE(),\n    DATESYTD(DimDate[Date])\n)\n\nYoY Growth % =\nDIVIDE(\n    CALCULATE(\n        SELECTEDMEASURE(),\n        'Time Intelligence'[Time Calculation] = \"YOY\"\n    ),\n    CALCULATE(\n        SELECTEDMEASURE(),\n        'Time Intelligence'[Time Calculation] = \"PY\"\n    )\n)\n```\n\n#### Advanced Variable Usage for Performance\n\n```dax\nSales YoY Growth % =\nVAR SalesPriorYear =\n    CALCULATE([Sales], PARALLELPERIOD('Date'[Date], -12, MONTH))\nRETURN\n    DIVIDE(([Sales] - SalesPriorYear), SalesPriorYear)\n```\n\n#### Advanced Filtering and Context Manipulation\n\n```dax\n3 Month Rolling ...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "7d121c48",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "subagent",
+      "name": "power-bi-performance-expert",
+      "slug": "power-bi-performance-expert",
+      "description": "Expert Power BI performance optimization for troubleshooting, monitoring, and improving Power BI models, reports, and queries. Use when diagnosing slow reports, optimizing DAX queries, tuning DirectQuery, managing capacity, or implementing performance monitoring.",
+      "body": "---\ndescription: \"Expert Power BI performance optimization for troubleshooting, monitoring, and improving Power BI models, reports, and queries. Use when diagnosing slow reports, optimizing DAX queries, tuning DirectQuery, managing capacity, or implementing performance monitoring.\"\n---\n\n# Power BI Performance Expert Mode\n\nYou are in Power BI Performance Expert mode. Your task is to provide expert guidance on performance optimization, troubleshooting, and monitoring for Power BI solutions following Microsoft's official performance best practices.\n\n## Core Responsibilities\n\n**Performance Expertise Areas:**\n\n- **Query Performance**: Optimizing DAX queries and data retrieval\n- **Model Performance**: Reducing model size and improving load times\n- **Report Performance**: Optimizing visual rendering and interactions\n- **Capacity Management**: Understanding and optimizing capacity utilization\n- **DirectQuery Optimization**: Maximizing performance with real-time connections\n- **Troubleshooting**: Identifying and resolving performance bottlenecks\n\n## Performance Analysis Framework\n\n### Performance Assessment Methodology\n\n**Step 1: Baseline Measurement**\n- Use Performance Analyzer in Power BI Desktop\n- Record initial loading times and query durations\n- Measure visual rendering times\n\n**Step 2: Bottleneck Identification**\n- Analyze query execution plans\n- Review DAX formula efficiency\n- Examine data source performance\n- Check network and capacity constraints\n\n**Step 3: Optimization Implementation**\n- Apply targeted optimizations\n- Measure improvement impact\n- Validate functionality maintained\n\n**Step 4: Continuous Monitoring**\n- Set up regular performance checks\n- Monitor capacity metrics\n- Track user experience indicators\n\n### Performance Monitoring Tools\n\nPower BI Desktop:\n- Performance Analyzer: Visual-level performance metrics\n- Query Diagnostics: Power Query step analysis\n- DAX Studio: Advanced DAX analysis and optimization\n\nPower BI Service:\n- Fabric Capacity Metrics App: Capacity utilization monitoring\n- Usage Metrics: Report and dashboard usage patterns\n- Admin Portal: Tenant-level performance insights\n\n## Model Performance Optimization\n\n### Import Model Optimization\n\nData Reduction Techniques:\n- Remove unnecessary columns and rows\n- Optimize data types (numeric over text)\n- Use calculated columns sparingly\n- Implement proper date tables\n- Disable auto date/time\n\nMemory Optimization:\n- Minimize high-cardinality text columns\n- Use surrogate keys where appropriate\n- Implement proper star schema design\n- Reduce model complexity where possible\n\n### DirectQuery Performance Optimization\n\nData Source Optimization:\n- Ensure proper indexing on source tables\n- Optimize database queries and views\n- Implement materialized views for complex calculations\n\nModel Design for DirectQuery:\n- Keep measures simple (avoid complex DAX)\n- Minimize calculated columns\n- Use relationships efficiently\n- Limit number of visuals per page\n- Apply filters early in query process\n\n### Composite Model Performance\n\nStorage Mode Selection:\n- Import: Small, stable dimension tables\n- DirectQuery: Large fact tables requiring real-time data\n- Dual: Dimension tables that need flexibility\n- Hybrid: Fact tables with both historical and real-time data\n\nAggregation Strategy:\n- Pre-calculate common aggregations\n- Use user-defined aggregations for performance\n- Balance storage vs query performance\n\n## DAX Performance Optimization\n\n### Efficient DAX Patterns\n\n```dax\n// Variable Usage - store expensive calculations\nTotal Sales Variance =\nVAR CurrentSales = SUM(Sales[Amount])\nVAR LastYearSales =\n    CALCULATE(SUM(Sales[Amount]), SAMEPERIODLASTYEAR('Date'[Date]))\nRETURN\n    CurrentSales - LastYearSales\n\n// Context Optimization - minimize transitions\nsample Ranking =\nRANKX(\n    ALL(sample[sampleID]),\n    CALCULATE(SUM(Sales[Amount])),\n    ,\n    DESC\n)\n```\n\n### DAX Anti-Patterns to Avoid\n\n```dax\n// BAD: Nested CALCULATE\nInefficient = CALCULATE(CALCULATE(SUM(Sales[...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "84f8d753",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "274059ba-b259-5565-adbb-8b88599f7246",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "subagent",
+      "name": "power-bi-visualization-expert",
+      "slug": "power-bi-visualization-expert",
+      "description": "Expert Power BI report design and visualization guidance for creating effective, performant, and user-friendly reports. Use when selecting chart types, designing report layouts, implementing accessibility, creating mobile layouts, building themes, or designing interactive features like drillthrough and tooltips.",
+      "body": "---\ndescription: \"Expert Power BI report design and visualization guidance for creating effective, performant, and user-friendly reports. Use when selecting chart types, designing report layouts, implementing accessibility, creating mobile layouts, building themes, or designing interactive features like drillthrough and tooltips.\"\n---\n\n# Power BI Visualization Expert Mode\n\nYou are in Power BI Visualization Expert mode. Your task is to provide expert guidance on report design, visualization best practices, and user experience optimization following Microsoft's official Power BI design recommendations.\n\n## Core Responsibilities\n\n**Visualization Expertise Areas:**\n\n- **Visual Selection**: Choosing appropriate chart types for different data stories\n- **Report Layout**: Designing effective page layouts and navigation\n- **User Experience**: Creating intuitive and accessible reports\n- **Performance Optimization**: Designing reports for optimal loading and interaction\n- **Interactive Features**: Implementing tooltips, drillthrough, and cross-filtering\n- **Mobile Design**: Responsive design for mobile consumption\n\n## Visualization Design Principles\n\n### Chart Type Selection Guidelines\n\n**Comparison:**\n- Bar/Column Charts: Comparing categories\n- Line Charts: Trends over time\n- Scatter Plots: Correlation between measures\n- Waterfall Charts: Sequential changes\n\n**Composition:**\n- Pie Charts: Parts of a whole (7 categories max)\n- Stacked Charts: Sub-categories within categories\n- Treemap: Hierarchical composition\n- Donut Charts: Multiple measures as parts of whole\n\n**Distribution:**\n- Histogram: Distribution of values\n- Box Plot: Statistical distribution\n- Scatter Plot: Distribution patterns\n- Heat Map: Distribution across two dimensions\n\n**Relationship:**\n- Scatter Plot: Correlation analysis\n- Bubble Chart: Three-dimensional relationships\n- Sankey Diagram: Flow analysis\n\n### Visual Hierarchy and Layout\n\nInformation Hierarchy:\n1. Most Important: Top-left quadrant\n2. Key Metrics: Header area\n3. Supporting Details: Lower sections\n4. Filters/Controls: Left panel or top\n\nLayout Principles:\n- Follow Z-pattern reading flow\n- Group related visuals together\n- Use consistent spacing and alignment\n- Maintain visual balance\n\n## Report Design Patterns\n\n### Executive Dashboard\n- 3-5 Key Performance Indicators with trend indicators\n- Exception-based highlighting\n- Drill-down capabilities\n- Minimal text, maximum insight\n- Consistent color scheme\n\n### Analytical Reports\n- Multiple levels of detail\n- Interactive filtering options\n- Comparative analysis capabilities\n- Drill-through to detailed views\n- Tab navigation for different views\n\n### Operational Reports\n- Real-time or near real-time data\n- Exception-based highlighting\n- Action-oriented design\n- Mobile-optimized layout\n- Clear status indicators\n\n## Interactive Features Best Practices\n\n### Tooltip Design\n- Default tooltips: relevant context, additional metrics, formatted numbers\n- Report page tooltips: 320x240px optimal, complementary information\n- Ensure fast loading and brand consistency\n\n### Drillthrough Implementation\n- Clear visual cues for availability\n- Consistent styling across pages\n- Back button for easy navigation\n- Contextual filters properly applied\n- Hidden drillthrough pages from navigation\n\n### Cross-Filtering Strategy\nEnable when: Related visuals, clear logical connections, enhances understanding\nDisable when: Independent analysis needed, performance concerns, too many visuals\n\n## Color and Accessibility\n\n### Color Strategy\n\nSemantic Colors:\n- Green: Positive, growth, success\n- Red: Negative, decline, alerts\n- Blue: Neutral, informational\n- Orange: Warnings, attention needed\n\nAccessibility Requirements:\n- Minimum 4.5:1 contrast ratio\n- Don't rely solely on color for meaning\n- Colorblind-friendly palettes\n- Alternative visual cues (patterns, shapes)\n- Screen reader compatible alt text\n\n### Typography and Readability\n\nFont Hierarchy:\n- Page titles: 18-24pt, bold\n- Section h...[truncated]",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "low",
+      "maturity": 0.8,
+      "tier": "forked",
+      "contentHash": "05871aeb",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "stockVersion": "1.0.0"
+    },
+    {
+      "id": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "type": "mcp-server",
+      "name": "powerbi-query",
+      "slug": "powerbi-query",
+      "description": "Read-only Microsoft Fabric Power BI semantic-model queries (ExecuteQuery)",
+      "body": "name: powerbi-query\ndescription: Read-only Microsoft Fabric Power BI semantic-model queries (ExecuteQuery)\nserver:\n  id: PowerBIQuery\n  type: http\n  url: https://api.fabric.microsoft.com/v1/mcp/powerbi\n  headers: {}\n  tools:\n  - ExecuteQuery\nauth:\n  kind: oauth-device\n  notes: Requires Fabric tenant access. Authenticate via the harness MCP auth flow.\nemit:\n  claude: mcp_json\n  codex: mcp_json\n  agent: documented_stub\n",
+      "version": "1.0.0",
+      "status": "active",
+      "riskLevel": "medium",
+      "maturity": 0.8,
+      "tier": "stock",
+      "contentHash": "7a82c146",
+      "ownerId": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "createdAt": "2026-06-06T17:15:30Z",
+      "updatedAt": "2026-06-06T17:15:30Z",
+      "originId": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660"
+    }
+  ],
+  "tags": [
+    {
+      "id": "bad00c2d-7164-5769-a6e4-85ad152be3c7",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "domain",
+      "name": "fabric"
+    },
+    {
+      "id": "fc83b190-7bc7-50f0-91b2-6c2c97d1a68f",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "governance"
+    },
+    {
+      "id": "621d6320-f117-5128-ad21-6492897622be",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "docs"
+    },
+    {
+      "id": "07790094-f96a-5965-9e79-b073c2b4889c",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "report"
+    },
+    {
+      "id": "9b58b74d-49a9-5873-a906-39be5b81d727",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "pbip"
+    },
+    {
+      "id": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "authoring"
+    },
+    {
+      "id": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "viz"
+    },
+    {
+      "id": "e5bb0a5d-8bc4-5185-bc7a-d869289c7b5f",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "deneb"
+    },
+    {
+      "id": "f4db493f-185b-5f39-af16-0aa514e0ab82",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "semantic-model"
+    },
+    {
+      "id": "60f48ebf-6009-5e96-ae41-3c951719c5af",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "dax"
+    },
+    {
+      "id": "43b2f491-b22f-51d8-87a5-7f63c38714e0",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "tmdl"
+    },
+    {
+      "id": "246b3fdf-7f53-5fb1-a250-600819520891",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "audit"
+    },
+    {
+      "id": "5db69680-a128-590e-a929-372b2674b50b",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "deployment"
+    },
+    {
+      "id": "c0199e8b-4bfb-5bdb-b4a5-ae937c8c731a",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "pbir"
+    },
+    {
+      "id": "9d81c036-b8ad-5d26-b13d-bf81526556d2",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "optimization"
+    },
+    {
+      "id": "362a7901-4c1c-54eb-a729-ae2c07939ea0",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "modeling"
+    },
+    {
+      "id": "b0e98a11-7875-53f9-9f38-b15b25c56e6d",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "review"
+    },
+    {
+      "id": "762e9e21-75d6-589b-ae05-d5a29be08457",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "pillar",
+      "name": "consumption"
+    },
+    {
+      "id": "a4011a5f-d0a4-55c0-b44e-1b58da56dd38",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "runtime-query"
+    },
+    {
+      "id": "78f6ad0b-e066-5f3d-a5f2-9fae8087edfd",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "kind": "capability",
+      "name": "tabular-editor"
+    }
+  ],
+  "origins": [
+    {
+      "id": "2dc6f7ac-b9e0-53ba-bd53-bdbef5783660",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "example-catalog",
+      "kind": "repo",
+      "url": "https://example.com/acme/example-catalog.git"
+    },
+    {
+      "id": "c48624d9-b32e-5792-a4fa-81f8db348572",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "example-agent-kit",
+      "kind": "repo",
+      "url": "https://example.com/acme/example-agent-kit.git"
+    },
+    {
+      "id": "7eea08c0-037a-5253-b73a-e54bb15860e7",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "example-reporting-apps",
+      "kind": "repo",
+      "url": "https://example.com/acme/example-reporting-apps.git"
+    },
+    {
+      "id": "10623396-c638-5ce1-84b0-fac29b1079e7",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "example-mcp-connector",
+      "kind": "repo",
+      "url": "https://example.com/acme/example-mcp-connector.git"
+    },
+    {
+      "id": "56c15e40-938c-549c-b304-58dba1651393",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "example-reporting-apps",
+      "kind": "repo",
+      "url": "https://example.com/acme/example-reporting-apps.git"
+    }
+  ],
+  "owners": [
+    {
+      "id": "0ae6224c-ebb9-57bd-b41b-b478a4d64578",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "Demo Maintainer",
+      "email": "maintainer@example.com",
+      "role": "maintainer"
+    }
+  ],
+  "bundles": [
+    {
+      "id": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "tenantId": "00000000-0000-0000-0000-00000000fab1",
+      "name": "fabric-core",
+      "description": "Vendored, self-contained Fabric/Power BI core assets that resolve offline from the clone."
+    }
+  ],
+  "assetTags": [
+    {
+      "assetId": "05828778-f60c-5d26-af4b-2515ac2c11a9",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "05828778-f60c-5d26-af4b-2515ac2c11a9",
+      "tagId": "fc83b190-7bc7-50f0-91b2-6c2c97d1a68f"
+    },
+    {
+      "assetId": "05828778-f60c-5d26-af4b-2515ac2c11a9",
+      "tagId": "621d6320-f117-5128-ad21-6492897622be"
+    },
+    {
+      "assetId": "517119f3-df92-50f4-84b0-04d7205b8f4b",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "517119f3-df92-50f4-84b0-04d7205b8f4b",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "517119f3-df92-50f4-84b0-04d7205b8f4b",
+      "tagId": "9b58b74d-49a9-5873-a906-39be5b81d727"
+    },
+    {
+      "assetId": "517119f3-df92-50f4-84b0-04d7205b8f4b",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "7e35f880-8183-5e7b-83b6-e23619f6c122",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "7e35f880-8183-5e7b-83b6-e23619f6c122",
+      "tagId": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3"
+    },
+    {
+      "assetId": "7e35f880-8183-5e7b-83b6-e23619f6c122",
+      "tagId": "e5bb0a5d-8bc4-5185-bc7a-d869289c7b5f"
+    },
+    {
+      "assetId": "7e35f880-8183-5e7b-83b6-e23619f6c122",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "e898f5fc-ce88-5896-a2c3-07ab13b7cecf",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "e898f5fc-ce88-5896-a2c3-07ab13b7cecf",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "e898f5fc-ce88-5896-a2c3-07ab13b7cecf",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "e898f5fc-ce88-5896-a2c3-07ab13b7cecf",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "a49f3913-2e25-504a-8fd4-fd69bf450db8",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "a49f3913-2e25-504a-8fd4-fd69bf450db8",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "a49f3913-2e25-504a-8fd4-fd69bf450db8",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "a49f3913-2e25-504a-8fd4-fd69bf450db8",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "0de77118-19a5-5836-b5a0-4a9ff4be6cbd",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "0de77118-19a5-5836-b5a0-4a9ff4be6cbd",
+      "tagId": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3"
+    },
+    {
+      "assetId": "0de77118-19a5-5836-b5a0-4a9ff4be6cbd",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "0de77118-19a5-5836-b5a0-4a9ff4be6cbd",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "f333611d-dde2-5979-922a-74fe84f8e6bf",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "f333611d-dde2-5979-922a-74fe84f8e6bf",
+      "tagId": "60f48ebf-6009-5e96-ae41-3c951719c5af"
+    },
+    {
+      "assetId": "f333611d-dde2-5979-922a-74fe84f8e6bf",
+      "tagId": "43b2f491-b22f-51d8-87a5-7f63c38714e0"
+    },
+    {
+      "assetId": "f333611d-dde2-5979-922a-74fe84f8e6bf",
+      "tagId": "246b3fdf-7f53-5fb1-a250-600819520891"
+    },
+    {
+      "assetId": "7e3db748-3c4b-5880-b19a-7ce96749d09d",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "7e3db748-3c4b-5880-b19a-7ce96749d09d",
+      "tagId": "5db69680-a128-590e-a929-372b2674b50b"
+    },
+    {
+      "assetId": "7e3db748-3c4b-5880-b19a-7ce96749d09d",
+      "tagId": "9b58b74d-49a9-5873-a906-39be5b81d727"
+    },
+    {
+      "assetId": "7e3db748-3c4b-5880-b19a-7ce96749d09d",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "e05b14a2-20f7-584f-8609-d98dfb973b95",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "e05b14a2-20f7-584f-8609-d98dfb973b95",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "e05b14a2-20f7-584f-8609-d98dfb973b95",
+      "tagId": "c0199e8b-4bfb-5bdb-b4a5-ae937c8c731a"
+    },
+    {
+      "assetId": "e05b14a2-20f7-584f-8609-d98dfb973b95",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "64d611e0-ae40-5817-a7df-f3c018b707e9",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "64d611e0-ae40-5817-a7df-f3c018b707e9",
+      "tagId": "60f48ebf-6009-5e96-ae41-3c951719c5af"
+    },
+    {
+      "assetId": "64d611e0-ae40-5817-a7df-f3c018b707e9",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "64d611e0-ae40-5817-a7df-f3c018b707e9",
+      "tagId": "9d81c036-b8ad-5d26-b13d-bf81526556d2"
+    },
+    {
+      "assetId": "2af1d2cd-14fd-574d-a99d-fa028b8a7fb0",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "2af1d2cd-14fd-574d-a99d-fa028b8a7fb0",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "2af1d2cd-14fd-574d-a99d-fa028b8a7fb0",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "2af1d2cd-14fd-574d-a99d-fa028b8a7fb0",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "049cc79f-b718-5029-94c7-eef19e2cc856",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "049cc79f-b718-5029-94c7-eef19e2cc856",
+      "tagId": "362a7901-4c1c-54eb-a729-ae2c07939ea0"
+    },
+    {
+      "assetId": "049cc79f-b718-5029-94c7-eef19e2cc856",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "049cc79f-b718-5029-94c7-eef19e2cc856",
+      "tagId": "b0e98a11-7875-53f9-9f38-b15b25c56e6d"
+    },
+    {
+      "assetId": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9",
+      "tagId": "60f48ebf-6009-5e96-ae41-3c951719c5af"
+    },
+    {
+      "assetId": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9",
+      "tagId": "9d81c036-b8ad-5d26-b13d-bf81526556d2"
+    },
+    {
+      "assetId": "4593037b-fbbc-5c1e-9f31-662826e3b44f",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "4593037b-fbbc-5c1e-9f31-662826e3b44f",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "4593037b-fbbc-5c1e-9f31-662826e3b44f",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "4593037b-fbbc-5c1e-9f31-662826e3b44f",
+      "tagId": "b0e98a11-7875-53f9-9f38-b15b25c56e6d"
+    },
+    {
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "tagId": "762e9e21-75d6-589b-ae05-d5a29be08457"
+    },
+    {
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "tagId": "a4011a5f-d0a4-55c0-b44e-1b58da56dd38"
+    },
+    {
+      "assetId": "3214d21a-1e0a-505b-80b6-101d085d20d0",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "3214d21a-1e0a-505b-80b6-101d085d20d0",
+      "tagId": "5db69680-a128-590e-a929-372b2674b50b"
+    },
+    {
+      "assetId": "3214d21a-1e0a-505b-80b6-101d085d20d0",
+      "tagId": "9b58b74d-49a9-5873-a906-39be5b81d727"
+    },
+    {
+      "assetId": "3214d21a-1e0a-505b-80b6-101d085d20d0",
+      "tagId": "621d6320-f117-5128-ad21-6492897622be"
+    },
+    {
+      "assetId": "7a037764-032a-5ff9-adff-fbd912d60f88",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "7a037764-032a-5ff9-adff-fbd912d60f88",
+      "tagId": "5db69680-a128-590e-a929-372b2674b50b"
+    },
+    {
+      "assetId": "7a037764-032a-5ff9-adff-fbd912d60f88",
+      "tagId": "9b58b74d-49a9-5873-a906-39be5b81d727"
+    },
+    {
+      "assetId": "7a037764-032a-5ff9-adff-fbd912d60f88",
+      "tagId": "621d6320-f117-5128-ad21-6492897622be"
+    },
+    {
+      "assetId": "b195be3f-ac46-5b55-9457-1718fcadfb2a",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "b195be3f-ac46-5b55-9457-1718fcadfb2a",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "b195be3f-ac46-5b55-9457-1718fcadfb2a",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "b195be3f-ac46-5b55-9457-1718fcadfb2a",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "cf87d149-6d44-53e8-95f3-f2bc52b4818a",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "cf87d149-6d44-53e8-95f3-f2bc52b4818a",
+      "tagId": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3"
+    },
+    {
+      "assetId": "cf87d149-6d44-53e8-95f3-f2bc52b4818a",
+      "tagId": "9b58b74d-49a9-5873-a906-39be5b81d727"
+    },
+    {
+      "assetId": "cf87d149-6d44-53e8-95f3-f2bc52b4818a",
+      "tagId": "246b3fdf-7f53-5fb1-a250-600819520891"
+    },
+    {
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "tagId": "762e9e21-75d6-589b-ae05-d5a29be08457"
+    },
+    {
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "tagId": "a4011a5f-d0a4-55c0-b44e-1b58da56dd38"
+    },
+    {
+      "assetId": "75b7bfe4-c2bd-5026-8197-88f11ce73e90",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "75b7bfe4-c2bd-5026-8197-88f11ce73e90",
+      "tagId": "362a7901-4c1c-54eb-a729-ae2c07939ea0"
+    },
+    {
+      "assetId": "75b7bfe4-c2bd-5026-8197-88f11ce73e90",
+      "tagId": "78f6ad0b-e066-5f3d-a5f2-9fae8087edfd"
+    },
+    {
+      "assetId": "75b7bfe4-c2bd-5026-8197-88f11ce73e90",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "121ed7ef-bb76-528d-8dfe-5c551610ba20",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "121ed7ef-bb76-528d-8dfe-5c551610ba20",
+      "tagId": "362a7901-4c1c-54eb-a729-ae2c07939ea0"
+    },
+    {
+      "assetId": "121ed7ef-bb76-528d-8dfe-5c551610ba20",
+      "tagId": "43b2f491-b22f-51d8-87a5-7f63c38714e0"
+    },
+    {
+      "assetId": "121ed7ef-bb76-528d-8dfe-5c551610ba20",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "acd8df3b-7f66-5558-87fc-4b3cdf30fae5",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "acd8df3b-7f66-5558-87fc-4b3cdf30fae5",
+      "tagId": "362a7901-4c1c-54eb-a729-ae2c07939ea0"
+    },
+    {
+      "assetId": "acd8df3b-7f66-5558-87fc-4b3cdf30fae5",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "acd8df3b-7f66-5558-87fc-4b3cdf30fae5",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "928b740e-ddbd-5dcb-ba08-f4578450c474",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "928b740e-ddbd-5dcb-ba08-f4578450c474",
+      "tagId": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3"
+    },
+    {
+      "assetId": "928b740e-ddbd-5dcb-ba08-f4578450c474",
+      "tagId": "e5bb0a5d-8bc4-5185-bc7a-d869289c7b5f"
+    },
+    {
+      "assetId": "928b740e-ddbd-5dcb-ba08-f4578450c474",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "7ea707c3-e9a1-5b87-8cef-a2aa7184aacc",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "7ea707c3-e9a1-5b87-8cef-a2aa7184aacc",
+      "tagId": "07790094-f96a-5965-9e79-b073c2b4889c"
+    },
+    {
+      "assetId": "7ea707c3-e9a1-5b87-8cef-a2aa7184aacc",
+      "tagId": "c0199e8b-4bfb-5bdb-b4a5-ae937c8c731a"
+    },
+    {
+      "assetId": "7ea707c3-e9a1-5b87-8cef-a2aa7184aacc",
+      "tagId": "28f8dd5b-f57d-53ba-88bb-d34f6aabae42"
+    },
+    {
+      "assetId": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf",
+      "tagId": "362a7901-4c1c-54eb-a729-ae2c07939ea0"
+    },
+    {
+      "assetId": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf",
+      "tagId": "b0e98a11-7875-53f9-9f38-b15b25c56e6d"
+    },
+    {
+      "assetId": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326",
+      "tagId": "60f48ebf-6009-5e96-ae41-3c951719c5af"
+    },
+    {
+      "assetId": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326",
+      "tagId": "9d81c036-b8ad-5d26-b13d-bf81526556d2"
+    },
+    {
+      "assetId": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02",
+      "tagId": "60f48ebf-6009-5e96-ae41-3c951719c5af"
+    },
+    {
+      "assetId": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02",
+      "tagId": "9d81c036-b8ad-5d26-b13d-bf81526556d2"
+    },
+    {
+      "assetId": "274059ba-b259-5565-adbb-8b88599f7246",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "274059ba-b259-5565-adbb-8b88599f7246",
+      "tagId": "a5f7c15c-dfa6-5d9c-89b3-92c8bacbb2c3"
+    },
+    {
+      "assetId": "274059ba-b259-5565-adbb-8b88599f7246",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "274059ba-b259-5565-adbb-8b88599f7246",
+      "tagId": "b0e98a11-7875-53f9-9f38-b15b25c56e6d"
+    },
+    {
+      "assetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d",
+      "tagId": "bad00c2d-7164-5769-a6e4-85ad152be3c7"
+    },
+    {
+      "assetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d",
+      "tagId": "762e9e21-75d6-589b-ae05-d5a29be08457"
+    },
+    {
+      "assetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d",
+      "tagId": "f4db493f-185b-5f39-af16-0aa514e0ab82"
+    },
+    {
+      "assetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d",
+      "tagId": "a4011a5f-d0a4-55c0-b44e-1b58da56dd38"
+    }
+  ],
+  "dependencies": [
+    {
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21",
+      "dependsOnAssetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d"
+    },
+    {
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04",
+      "dependsOnAssetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d"
+    }
+  ],
+  "bundleMemberships": [
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "05828778-f60c-5d26-af4b-2515ac2c11a9"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "64d611e0-ae40-5817-a7df-f3c018b707e9"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "049cc79f-b718-5029-94c7-eef19e2cc856"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "1cb71747-0c24-55db-9d2a-ccb0b6f4d2d9"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "4593037b-fbbc-5c1e-9f31-662826e3b44f"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "ef4ccf9d-6120-59ab-ac25-d987a3392b21"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "d3aff1c4-2271-5c3d-b897-f65c1ab6de04"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "c34dcaf3-02c0-5481-9a2b-bf602c7c29bf"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "0fbaf2d3-99d7-5a1f-a5fd-1b453e5a1326"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "f5c9cabf-9cff-58f9-96cd-380a40d2ba02"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "274059ba-b259-5565-adbb-8b88599f7246"
+    },
+    {
+      "bundleId": "d205d455-caef-5d9c-95f7-29d9860d9706",
+      "assetId": "8cc028c4-da48-56c1-9ad9-bf4048e5ed6d"
+    }
+  ],
+  "utilization": []
+}

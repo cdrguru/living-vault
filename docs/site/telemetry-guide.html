@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Telemetry and privacy - The Living Vault</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="How The Living Vault measures agentic asset usage across AI coding harnesses: metadata only, local-first, honesty grades. No repository access required."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Telemetry and privacy - The Living Vault" />
+    <meta
+      property="og:description"
+      content="Metadata-only collectors, per-harness honesty grades, and a clear split between the public demo and self-hosted real usage."
+    />
+    <style>
+      :root {
+        --navy: #213b5e;
+        --teal: #1bb59f;
+        --teal-text: #0f7d6c;
+        --blue: #2e8ff5;
+        --ink: #0f2032;
+        --ink-soft: #3a4a5c;
+        --ink-faint: #586b7e;
+        --paper: #ffffff;
+        --surface: #f6f9fb;
+        --line: #dde6ee;
+        --link: #1463c2;
+        --radius: 16px;
+        --radius-sm: 11px;
+        --maxw: 820px;
+        --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        font-size: 1rem;
+        line-height: 1.62;
+        color: var(--ink);
+        background: var(--surface);
+      }
+      a { color: var(--link); }
+      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 64px; }
+      .site-header {
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+        padding: 16px 0;
+        margin-bottom: 40px;
+      }
+      .site-header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 0;
+      }
+      .brand { font-weight: 800; color: var(--navy); text-decoration: none; }
+      .brand .accent { color: var(--teal-text); }
+      /* Primary cross-page nav (canonical, identical across all pages) */
+      .nav-links {
+        display: flex;
+        gap: 26px;
+        align-items: center;
+      }
+      .nav-links a {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-decoration: none;
+        padding: 4px 2px;
+        border-bottom: 2px solid transparent;
+      }
+      .nav-links a:hover { color: var(--navy); }
+      .nav-links a[aria-current="page"] {
+        color: var(--navy);
+        border-bottom-color: var(--teal);
+      }
+      /* Hamburger button (mobile only) */
+      .nav-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: var(--paper);
+        color: var(--navy);
+        cursor: pointer;
+        padding: 0;
+      }
+      .nav-toggle:hover { border-color: var(--teal); }
+      .nav-toggle:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 2px;
+      }
+      .nav-toggle svg { width: 22px; height: 22px; display: block; }
+      .nav-toggle .icon-close { display: none; }
+      .nav-toggle[aria-expanded="true"] .icon-open { display: none; }
+      .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+      /* Mobile menu panel (hamburger target) */
+      .mobile-menu {
+        display: none;
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+      }
+      .mobile-menu.is-open { display: block; }
+      .mobile-menu .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 8px;
+        padding-bottom: 14px;
+      }
+      .mobile-menu a {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-decoration: none;
+        padding: 12px 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mobile-menu a:last-of-type { border-bottom: none; }
+      .mobile-menu a:hover,
+      .mobile-menu a:focus-visible { color: var(--navy); }
+      .mobile-menu a:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 2px;
+      }
+      .mobile-menu a[aria-current="page"] { color: var(--navy); }
+      @media (max-width: 760px) {
+        .nav-links { display: none; }
+        .nav-toggle { display: inline-flex; }
+      }
+      .eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--teal-text);
+      }
+      h1 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -0.02em;
+        margin: 12px 0 16px;
+      }
+      .lead { font-size: 1.12rem; color: var(--ink-soft); margin-bottom: 32px; }
+      h2 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--navy);
+        margin: 36px 0 12px;
+        letter-spacing: -0.01em;
+      }
+      p, li { color: var(--ink-soft); }
+      .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px 24px;
+        margin: 20px 0;
+      }
+      .card strong { color: var(--navy); }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        margin: 16px 0;
+        font-size: 0.92rem;
+      }
+      th, td {
+        text-align: left;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th { background: var(--surface); color: var(--navy); font-weight: 700; }
+      tr:last-child th, tr:last-child td { border-bottom: none; }
+      .footer {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+        font-size: 0.88rem;
+        color: var(--ink-faint);
+      }
+      .btn {
+        display: inline-block;
+        font-weight: 700;
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 10px 18px;
+        background: linear-gradient(120deg, #1bb59f, #2e8ff5);
+        color: var(--navy);
+      }
+      .faq {
+        display: grid;
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .faq-item {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 16px 18px;
+      }
+      .faq-item h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--navy);
+        margin: 0 0 8px;
+      }
+      .faq-item p {
+        margin: 0;
+        font-size: 0.92rem;
+      }
+      h3.section-sub {
+        color: var(--navy);
+        font-size: 1.05rem;
+        margin: 28px 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="index.html"
+          >The Living <span class="accent">Vault</span></a
+        >
+        <nav class="nav-links" aria-label="Primary">
+          <a href="index.html">Overview</a>
+          <a href="ecosystem.html">Ecosystem</a>
+          <a href="telemetry-guide.html" aria-current="page">Telemetry</a>
+          <a href="/demo">Demo</a>
+        </nav>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        >
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <nav class="wrap" aria-label="Mobile primary">
+          <a href="index.html">Overview</a>
+          <a href="ecosystem.html">Ecosystem</a>
+          <a href="telemetry-guide.html" aria-current="page">Telemetry</a>
+          <a href="/demo">Demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <span class="eyebrow">Public guide</span>
+      <h1>Telemetry and privacy</h1>
+      <p class="lead">
+        The Living Vault measures how reusable agentic assets perform across AI
+        coding harnesses by reading structural metadata from each harness's own
+        local session logs. It never reads prompt text, responses, or file
+        contents. The public demo uses synthetic data only; real usage stays on
+        your machine.
+      </p>
+
+      <p>
+        <a
+          class="btn"
+          href="/demo"
+          >Try the demo</a
+        >
+        <span style="margin-left: 12px; color: var(--ink-faint); font-size: 0.9rem"
+          >Public repo coming soon</span
+        >
+      </p>
+
+      <h2>What each harness contributes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Harness</th>
+            <th scope="col">Local source (typical)</th>
+            <th scope="col">Typical honesty grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Claude Code</th>
+            <td>Project transcript JSONL under your Claude config directory</td>
+            <td><strong>full</strong> per-asset invocations, success, errors, latency</td>
+          </tr>
+          <tr>
+            <th scope="row">Codex</th>
+            <td>Session rollout JSONL files</td>
+            <td><strong>partial</strong> session-level signals; gaps marked</td>
+          </tr>
+          <tr>
+            <th scope="row">Grok</th>
+            <td>Session folders and unified log (metadata paths only)</td>
+            <td><strong>partial</strong> summaries at log fidelity</td>
+          </tr>
+          <tr>
+            <th scope="row">Copilot</th>
+            <td>Session event JSONL streams</td>
+            <td><strong>occupancy</strong> or <strong>derived</strong>; cost not faked</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Metadata only, never content</h2>
+      <div class="card">
+        <p><strong>Collectors read:</strong> event types, tool and skill names, invocation and error counts, durations, token totals, ids, and timestamps.</p>
+        <p style="margin-bottom: 0"><strong>Never read:</strong> prompt text, model responses, reasoning, command text, tool arguments, tool results, file contents, file paths, summaries, titles, or auth tokens. Parser unit tests enforce this with sentinel content in fixtures.</p>
+      </div>
+
+      <h3 style="color: var(--navy); font-size: 1.05rem">Notable exclusions by harness</h3>
+      <ul>
+        <li><strong>Grok:</strong> chat history, prompt context, system prompts, terminal output, and worktree checkouts (can contain secrets).</li>
+        <li><strong>Copilot:</strong> message content, tool arguments and results, session-store database text columns. The collector does not open the SQLite store.</li>
+        <li><strong>Codex:</strong> function output strings and message payloads.</li>
+        <li><strong>Claude Code:</strong> transcript message bodies; only structural invocation metadata is parsed.</li>
+      </ul>
+
+      <h2 id="privacy">Where data lives</h2>
+      <div class="card">
+        <p><strong>Public demo build:</strong> ships committed synthetic <code>utilization.json</code> and <code>harness-usage.json</code> only. No access to your machine.</p>
+        <p><strong>Live Fabric (owner push):</strong> curl <code>living-vault-collect.mjs</code> from the deployed app, run <code>node living-vault-collect.mjs telemetry</code>, then upload <code>./utilization.upload.json</code> in Settings. Fabric never reads your home directory.</p>
+        <p><strong>Local dev loop:</strong> repo collectors write gitignored <code>*.local.json</code> snapshots; the dev server prefers them. Demo builds never bundle real usage.</p>
+        <p style="margin-bottom: 0"><strong>Honesty over completeness:</strong> the UI labels each metric with a fidelity grade (<code>full | partial | occupancy | derived | none</code>). Unobserved assets show "no telemetry", not a measured zero.</p>
+      </div>
+
+      <h2>How it reaches the Monitor</h2>
+      <ol>
+        <li>Harness writes session logs locally (already happening today).</li>
+        <li>A metadata-only collector aggregates Claude Code usage into upload rows.</li>
+        <li>You upload <code>utilization.upload.json</code> in Settings (live Fabric).</li>
+        <li>Rows reconcile to governed catalog asset ids (type + slug).</li>
+        <li>Monitor, Effectiveness, and Cost surfaces render the signal with per-harness honesty grades.</li>
+      </ol>
+
+      <h2>Public demo vs live Fabric push</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Question</th>
+            <th scope="col">Public demo (SWA)</th>
+            <th scope="col">Live Fabric (owner push)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Reads your machine?</th>
+            <td>No</td>
+            <td>Only when you run the collector locally</td>
+          </tr>
+          <tr>
+            <th scope="row">Telemetry data</th>
+            <td>Synthetic seed data in the demo build</td>
+            <td><code>./utilization.upload.json</code> you upload in Settings</td>
+          </tr>
+          <tr>
+            <th scope="row">Repo checkout required?</th>
+            <td>No</td>
+            <td>No, curl <code>living-vault-collect.mjs</code> from the deployed app</td>
+          </tr>
+          <tr>
+            <th scope="row">Honesty grades</th>
+            <td>Illustrative on demo assets</td>
+            <td>Reflect Claude Code transcript fidelity today</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Collector entrypoints</h2>
+      <div class="card">
+        <p><strong>Deployed app (no repo):</strong></p>
+        <ul>
+          <li><code>curl -fsSL …/living-vault-collect.mjs -o living-vault-collect.mjs</code></li>
+          <li><code>node living-vault-collect.mjs telemetry</code> → <code>./utilization.upload.json</code></li>
+          <li><code>node living-vault-collect.mjs assets</code> → <code>./living-vault-assets.json</code></li>
+        </ul>
+        <p><strong>App repo (local dev):</strong></p>
+        <ul>
+          <li><code>node scripts/vault-telemetry.mjs</code> → gitignored <code>utilization.local.json</code></li>
+          <li><code>node scripts/vault-harness-usage.mjs</code> → gitignored <code>harness-usage.local.json</code></li>
+        </ul>
+        <p style="margin-bottom: 0">
+          Parsers read metadata only. Unit tests assert sentinel prompt content
+          never appears in output.
+        </p>
+      </div>
+
+      <h3 class="section-sub">Honesty grade quick reference</h3>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Grade</th>
+            <th scope="col">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><code>full</code></th>
+            <td>Directly instrumented end to end (Claude Code today)</td>
+          </tr>
+          <tr>
+            <th scope="row"><code>partial</code></th>
+            <td>Measured where logs allow; gaps marked (Codex, Grok)</td>
+          </tr>
+          <tr>
+            <th scope="row"><code>occupancy</code></th>
+            <td>Presence and activity only (Copilot)</td>
+          </tr>
+          <tr>
+            <th scope="row"><code>derived</code></th>
+            <td>Inferred from adjacent signals, labeled as inference</td>
+          </tr>
+          <tr>
+            <th scope="row"><code>none</code></th>
+            <td>Not measurable; shown as a gap, never a fake zero</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Frequently asked questions</h2>
+      <div class="faq">
+        <article class="faq-item">
+          <h3>Does the demo upload my Claude transcripts?</h3>
+          <p>
+            No. The hosted demo cannot reach your filesystem. It renders
+            committed synthetic utilization rows baked into the static build.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>Why not read everything the harness logs?</h3>
+          <p>
+            Session logs contain prompts, responses, and file paths. The product
+            measures asset effectiveness, not conversation content. Collectors
+            parse structural fields only and tests enforce exclusions.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>Why show Copilot cost as "not tracked"?</h3>
+          <p>
+            Copilot logs do not expose reliable per-request dollar amounts. The
+            UI labels cost as untracked rather than inventing a number.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>What blocks org-wide rollups today?</h3>
+          <p>
+            A trusted owner can already collect locally and upload into Fabric.
+            Team-wide reach still needs every contributor to run collectors (or
+            scheduled sync), per-user attribution on utilization rows, and RBAC
+            for who may push whose signal. Those org-scale pieces remain on the
+            roadmap.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        <a href="index.html#telemetry">Back to overview telemetry section</a>
+        · <a href="ecosystem.html">Ecosystem map</a>
+      </p>
+
+      <div class="footer">
+        The Living Vault · Built with Microsoft Rayfin for Fabric · Public repo coming soon
+      </div>
+    </main>
+    <script>
+      // Accessible hamburger menu (dependency-free, keyboard operable)
+      (function () {
+        var toggle = document.querySelector(".nav-toggle");
+        var menu = document.getElementById("mobile-menu");
+        if (!toggle || !menu) return;
+        function setOpen(open) {
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          menu.classList.toggle("is-open", open);
+        }
+        toggle.addEventListener("click", function () {
+          setOpen(toggle.getAttribute("aria-expanded") !== "true");
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+            setOpen(false);
+            toggle.focus();
+          }
+        });
+        menu.addEventListener("click", function (e) {
+          if (e.target.closest("a")) setOpen(false);
+        });
+      })();
+    </script>
+  </body>
+</html>

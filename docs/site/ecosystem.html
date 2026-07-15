@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecosystem map - The Living Vault</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="How The Library, the-catalog-source, The Living Vault, Microsoft Fabric, governance, and Power BI fit together in the agentic asset lifecycle."
+    />
+    <style>
+      :root {
+        --navy: #213b5e;
+        --teal: #1bb59f;
+        --teal-bright: #34cfa6;
+        --teal-text: #0f7d6c;
+        --blue: #2e8ff5;
+        --ink: #0f2032;
+        --ink-soft: #3a4a5c;
+        --ink-faint: #586b7e;
+        --paper: #ffffff;
+        --surface: #f6f9fb;
+        --line: #dde6ee;
+        --link: #1463c2;
+        --radius: 16px;
+        --maxw: 1000px;
+        --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--ink);
+        background: var(--surface);
+        line-height: 1.6;
+      }
+      a { color: var(--link); }
+      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 64px; }
+      .site-header {
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+        padding: 16px 0;
+        margin-bottom: 36px;
+      }
+      .site-header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0;
+      }
+      .brand { font-weight: 800; color: var(--navy); text-decoration: none; }
+      .brand .accent { color: var(--teal-text); }
+      /* Primary cross-page nav (canonical, identical across all pages) */
+      .nav-links {
+        display: flex;
+        gap: 26px;
+        align-items: center;
+      }
+      .nav-links a {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-decoration: none;
+        padding: 4px 2px;
+        border-bottom: 2px solid transparent;
+      }
+      .nav-links a:hover { color: var(--navy); }
+      .nav-links a[aria-current="page"] {
+        color: var(--navy);
+        border-bottom-color: var(--teal);
+      }
+      /* Hamburger button (mobile only) */
+      .nav-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: var(--paper);
+        color: var(--navy);
+        cursor: pointer;
+        padding: 0;
+      }
+      .nav-toggle:hover { border-color: var(--teal); }
+      .nav-toggle:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 2px;
+      }
+      .nav-toggle svg { width: 22px; height: 22px; display: block; }
+      .nav-toggle .icon-close { display: none; }
+      .nav-toggle[aria-expanded="true"] .icon-open { display: none; }
+      .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+      /* Mobile menu panel (hamburger target) */
+      .mobile-menu {
+        display: none;
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+      }
+      .mobile-menu.is-open { display: block; }
+      .mobile-menu .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 8px;
+        padding-bottom: 14px;
+      }
+      .mobile-menu a {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-decoration: none;
+        padding: 12px 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mobile-menu a:last-of-type { border-bottom: none; }
+      .mobile-menu a:hover,
+      .mobile-menu a:focus-visible { color: var(--navy); }
+      .mobile-menu a:focus-visible {
+        outline: 2px solid var(--blue);
+        outline-offset: 2px;
+      }
+      .mobile-menu a[aria-current="page"] { color: var(--navy); }
+      .eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--teal-text);
+      }
+      h1 {
+        font-size: 2.15rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -0.02em;
+        margin: 10px 0 14px;
+      }
+      .lead { font-size: 1.1rem; color: var(--ink-soft); max-width: 62ch; margin-bottom: 28px; }
+      .diagram-wrap {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px 16px 20px;
+        margin-bottom: 32px;
+        overflow-x: auto;
+      }
+      .stack-svg { display: block; width: 100%; min-width: 720px; height: auto; }
+      .legend {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .leg-card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+      .leg-card .name {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--teal-text);
+        margin-bottom: 6px;
+      }
+      .leg-card p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
+      .leg-card.cousin { border-style: dashed; opacity: 0.9; }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--navy);
+        margin: 32px 0 12px;
+      }
+      .note {
+        font-size: 0.92rem;
+        color: var(--ink-soft);
+        background: var(--paper);
+        border-left: 4px solid var(--blue);
+        padding: 14px 18px;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        margin: 20px 0;
+      }
+      .btn {
+        display: inline-block;
+        font-weight: 700;
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 10px 18px;
+        background: linear-gradient(120deg, #1bb59f, #2e8ff5);
+        color: var(--navy);
+      }
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        font-size: 0.88rem;
+        color: var(--ink-faint);
+      }
+      .handoff-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        font-size: 0.9rem;
+        margin: 20px 0;
+      }
+      .handoff-table th,
+      .handoff-table td {
+        text-align: left;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+        color: var(--ink-soft);
+      }
+      .handoff-table th {
+        background: var(--surface);
+        color: var(--navy);
+        font-weight: 700;
+      }
+      .handoff-table tr:last-child th,
+      .handoff-table tr:last-child td {
+        border-bottom: none;
+      }
+      .proof-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin: 28px 0 8px;
+      }
+      .proof-card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .proof-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .proof-card .cap {
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+        padding: 8px 10px;
+        border-top: 1px solid var(--line);
+      }
+      .faq {
+        display: grid;
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .faq-item {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+      .faq-item h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--navy);
+        margin: 0 0 8px;
+      }
+      .faq-item p {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--ink-soft);
+      }
+      @media (max-width: 760px) {
+        .legend { grid-template-columns: 1fr; }
+        .proof-row { grid-template-columns: repeat(2, 1fr); }
+        .nav-links { display: none; }
+        .nav-toggle { display: inline-flex; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="index.html"
+          >The Living <span class="accent">Vault</span></a
+        >
+        <nav class="nav-links" aria-label="Primary">
+          <a href="index.html">Overview</a>
+          <a href="ecosystem.html" aria-current="page">Ecosystem</a>
+          <a href="telemetry-guide.html">Telemetry</a>
+          <a href="/demo">Demo</a>
+        </nav>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        >
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <nav class="wrap" aria-label="Mobile primary">
+          <a href="index.html">Overview</a>
+          <a href="ecosystem.html" aria-current="page">Ecosystem</a>
+          <a href="telemetry-guide.html">Telemetry</a>
+          <a href="/demo">Demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <span class="eyebrow">Ecosystem map</span>
+      <h1>From distribution to governance inside Fabric</h1>
+      <p class="lead">
+        Four similarly named systems serve different roles. This map shows how
+        install, catalog projection, measurement, and Fabric-native governance
+        connect. There is no automatic sync between every box; each arrow is an
+        intentional, documented handoff. The public demo runs at zero Fabric
+        cost; a live Rayfin deploy on Fabric exercises the same model end to
+        end.
+      </p>
+
+      <div class="diagram-wrap">
+        <svg
+          class="stack-svg"
+          viewBox="0 0 920 620"
+          role="img"
+          aria-label="Ecosystem diagram: The Library distributes assets across harnesses; the-catalog-source projects catalog into The Living Vault; the Vault runs on Microsoft Fabric with Rayfin semantic model and governance; Power BI can bind to the Fabric model downstream."
+        >
+          <defs>
+            <linearGradient id="g-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1BB59F" />
+              <stop offset="1" stop-color="#2E8FF5" />
+            </linearGradient>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#2E8FF5" />
+            </marker>
+          </defs>
+
+          <!-- ROW 1: Distribution -->
+          <rect x="40" y="30" width="840" height="88" rx="14" fill="#f6f9fb" stroke="#1BB59F" stroke-width="2" />
+          <text x="60" y="58" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">DISTRIBUTION</text>
+          <rect x="300" y="48" width="320" height="52" rx="10" fill="#fff" stroke="#1BB59F" stroke-width="2" />
+          <text x="460" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#213B5E">The Library</text>
+          <text x="460" y="90" text-anchor="middle" font-size="11" fill="#586b7e">install · use · sync across harnesses</text>
+
+          <!-- arrow down -->
+          <path d="M 460 130 L 460 158" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+
+          <!-- ROW 2: Catalog upstream -->
+          <rect x="40" y="168" width="840" height="100" rx="14" fill="#f6f9fb" stroke="#34CFA6" stroke-width="2" />
+          <text x="60" y="196" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">CATALOG UPSTREAM</text>
+          <rect x="180" y="206" width="240" height="48" rx="10" fill="#fff" stroke="#34CFA6" stroke-width="2" />
+          <text x="300" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#213B5E">the-catalog-source</text>
+          <text x="300" y="244" text-anchor="middle" font-size="10" fill="#586b7e">catalog.yaml</text>
+          <path d="M 432 230 L 488 230" stroke="#2E8FF5" stroke-width="2" marker-end="url(#arr)" />
+          <rect x="500" y="206" width="240" height="48" rx="10" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
+          <text x="620" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">fabric-library.json</text>
+          <text x="620" y="244" text-anchor="middle" font-size="10" fill="#586b7e">catalog projection snapshot</text>
+
+          <path d="M 460 278 L 460 306" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+
+          <!-- ROW 3: Living Vault app -->
+          <rect x="40" y="316" width="840" height="120" rx="14" fill="#eef6fb" stroke="#213B5E" stroke-width="2.5" />
+          <text x="60" y="344" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">THE LIVING VAULT (RAYFIN FABRIC APP)</text>
+          <rect x="80" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#1BB59F" stroke-width="2" />
+          <text x="180" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Govern</text>
+          <text x="180" y="400" text-anchor="middle" font-size="10" fill="#586b7e">editable catalog</text>
+          <rect x="300" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
+          <text x="400" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Measure</text>
+          <text x="400" y="400" text-anchor="middle" font-size="10" fill="#586b7e">cross-harness Monitor</text>
+          <rect x="520" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#34CFA6" stroke-width="2" />
+          <text x="620" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Improve</text>
+          <text x="620" y="400" text-anchor="middle" font-size="10" fill="#586b7e">effectiveness signal</text>
+          <rect x="740" y="358" width="120" height="62" rx="10" fill="#fff" stroke="#213B5E" stroke-width="1.5" stroke-dasharray="4 3" />
+          <text x="800" y="386" text-anchor="middle" font-size="11" font-weight="700" fill="#213B5E">/model</text>
+          <text x="800" y="404" text-anchor="middle" font-size="9" fill="#586b7e">canvas</text>
+
+          <path d="M 460 446 L 460 474" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+
+          <!-- ROW 4: Fabric platform -->
+          <rect x="40" y="484" width="520" height="100" rx="14" fill="#f6f9fb" stroke="#213B5E" stroke-width="2" />
+          <text x="60" y="512" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">MICROSOFT FABRIC</text>
+          <text x="300" y="538" text-anchor="middle" font-size="14" font-weight="700" fill="#213B5E">Rayfin semantic model (9 entities)</text>
+          <text x="300" y="556" text-anchor="middle" font-size="11" fill="#586b7e">Asset · Utilization · Tags · Bundles · Dependencies</text>
+          <text x="300" y="572" text-anchor="middle" font-size="11" fill="#586b7e">MSSQL + GraphQL data layer</text>
+
+          <!-- Governance box -->
+          <rect x="580" y="484" width="300" height="100" rx="14" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
+          <text x="600" y="512" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">GOVERNANCE</text>
+          <text x="730" y="538" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Inside the Vault</text>
+          <text x="730" y="556" text-anchor="middle" font-size="10" fill="#586b7e">submissions queue · contract gate</text>
+          <text x="730" y="572" text-anchor="middle" font-size="10" fill="#586b7e">honesty grades · RBAC (Fabric gated)</text>
+
+          <!-- Power BI branch -->
+          <path d="M 300 594 L 300 610 L 460 610" stroke="#9fb1c8" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)" />
+          <rect x="460" y="588" width="200" height="28" rx="8" fill="#fff" stroke="#9fb1c8" stroke-width="1.5" stroke-dasharray="4 3" />
+          <text x="560" y="607" text-anchor="middle" font-size="11" font-weight="600" fill="#586b7e">Power BI (optional downstream)</text>
+
+          <!-- Telemetry side feed -->
+          <rect x="40" y="358" width="28" height="62" rx="6" fill="#1BB59F" opacity="0.15" />
+          <text x="24" y="392" font-size="9" fill="#0f7d6c" transform="rotate(-90 24 392)">local harness logs</text>
+          <path d="M 68 389 L 78 389" stroke="#1BB59F" stroke-width="2" marker-end="url(#arr)" />
+        </svg>
+      </div>
+
+      <h2>Keep the names straight</h2>
+      <div class="legend">
+        <div class="leg-card">
+          <div class="name">The Library</div>
+          <p>Distribution catalog. Installs the same agentic assets across Claude Code, Codex, Copilot, Grok, and devices.</p>
+        </div>
+        <div class="leg-card">
+          <div class="name">the-catalog-source</div>
+          <p>Upstream catalog for asset-side projection into <code>fabric-library.json</code>. Not the same repo as The Library.</p>
+        </div>
+        <div class="leg-card">
+          <div class="name">The Living Vault</div>
+          <p>Rayfin Fabric app: system of record + effectiveness monitor. This is the operational product surface.</p>
+        </div>
+        <div class="leg-card cousin">
+          <div class="name">the-vault (cousin)</div>
+          <p>Separate personal skill library. Tooling source only; does not feed the Living Vault catalog.</p>
+        </div>
+        <div class="leg-card">
+          <div class="name">Microsoft Fabric</div>
+          <p>Hosts the Rayfin app bundle and semantic model. Live read/write path deploys on request; demo SWA runs at zero Fabric cost.</p>
+        </div>
+        <div class="leg-card">
+          <div class="name">Power BI</div>
+          <p>Optional analytics consumer of the Fabric semantic model. The Vault's Monitor is the live ops UI; Power BI is not a substitute.</p>
+        </div>
+      </div>
+
+      <h2>Intentional handoffs (not auto-sync)</h2>
+      <table class="handoff-table">
+        <thead>
+          <tr>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">What moves</th>
+            <th scope="col">Who triggers it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">The Library</th>
+            <td>Harness workspaces</td>
+            <td>Installed skills, agents, MCP servers</td>
+            <td>Contributor / <code>library install</code></td>
+          </tr>
+          <tr>
+            <th scope="row">the-catalog-source</th>
+            <td>The Living Vault</td>
+            <td><code>fabric-library.json</code> catalog projection</td>
+            <td>Admin import or accepted submission</td>
+          </tr>
+          <tr>
+            <th scope="row">Harness session logs</th>
+            <td>The Living Vault</td>
+            <td>Metadata-only utilization rows</td>
+            <td>Optional local collectors (self-host)</td>
+          </tr>
+          <tr>
+            <th scope="row">Rayfin semantic model</th>
+            <td>Power BI</td>
+            <td>Nine-entity star schema</td>
+            <td>Analyst bind (optional)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Live stack proof (2026-06-19)</h2>
+      <p style="color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 4px">
+        Four captures from the same live Fabric session: SQL facts, ops Monitor,
+        executive Overview, and optional Power BI downstream.
+      </p>
+      <div class="proof-row" aria-label="Stack story trio screenshots">
+        <figure class="proof-card">
+          <img
+            src="images/fabricapp/fabric-sql-the-vault-utilizations-table.png"
+            alt="Fabric SQL Utilizations table"
+            width="640"
+            height="360"
+            loading="lazy"
+          />
+          <figcaption class="cap">Fabric SQL · Utilizations</figcaption>
+        </figure>
+        <figure class="proof-card">
+          <img
+            src="images/fabricapp/living-vault-monitor-demo.png"
+            alt="Living Vault Monitor"
+            width="640"
+            height="360"
+            loading="lazy"
+          />
+          <figcaption class="cap">Vault · Monitor (demo)</figcaption>
+        </figure>
+        <figure class="proof-card">
+          <img
+            src="images/fabricapp/living-vault-overview-health-quadrant.png"
+            alt="Living Vault Overview quadrant"
+            width="640"
+            height="360"
+            loading="lazy"
+          />
+          <figcaption class="cap">Vault · Overview</figcaption>
+        </figure>
+      </div>
+
+      <div class="note">
+        <strong>Closed loop:</strong> The Library distributes assets across harnesses. the-catalog-source projects the governed catalog. The Living Vault measures which assets earn their place. Telemetry reads local harness logs (metadata only) and never ships in the public demo build.
+      </div>
+
+      <h2>Common confusions</h2>
+      <div class="faq">
+        <article class="faq-item">
+          <h3>Is The Library the same as the Living Vault?</h3>
+          <p>
+            No. The Library is distribution (install across harnesses). The Living
+            Vault is governance and measurement inside Fabric. They complement
+            each other; neither replaces the other.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>Is the-catalog-source the same as The Library?</h3>
+          <p>
+            No. Different repos and roles. the-catalog-source is the upstream
+            catalog projection source for <code>fabric-library.json</code>. The
+            Library is the cross-harness install catalog.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>Is Power BI the product?</h3>
+          <p>
+            No. The Monitor and /model canvas are the live operational UI. Power
+            BI is an optional downstream consumer of the same Rayfin semantic
+            model.
+          </p>
+        </article>
+        <article class="faq-item">
+          <h3>Does the demo read my machine?</h3>
+          <p>
+            No. The public SWA ships synthetic utilization JSON only. Real
+            harness telemetry stays in gitignored local snapshots when you
+            self-host. See the
+            <a href="telemetry-guide.html">telemetry guide</a>.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        <a class="btn" href="/demo">Try the demo</a>
+        <a href="index.html" style="margin-left: 16px; font-weight: 600">Full overview</a>
+        <a href="telemetry-guide.html" style="margin-left: 16px; font-weight: 600">Telemetry guide</a>
+      </p>
+
+      <div class="footer">
+        The Living Vault · Public repo coming soon
+      </div>
+    </main>
+    <script>
+      // Accessible hamburger menu (dependency-free, keyboard operable)
+      (function () {
+        var toggle = document.querySelector(".nav-toggle");
+        var menu = document.getElementById("mobile-menu");
+        if (!toggle || !menu) return;
+        function setOpen(open) {
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          menu.classList.toggle("is-open", open);
+        }
+        toggle.addEventListener("click", function () {
+          setOpen(toggle.getAttribute("aria-expanded") !== "true");
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+            setOpen(false);
+            toggle.focus();
+          }
+        });
+        menu.addEventListener("click", function (e) {
+          if (e.target.closest("a")) setOpen(false);
+        });
+      })();
+    </script>
+  </body>
+</html>

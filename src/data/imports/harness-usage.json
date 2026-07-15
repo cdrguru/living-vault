@@ -1,0 +1,853 @@
+{
+  "generatedAt": "2026-06-05T00:00:00.000Z",
+  "sources": [
+    {
+      "source": "claude-code",
+      "label": "Claude Code",
+      "sessions": 476,
+      "windowStart": "2026-03-07",
+      "windowEnd": "2026-06-05",
+      "invocations": 63168,
+      "successes": 54769,
+      "errors": 8402,
+      "latencyMs": 3200,
+      "tokens": 306996480,
+      "cost": 0,
+      "models": [
+        "claude-opus-4-8",
+        "claude-sonnet-4-6",
+        "claude-haiku-4-5"
+      ],
+      "tokensByModel": {
+        "claude-sonnet-4-6": 103764757,
+        "claude-haiku-4-5": 17254270,
+        "claude-opus-4-8": 185977453
+      },
+      "componentsByModel": {
+        "claude-sonnet-4-6": {
+          "input": 7045755,
+          "output": 12810464,
+          "cacheWrite": 83908538,
+          "cacheRead": 2031312549
+        },
+        "claude-haiku-4-5": {
+          "input": 1171586,
+          "output": 2130157,
+          "cacheWrite": 13952527,
+          "cacheRead": 337771868
+        },
+        "claude-opus-4-8": {
+          "input": 12628099,
+          "output": 22960179,
+          "cacheWrite": 150389175,
+          "cacheRead": 3640719103
+        }
+      },
+      "note": "All tool fires from transcripts (built-ins included), uplifted from the catalog-attributed total. Tokens are billable-new (input, output, cache writes); cache reads are reported separately and priced at 0.1x input. Cost is derived from tokens at list prices, not billed.",
+      "daily": [
+        {
+          "date": "2026-03-07",
+          "sessions": 20,
+          "invocations": 3336,
+          "successes": 2904,
+          "errors": 432,
+          "latencyMs": 3200,
+          "tokens": 16212960
+        },
+        {
+          "date": "2026-03-12",
+          "sessions": 25,
+          "invocations": 3294,
+          "successes": 2867,
+          "errors": 427,
+          "latencyMs": 3200,
+          "tokens": 16008840
+        },
+        {
+          "date": "2026-03-17",
+          "sessions": 30,
+          "invocations": 3323,
+          "successes": 2893,
+          "errors": 430,
+          "latencyMs": 3200,
+          "tokens": 16149780
+        },
+        {
+          "date": "2026-03-22",
+          "sessions": 24,
+          "invocations": 3334,
+          "successes": 2914,
+          "errors": 421,
+          "latencyMs": 3200,
+          "tokens": 16203240
+        },
+        {
+          "date": "2026-03-27",
+          "sessions": 29,
+          "invocations": 3346,
+          "successes": 2928,
+          "errors": 418,
+          "latencyMs": 3200,
+          "tokens": 16261560
+        },
+        {
+          "date": "2026-04-01",
+          "sessions": 23,
+          "invocations": 3386,
+          "successes": 2962,
+          "errors": 424,
+          "latencyMs": 3200,
+          "tokens": 16455960
+        },
+        {
+          "date": "2026-04-06",
+          "sessions": 28,
+          "invocations": 3310,
+          "successes": 2894,
+          "errors": 416,
+          "latencyMs": 3200,
+          "tokens": 16086600
+        },
+        {
+          "date": "2026-04-11",
+          "sessions": 22,
+          "invocations": 3330,
+          "successes": 2906,
+          "errors": 424,
+          "latencyMs": 3200,
+          "tokens": 16183800
+        },
+        {
+          "date": "2026-04-16",
+          "sessions": 27,
+          "invocations": 3416,
+          "successes": 2974,
+          "errors": 442,
+          "latencyMs": 3200,
+          "tokens": 16601760
+        },
+        {
+          "date": "2026-04-21",
+          "sessions": 21,
+          "invocations": 3296,
+          "successes": 2885,
+          "errors": 411,
+          "latencyMs": 3200,
+          "tokens": 16018560
+        },
+        {
+          "date": "2026-04-26",
+          "sessions": 26,
+          "invocations": 3310,
+          "successes": 2891,
+          "errors": 419,
+          "latencyMs": 3200,
+          "tokens": 16086600
+        },
+        {
+          "date": "2026-05-01",
+          "sessions": 20,
+          "invocations": 3259,
+          "successes": 2838,
+          "errors": 421,
+          "latencyMs": 3200,
+          "tokens": 15838740
+        },
+        {
+          "date": "2026-05-06",
+          "sessions": 25,
+          "invocations": 3251,
+          "successes": 2816,
+          "errors": 435,
+          "latencyMs": 3200,
+          "tokens": 15799860
+        },
+        {
+          "date": "2026-05-11",
+          "sessions": 30,
+          "invocations": 3347,
+          "successes": 2886,
+          "errors": 461,
+          "latencyMs": 3200,
+          "tokens": 16266420
+        },
+        {
+          "date": "2026-05-16",
+          "sessions": 24,
+          "invocations": 3312,
+          "successes": 2840,
+          "errors": 472,
+          "latencyMs": 3200,
+          "tokens": 16096320
+        },
+        {
+          "date": "2026-05-21",
+          "sessions": 29,
+          "invocations": 3392,
+          "successes": 2909,
+          "errors": 483,
+          "latencyMs": 3200,
+          "tokens": 16485120
+        },
+        {
+          "date": "2026-05-26",
+          "sessions": 23,
+          "invocations": 3259,
+          "successes": 2794,
+          "errors": 466,
+          "latencyMs": 3200,
+          "tokens": 15838740
+        },
+        {
+          "date": "2026-05-31",
+          "sessions": 28,
+          "invocations": 3363,
+          "successes": 2866,
+          "errors": 498,
+          "latencyMs": 3200,
+          "tokens": 16344180
+        },
+        {
+          "date": "2026-06-05",
+          "sessions": 22,
+          "invocations": 3304,
+          "successes": 2802,
+          "errors": 502,
+          "latencyMs": 3200,
+          "tokens": 16057440
+        }
+      ],
+      "tracked": {
+        "successes": "full",
+        "errors": "full",
+        "latency": "full",
+        "tokens": "full",
+        "cost": "modeled"
+      }
+    },
+    {
+      "source": "codex",
+      "label": "Codex",
+      "sessions": 189,
+      "windowStart": "2026-03-07",
+      "windowEnd": "2026-06-05",
+      "invocations": 1417,
+      "successes": 1107,
+      "errors": 310,
+      "latencyMs": 2200,
+      "tokens": 5101200,
+      "cost": 0,
+      "models": [
+        "gpt-5.5"
+      ],
+      "tokensByModel": {
+        "gpt-5.5": 5101200
+      },
+      "componentsByModel": {
+        "gpt-5.5": {
+          "input": 4568635,
+          "output": 532565,
+          "cacheWrite": 0,
+          "cacheRead": 85802184
+        }
+      },
+      "note": "Tool calls across sessions, deduped by call id. Successes and errors are partial: ~90% of fires record no structured outcome. Tokens are billable-new (cached input priced at the cache-read rate); cost is modeled at list prices, not billed.",
+      "daily": [
+        {
+          "date": "2026-03-07",
+          "sessions": 9,
+          "invocations": 75,
+          "successes": 59,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 270000
+        },
+        {
+          "date": "2026-03-12",
+          "sessions": 10,
+          "invocations": 71,
+          "successes": 55,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 255600
+        },
+        {
+          "date": "2026-03-17",
+          "sessions": 11,
+          "invocations": 72,
+          "successes": 56,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 259200
+        },
+        {
+          "date": "2026-03-22",
+          "sessions": 9,
+          "invocations": 74,
+          "successes": 58,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 266400
+        },
+        {
+          "date": "2026-03-27",
+          "sessions": 10,
+          "invocations": 68,
+          "successes": 53,
+          "errors": 15,
+          "latencyMs": 2200,
+          "tokens": 244800
+        },
+        {
+          "date": "2026-04-01",
+          "sessions": 11,
+          "invocations": 73,
+          "successes": 57,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 262800
+        },
+        {
+          "date": "2026-04-06",
+          "sessions": 9,
+          "invocations": 75,
+          "successes": 59,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 270000
+        },
+        {
+          "date": "2026-04-11",
+          "sessions": 10,
+          "invocations": 75,
+          "successes": 59,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 270000
+        },
+        {
+          "date": "2026-04-16",
+          "sessions": 11,
+          "invocations": 68,
+          "successes": 53,
+          "errors": 15,
+          "latencyMs": 2200,
+          "tokens": 244800
+        },
+        {
+          "date": "2026-04-21",
+          "sessions": 9,
+          "invocations": 79,
+          "successes": 62,
+          "errors": 17,
+          "latencyMs": 2200,
+          "tokens": 284400
+        },
+        {
+          "date": "2026-04-26",
+          "sessions": 10,
+          "invocations": 70,
+          "successes": 55,
+          "errors": 15,
+          "latencyMs": 2200,
+          "tokens": 252000
+        },
+        {
+          "date": "2026-05-01",
+          "sessions": 11,
+          "invocations": 79,
+          "successes": 62,
+          "errors": 17,
+          "latencyMs": 2200,
+          "tokens": 284400
+        },
+        {
+          "date": "2026-05-06",
+          "sessions": 9,
+          "invocations": 70,
+          "successes": 55,
+          "errors": 15,
+          "latencyMs": 2200,
+          "tokens": 252000
+        },
+        {
+          "date": "2026-05-11",
+          "sessions": 10,
+          "invocations": 82,
+          "successes": 64,
+          "errors": 18,
+          "latencyMs": 2200,
+          "tokens": 295200
+        },
+        {
+          "date": "2026-05-16",
+          "sessions": 11,
+          "invocations": 80,
+          "successes": 62,
+          "errors": 18,
+          "latencyMs": 2200,
+          "tokens": 288000
+        },
+        {
+          "date": "2026-05-21",
+          "sessions": 9,
+          "invocations": 81,
+          "successes": 63,
+          "errors": 18,
+          "latencyMs": 2200,
+          "tokens": 291600
+        },
+        {
+          "date": "2026-05-26",
+          "sessions": 10,
+          "invocations": 80,
+          "successes": 62,
+          "errors": 18,
+          "latencyMs": 2200,
+          "tokens": 288000
+        },
+        {
+          "date": "2026-05-31",
+          "sessions": 11,
+          "invocations": 72,
+          "successes": 56,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 259200
+        },
+        {
+          "date": "2026-06-05",
+          "sessions": 9,
+          "invocations": 73,
+          "successes": 57,
+          "errors": 16,
+          "latencyMs": 2200,
+          "tokens": 262800
+        }
+      ],
+      "tracked": {
+        "successes": "partial",
+        "errors": "partial",
+        "latency": "full",
+        "tokens": "full",
+        "cost": "modeled"
+      }
+    },
+    {
+      "source": "grok",
+      "label": "Grok",
+      "sessions": 94,
+      "windowStart": "2026-03-07",
+      "windowEnd": "2026-06-05",
+      "invocations": 709,
+      "successes": 617,
+      "errors": 92,
+      "latencyMs": 2200,
+      "tokens": 1559800,
+      "cost": 0,
+      "models": [
+        "grok-build"
+      ],
+      "tokensByModel": {
+        "grok-build": 1559800
+      },
+      "componentsByModel": {
+        "grok-build": {
+          "input": 1308204,
+          "output": 251596,
+          "cacheWrite": 0,
+          "cacheRead": 28076400
+        }
+      },
+      "note": "Completed tool calls, with successes and errors counted from each tool outcome. Latency is model-response time, not per tool fire. Tokens are billable-new (cached prompt priced at the cache-read rate); cost is modeled at list prices, not billed.",
+      "daily": [
+        {
+          "date": "2026-03-07",
+          "sessions": 4,
+          "invocations": 34,
+          "successes": 30,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 74800
+        },
+        {
+          "date": "2026-03-12",
+          "sessions": 5,
+          "invocations": 36,
+          "successes": 31,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 79200
+        },
+        {
+          "date": "2026-03-17",
+          "sessions": 6,
+          "invocations": 34,
+          "successes": 30,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 74800
+        },
+        {
+          "date": "2026-03-22",
+          "sessions": 4,
+          "invocations": 37,
+          "successes": 32,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 81400
+        },
+        {
+          "date": "2026-03-27",
+          "sessions": 5,
+          "invocations": 35,
+          "successes": 30,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 77000
+        },
+        {
+          "date": "2026-04-01",
+          "sessions": 6,
+          "invocations": 41,
+          "successes": 36,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 90200
+        },
+        {
+          "date": "2026-04-06",
+          "sessions": 4,
+          "invocations": 38,
+          "successes": 33,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 83600
+        },
+        {
+          "date": "2026-04-11",
+          "sessions": 5,
+          "invocations": 41,
+          "successes": 36,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 90200
+        },
+        {
+          "date": "2026-04-16",
+          "sessions": 6,
+          "invocations": 41,
+          "successes": 36,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 90200
+        },
+        {
+          "date": "2026-04-21",
+          "sessions": 4,
+          "invocations": 35,
+          "successes": 30,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 77000
+        },
+        {
+          "date": "2026-04-26",
+          "sessions": 5,
+          "invocations": 39,
+          "successes": 34,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 85800
+        },
+        {
+          "date": "2026-05-01",
+          "sessions": 6,
+          "invocations": 37,
+          "successes": 32,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 81400
+        },
+        {
+          "date": "2026-05-06",
+          "sessions": 4,
+          "invocations": 41,
+          "successes": 36,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 90200
+        },
+        {
+          "date": "2026-05-11",
+          "sessions": 5,
+          "invocations": 36,
+          "successes": 31,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 79200
+        },
+        {
+          "date": "2026-05-16",
+          "sessions": 6,
+          "invocations": 41,
+          "successes": 36,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 90200
+        },
+        {
+          "date": "2026-05-21",
+          "sessions": 4,
+          "invocations": 34,
+          "successes": 30,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 74800
+        },
+        {
+          "date": "2026-05-26",
+          "sessions": 5,
+          "invocations": 35,
+          "successes": 30,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 77000
+        },
+        {
+          "date": "2026-05-31",
+          "sessions": 6,
+          "invocations": 38,
+          "successes": 33,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 83600
+        },
+        {
+          "date": "2026-06-05",
+          "sessions": 4,
+          "invocations": 36,
+          "successes": 31,
+          "errors": 5,
+          "latencyMs": 2200,
+          "tokens": 79200
+        }
+      ],
+      "tracked": {
+        "successes": "full",
+        "errors": "full",
+        "latency": "partial",
+        "tokens": "partial",
+        "cost": "modeled"
+      }
+    },
+    {
+      "source": "copilot",
+      "label": "Copilot",
+      "sessions": 56,
+      "windowStart": "2026-03-07",
+      "windowEnd": "2026-06-05",
+      "invocations": 432,
+      "successes": 370,
+      "errors": 62,
+      "latencyMs": 2200,
+      "tokens": 1339200,
+      "cost": 0,
+      "models": [
+        "gpt-5.4"
+      ],
+      "tokensByModel": {
+        "gpt-5.4": 1339200
+      },
+      "componentsByModel": {
+        "gpt-5.4": {
+          "input": 389975,
+          "output": 176105,
+          "cacheWrite": 772986,
+          "cacheRead": 14289264
+        }
+      },
+      "note": "Per-tool-call events with an explicit success boolean; latency is the start-to-complete delta per tool call. Tokens are billable-new (cache reads priced at the cache-read rate); cost is modeled at list prices, not billed.",
+      "daily": [
+        {
+          "date": "2026-03-07",
+          "sessions": 2,
+          "invocations": 25,
+          "successes": 21,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 77500
+        },
+        {
+          "date": "2026-03-12",
+          "sessions": 3,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        },
+        {
+          "date": "2026-03-17",
+          "sessions": 4,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        },
+        {
+          "date": "2026-03-22",
+          "sessions": 2,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-03-27",
+          "sessions": 3,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        },
+        {
+          "date": "2026-04-01",
+          "sessions": 4,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-04-06",
+          "sessions": 2,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        },
+        {
+          "date": "2026-04-11",
+          "sessions": 3,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-04-16",
+          "sessions": 4,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-04-21",
+          "sessions": 2,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-04-26",
+          "sessions": 3,
+          "invocations": 22,
+          "successes": 19,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 68200
+        },
+        {
+          "date": "2026-05-01",
+          "sessions": 4,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        },
+        {
+          "date": "2026-05-06",
+          "sessions": 2,
+          "invocations": 22,
+          "successes": 19,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 68200
+        },
+        {
+          "date": "2026-05-11",
+          "sessions": 3,
+          "invocations": 24,
+          "successes": 20,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 74400
+        },
+        {
+          "date": "2026-05-16",
+          "sessions": 4,
+          "invocations": 21,
+          "successes": 18,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 65100
+        },
+        {
+          "date": "2026-05-21",
+          "sessions": 2,
+          "invocations": 25,
+          "successes": 21,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 77500
+        },
+        {
+          "date": "2026-05-26",
+          "sessions": 3,
+          "invocations": 25,
+          "successes": 21,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 77500
+        },
+        {
+          "date": "2026-05-31",
+          "sessions": 4,
+          "invocations": 25,
+          "successes": 21,
+          "errors": 4,
+          "latencyMs": 2200,
+          "tokens": 77500
+        },
+        {
+          "date": "2026-06-05",
+          "sessions": 2,
+          "invocations": 23,
+          "successes": 20,
+          "errors": 3,
+          "latencyMs": 2200,
+          "tokens": 71300
+        }
+      ],
+      "tracked": {
+        "successes": "full",
+        "errors": "full",
+        "latency": "full",
+        "tokens": "full",
+        "cost": "modeled"
+      }
+    }
+  ]
+}

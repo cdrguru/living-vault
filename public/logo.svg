@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1240" role="img" aria-labelledby="tlv-title tlv-desc">
+  <title id="tlv-title">The Living Vault</title>
+  <desc id="tlv-desc">A vault door with a six-spoke wheel, a connected orbit ring of nodes, and a growing sprout with a sparkle.</desc>
+
+  <defs>
+    <!-- palette -->
+    <!-- navy  #213B5E   teal #1BB59F   teal-bright #34CFA6   blue #2E8FF5 -->
+
+    <!-- orbit ring: teal (top-left) to blue (bottom-right) -->
+    <linearGradient id="tlv-orbit" x1="0.12" y1="0.12" x2="0.92" y2="0.9">
+      <stop offset="0" stop-color="#23C3AC"/>
+      <stop offset="0.5" stop-color="#23A6D8"/>
+      <stop offset="1" stop-color="#2E8FF5"/>
+    </linearGradient>
+
+    <!-- leaf fill: bright mint at the tip to teal at the base -->
+    <linearGradient id="tlv-leaf" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#46DDA6"/>
+      <stop offset="1" stop-color="#16B39C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ===================== ORBIT RING (behind everything) ===================== -->
+  <circle cx="600" cy="560" r="258" fill="none" stroke="url(#tlv-orbit)" stroke-width="9"/>
+
+  <!-- ===================== SPROUT (over the ring, behind the vault) ===================== -->
+  <g fill="none" stroke="#1FBFA6" stroke-width="13" stroke-linecap="round">
+    <!-- main stem rising up and to the right from behind the vault -->
+    <path d="M 650 415 C 700 360 700 298 728 250 C 748 214 760 196 776 168"/>
+  </g>
+
+  <g fill="url(#tlv-leaf)">
+    <!-- broad lower-left leaf sweeping over the top-left -->
+    <path d="M 706 308 Q 628 250 558 296 Q 648 320 706 308 Z"/>
+    <!-- upper-left leaf -->
+    <path d="M 744 236 Q 690 168 686 132 Q 738 184 744 236 Z"/>
+    <!-- upper-right leaf (carries the sparkle) -->
+    <path d="M 750 232 Q 794 154 846 148 Q 810 202 750 232 Z"/>
+  </g>
+
+  <!-- leaf midribs -->
+  <g fill="none" stroke="#0E8E80" stroke-width="5" stroke-linecap="round" opacity="0.55">
+    <path d="M 700 304 Q 632 296 562 296"/>
+    <path d="M 740 232 Q 706 184 690 138"/>
+    <path d="M 752 230 Q 798 188 840 152"/>
+  </g>
+
+  <!-- sparkle / twinkle -->
+  <path d="M 860 122 L 868 142 L 888 150 L 868 158 L 860 178 L 852 158 L 832 150 L 852 142 Z"
+        fill="#FFFFFF"/>
+
+  <!-- ===================== VAULT DOOR ===================== -->
+  <!-- left handle / hinge assembly -->
+  <g fill="#213B5E">
+    <rect x="356" y="470" width="44" height="56" rx="20"/>
+    <rect x="356" y="596" width="44" height="56" rx="20"/>
+    <rect x="369" y="510" width="18" height="104" rx="8"/>
+    <rect x="392" y="547" width="78" height="28" rx="13"/>
+  </g>
+
+  <!-- concentric vault rings -->
+  <circle cx="600" cy="560" r="196" fill="#213B5E"/>
+  <circle cx="600" cy="560" r="166" fill="#FFFFFF"/>
+  <circle cx="600" cy="560" r="140" fill="#213B5E"/>
+  <circle cx="600" cy="560" r="110" fill="#FFFFFF"/>
+
+  <!-- six-spoke wheel -->
+  <g stroke="#213B5E" stroke-width="24" stroke-linecap="round">
+    <g transform="rotate(0 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+    <g transform="rotate(60 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+    <g transform="rotate(120 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+    <g transform="rotate(180 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+    <g transform="rotate(240 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+    <g transform="rotate(300 600 560)"><line x1="600" y1="560" x2="692" y2="560"/></g>
+  </g>
+  <!-- spoke knobs -->
+  <g fill="#213B5E">
+    <g transform="rotate(0 600 560)"><circle cx="692" cy="560" r="15"/></g>
+    <g transform="rotate(60 600 560)"><circle cx="692" cy="560" r="15"/></g>
+    <g transform="rotate(120 600 560)"><circle cx="692" cy="560" r="15"/></g>
+    <g transform="rotate(180 600 560)"><circle cx="692" cy="560" r="15"/></g>
+    <g transform="rotate(240 600 560)"><circle cx="692" cy="560" r="15"/></g>
+    <g transform="rotate(300 600 560)"><circle cx="692" cy="560" r="15"/></g>
+  </g>
+
+  <!-- hub -->
+  <circle cx="600" cy="560" r="56" fill="#213B5E"/>
+  <circle cx="600" cy="560" r="30" fill="#FFFFFF"/>
+  <circle cx="600" cy="560" r="11" fill="#213B5E"/>
+
+  <!-- ===================== ORBIT NODES (in front of the ring) ===================== -->
+  <circle cx="398" cy="414" r="24" fill="#23C3AC"/>
+  <circle cx="851" cy="618" r="22" fill="#FFFFFF" stroke="#2E8FF5" stroke-width="9"/>
+  <circle cx="512" cy="802" r="22" fill="#2E8FF5"/>
+  <circle cx="706" cy="792" r="18" fill="#2E8FF5"/>
+
+  <!-- ===================== WORDMARK ===================== -->
+  <g id="tlv-wordmark">
+    <path transform="translate(3.58 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M567 702V565H381V0H210V565H24V702Z"/>
+    <path transform="translate(93.13 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M617 326V0H447V303Q447 359 418.0 390.0Q389 421 340 421Q291 421 262.0 390.0Q233 359 233 303V0H62V740H233V483Q259 520 304.0 542.0Q349 564 405 564Q501 564 559.0 500.5Q617 437 617 326Z"/>
+    <path transform="translate(195.13 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M585 238H198Q202 186 231.5 158.5Q261 131 304 131Q368 131 393 185H575Q561 130 524.5 86.0Q488 42 433.0 17.0Q378 -8 310 -8Q228 -8 164.0 27.0Q100 62 64.0 127.0Q28 192 28 279Q28 366 63.5 431.0Q99 496 163.0 531.0Q227 566 310 566Q391 566 454.0 532.0Q517 498 552.5 435.0Q588 372 588 288Q588 264 585 238ZM413 333Q413 377 383.0 403.0Q353 429 308 429Q265 429 235.5 404.0Q206 379 199 333Z"/>
+    <path transform="translate(320.23 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M233 132H457V0H62V702H233Z"/>
+    <path transform="translate(392.68 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M46 708Q46 748 74.5 774.5Q103 801 148 801Q192 801 220.5 774.5Q249 748 249 708Q249 669 220.5 642.5Q192 616 148 616Q103 616 74.5 642.5Q46 669 46 708ZM233 558V0H62V558Z"/>
+    <path transform="translate(437.83 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M313 160 434 558H616L418 0H207L9 558H192Z"/>
+    <path transform="translate(532.62 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M46 708Q46 748 74.5 774.5Q103 801 148 801Q192 801 220.5 774.5Q249 748 249 708Q249 669 220.5 642.5Q192 616 148 616Q103 616 74.5 642.5Q46 669 46 708ZM233 558V0H62V558Z"/>
+    <path transform="translate(577.77 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M617 326V0H447V303Q447 359 418.0 390.0Q389 421 340 421Q291 421 262.0 390.0Q233 359 233 303V0H62V558H233V484Q259 521 303.0 542.5Q347 564 402 564Q500 564 558.5 500.5Q617 437 617 326Z"/>
+    <path transform="translate(679.77 1078) scale(0.150000 -0.150000)" fill="#1BB59F" d="M446 479V558H617V1Q617 -76 586.5 -138.5Q556 -201 493.5 -238.0Q431 -275 338 -275Q214 -275 137.0 -216.5Q60 -158 49 -58H218Q226 -90 256.0 -108.5Q286 -127 330 -127Q383 -127 414.5 -96.5Q446 -66 446 1V80Q421 41 377.0 16.5Q333 -8 274 -8Q205 -8 149.0 27.5Q93 63 60.5 128.5Q28 194 28 280Q28 366 60.5 431.0Q93 496 149.0 531.0Q205 566 274 566Q333 566 377.5 542.0Q422 518 446 479ZM324 417Q273 417 237.5 380.5Q202 344 202 280Q202 216 237.5 178.5Q273 141 324 141Q375 141 410.5 178.0Q446 215 446 279Q446 343 410.5 380.0Q375 417 324 417Z"/>
+    <path transform="translate(814.33 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M721 702 472 0H258L9 702H191L365 172L540 702Z"/>
+    <path transform="translate(924.73 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M274 566Q333 566 377.5 542.0Q422 518 446 479V558H617V0H446V79Q421 40 376.5 16.0Q332 -8 273 -8Q205 -8 149.0 27.5Q93 63 60.5 128.5Q28 194 28 280Q28 366 60.5 431.0Q93 496 149.0 531.0Q205 566 274 566ZM324 417Q273 417 237.5 380.5Q202 344 202 280Q202 216 237.5 178.5Q273 141 324 141Q375 141 410.5 178.0Q446 215 446 279Q446 343 410.5 380.0Q375 417 324 417Z"/>
+    <path transform="translate(1027.47 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M613 558V0H442V76Q416 39 371.5 16.5Q327 -6 273 -6Q209 -6 160.0 22.5Q111 51 84.0 105.0Q57 159 57 232V558H227V255Q227 199 256.0 168.0Q285 137 334 137Q384 137 413.0 168.0Q442 199 442 255V558Z"/>
+    <path transform="translate(1129.47 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M233 740V0H62V740Z"/>
+    <path transform="translate(1174.62 1078) scale(0.150000 -0.150000)" fill="#213B5E" d="M373 145V0H286Q193 0 141.0 45.5Q89 91 89 194V416H21V558H89V694H260V558H372V416H260V192Q260 167 272.0 156.0Q284 145 312 145Z"/>
+  </g>
+</svg>

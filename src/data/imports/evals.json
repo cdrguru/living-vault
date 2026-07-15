@@ -1,0 +1,49 @@
+{
+  "demo": true,
+  "rows": [
+    {
+      "id": "eval-demo-as-0",
+      "tenantId": "tenant-fabricagent",
+      "assetId": "as-0",
+      "caseHash": "demo-case-a",
+      "date": "2026-06-18",
+      "trials": 20,
+      "passed": 18,
+      "failed": 2,
+      "errored": 0,
+      "latencyMs": 900,
+      "tokens": 0,
+      "cost": 0,
+      "quality": "full"
+    },
+    {
+      "id": "eval-demo-as-1",
+      "tenantId": "tenant-fabricagent",
+      "assetId": "as-1",
+      "caseHash": "demo-case-b",
+      "date": "2026-06-18",
+      "trials": 15,
+      "passed": 11,
+      "failed": 3,
+      "errored": 1,
+      "latencyMs": 1200,
+      "tokens": 0,
+      "cost": 0,
+      "quality": "full"
+    }
+  ],
+  "meta": {
+    "source": "demo",
+    "generatedAt": "2026-06-18T00:00:00.000Z",
+    "windowStart": "2026-06-01",
+    "windowEnd": "2026-06-18",
+    "cases": 2,
+    "tracked": {
+      "passed": "full",
+      "failed": "full",
+      "latency": "full",
+      "tokens": "none",
+      "cost": "none"
+    }
+  }
+}

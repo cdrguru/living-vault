@@ -1,0 +1,41 @@
+{
+  "note": "Neutral, synthetic overlay shipped in public builds (build:swa, build:fabric) and used by tests. Contains no owner identity or real asset list. realAssets.ts uses this whenever the owner's gitignored real-assets.local.json is absent (production, CI, the test runner). Keep this contract-clean and ownerless. See docs/PRIVACY.md.",
+  "identity": {
+    "ownerName": "Demo Maintainer",
+    "ownerEmail": "maintainer@example.com",
+    "originName": "Example Workspace (local)",
+    "domainTagName": "agentic-tooling",
+    "toolkitBundleName": "Starter Toolkit",
+    "toolkitBundleDescription": "A representative set of agentic assets for the demo catalog.",
+    "rayfinBundleName": "App Build Suite",
+    "rayfinBundleDescription": "Example app-building skills for the demo catalog.",
+    "pbiBundleName": "Reporting Prompt Pack",
+    "pbiBundleDescription": "Example reporting prompts for the demo catalog."
+  },
+  "assets": [
+    { "type": "subagent", "slug": "example-helper", "name": "Example Helper", "tier": "stock", "riskLevel": "low", "maturity": 0.82, "status": "active", "capability": "research" },
+    { "type": "subagent", "slug": "demo-reviewer", "name": "Demo Reviewer", "tier": "stock", "riskLevel": "low", "maturity": 0.76, "status": "active", "capability": "quality" },
+    { "type": "subagent", "slug": "sample-researcher", "name": "Sample Researcher", "tier": "custom", "riskLevel": "medium", "maturity": 0.6, "status": "active", "capability": "research", "ungoverned": true },
+
+    { "type": "mcp-server", "slug": "example-docs-server", "name": "Example Docs Server", "tier": "stock", "riskLevel": "low", "maturity": 0.78, "status": "active", "capability": "ai-platform", "summary": "A sample documentation MCP server for the demo catalog." },
+    { "type": "mcp-server", "slug": "sample-browser", "name": "Sample Browser", "tier": "stock", "riskLevel": "medium", "maturity": 0.66, "status": "active", "capability": "frontend", "ungoverned": true },
+
+    { "type": "skill", "slug": "starter-scaffolder", "name": "Starter Scaffolder", "tier": "stock", "riskLevel": "low", "maturity": 0.8, "status": "active", "capability": "devops", "summary": "Scaffold a new project from a template in the demo catalog." },
+    { "type": "skill", "slug": "example-test-runner", "name": "Example Test Runner", "tier": "stock", "riskLevel": "low", "maturity": 0.84, "status": "active", "capability": "quality", "summary": "Run and summarize the test suite in the demo catalog." },
+    { "type": "skill", "slug": "demo-formatter", "name": "Demo Formatter", "tier": "stock", "riskLevel": "low", "maturity": 0.62, "status": "active", "capability": "devops", "ungoverned": true },
+    { "type": "skill", "slug": "sample-data-modeler", "name": "Sample Data Modeler", "tier": "custom", "riskLevel": "low", "maturity": 0.79, "status": "active", "capability": "ai-platform", "bundle": "rayfin-suite", "summary": "Design entity models and relationships in the demo catalog." },
+    { "type": "skill", "slug": "sample-app-builder", "name": "Sample App Builder", "tier": "custom", "riskLevel": "medium", "maturity": 0.74, "status": "active", "capability": "devops", "bundle": "rayfin-suite", "summary": "Wire data contracts and iterate on seed data in the demo catalog." },
+    { "type": "skill", "slug": "sample-ui-refiner", "name": "Sample UI Refiner", "tier": "custom", "riskLevel": "low", "maturity": 0.7, "status": "active", "capability": "frontend", "bundle": "rayfin-suite", "summary": "Restyle cards and buttons with screenshot verification in the demo catalog." },
+    { "type": "skill", "slug": "sample-motion-system", "name": "Sample Motion System", "tier": "custom", "riskLevel": "low", "maturity": 0.66, "status": "active", "capability": "frontend", "bundle": "rayfin-suite", "summary": "Add a motion system to demo dashboards.", "ungoverned": true },
+    { "type": "skill", "slug": "sample-report-builder", "name": "Sample Report Builder", "tier": "custom", "riskLevel": "low", "maturity": 0.72, "status": "active", "capability": "frontend", "bundle": "rayfin-suite", "summary": "Build and scaffold reports from a prompt in the demo catalog." },
+    { "type": "skill", "slug": "deneb-visuals", "name": "Deneb Visuals", "tier": "custom", "riskLevel": "low", "maturity": 0.72, "status": "active", "capability": "frontend", "bundle": "rayfin-suite", "summary": "Build custom chart specs for the demo catalog." },
+
+    { "type": "hook", "slug": "example-post-edit", "name": "Example Post-Edit Hook", "tier": "stock", "riskLevel": "low", "maturity": 0.68, "status": "active", "capability": "quality", "summary": "A post-edit formatter hook recorded with sample success and latency.", "ungoverned": true },
+    { "type": "hook", "slug": "example-session-start", "name": "Example Session-Start Hook", "tier": "stock", "riskLevel": "low", "maturity": 0.7, "status": "active", "capability": "devops", "summary": "A session-start hook that injects sample context.", "ungoverned": true },
+
+    { "type": "prompt", "slug": "sample-measure-prompt", "name": "Sample Measure Prompt", "tier": "stock", "riskLevel": "low", "maturity": 0.72, "status": "active", "capability": "ai-platform", "bundle": "pbi-prompts", "summary": "Draft a reporting measure from a description in the demo catalog.", "ungoverned": true },
+    { "type": "prompt", "slug": "sample-naming-prompt", "name": "Sample Naming Prompt", "tier": "stock", "riskLevel": "low", "maturity": 0.7, "status": "active", "capability": "ai-platform", "bundle": "pbi-prompts", "summary": "Apply a naming and metadata pass in the demo catalog.", "ungoverned": true },
+
+    { "type": "command", "slug": "example-deploy-command", "name": "Example Deploy Command", "tier": "custom", "riskLevel": "medium", "maturity": 0.6, "status": "active", "capability": "devops", "summary": "A sample deploy slash command for the demo catalog.", "ungoverned": true }
+  ]
+}
