@@ -10,6 +10,8 @@ import type { RayfinEntities } from "./rayfinMapper";
 import type { AssetInput, TelemetryMeta } from "./types";
 
 const entities: RayfinEntities = {
+  routingStats: [],
+  assetRevisions: [],
   assets: [
     {
       id: "a1",
@@ -41,6 +43,8 @@ const entities: RayfinEntities = {
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [
     {
       id: "u1",
@@ -141,6 +145,21 @@ const telemetryMeta = {
     cost: true,
   },
 } as TelemetryMeta;
+
+const routingMeta = {
+  source: "router",
+  generatedAt: "2026-06-02T00:00:00Z",
+  windowStart: "2026-06-01",
+  windowEnd: "2026-06-02",
+  decisions: 9,
+  tracked: {
+    localHits: "full" as const,
+    externalFallbacks: "full" as const,
+    belowThreshold: "full" as const,
+    externalCost: "full" as const,
+    avoidedCostEstimate: "modeled" as const,
+  },
+};
 
 describe("RayfinDataSource writes", () => {
   it("addAsset creates a contract-clean asset with a server id and correct hash", async () => {
@@ -298,6 +317,67 @@ describe("RayfinDataSource writes", () => {
     expect(stored.invocations).toBe(3);
   });
 
+  it("importRoutingStats skips when no rows match a known asset", async () => {
+    const backend = new MockBackend(entities);
+    const source = new RayfinDataSource(backend, backend, {
+      canReview: () => true,
+    });
+    const result = await source.importRoutingStats(
+      [
+        {
+          id: "r-x",
+          tenantId: "t",
+          assetId: "ghost",
+          date: "2026-06-02",
+          localHits: 1,
+          externalFallbacks: 0,
+          belowThreshold: 0,
+          externalCost: 0,
+          avoidedCostEstimate: 0.2,
+        },
+      ],
+      routingMeta,
+    );
+    expect(result.skipped).toBe("no-matching-rows");
+    expect(backend.store.routingStats).toHaveLength(0);
+  });
+
+  it("importRoutingStats replaces the routing-stats table for matching rows", async () => {
+    const backend = new MockBackend(entities);
+    const source = new RayfinDataSource(backend, backend, {
+      canReview: () => true,
+    });
+    const result = await source.importRoutingStats(
+      [
+        {
+          id: "r-1",
+          tenantId: "t",
+          assetId: "a1",
+          date: "2026-06-02",
+          localHits: 6,
+          externalFallbacks: 2,
+          belowThreshold: 1,
+          externalCost: 0.3,
+          avoidedCostEstimate: 0.9,
+        },
+      ],
+      routingMeta,
+    );
+    expect(result.applied).toBe(1);
+    expect(backend.store.routingStats).toHaveLength(1);
+    const stored = backend.store.routingStats[0] as unknown as {
+      id: string;
+      asset_id: string;
+      localHits: number;
+    };
+    // RoutingStat.id is @uuid(): the id is server-assigned, not the upload's
+    // synthetic dedup id, mirroring importTelemetry.
+    expect(stored.id).not.toBe("r-1");
+    expect(UUID_RE.test(stored.id)).toBe(true);
+    expect(stored.asset_id).toBe("a1");
+    expect(stored.localHits).toBe(6);
+  });
+
   it("importProjection adds new catalog rows and is idempotent", async () => {
     const backend = new MockBackend(entities);
     const source = new RayfinDataSource(backend, backend, {
@@ -370,6 +450,50 @@ describe("RayfinDataSource writes", () => {
     );
     expect(backend.store.assets).toHaveLength(1);
     expect(backend.store.assetTags).toHaveLength(1);
+  });
+
+  it("recordIntervention creates one Intervention with a server-minted id, then reads it back", async () => {
+    const backend = new MockBackend(entities);
+    const source: DataSource = new RayfinDataSource(backend, backend, {
+      canReview: () => true,
+    });
+    const returned = await source.recordIntervention({
+      assetId: "a1",
+      action: "improve",
+      outcome: "revised",
+      actor: "claude-code",
+      note: "tightened the trigger",
+      date: "2026-07-01",
+    });
+    expect(returned.dedupeKey).toBe("a1:2026-07-01:improve");
+    // One row created; id omitted on create so the backend minted it (not the local uuid).
+    expect(backend.store.interventions).toHaveLength(1);
+    const stored = backend.store.interventions[0];
+    expect(stored.id).toMatch(UUID_RE);
+    expect(stored.assetId).toBe("a1"); // bare scalar, no snake_case remap
+    expect(stored.dedupeKey).toBe("a1:2026-07-01:improve");
+    // And it reads back through the mapper as an InterventionRow.
+    const dataset = await source.getDataset();
+    const read = dataset.interventions.find((i) => i.dedupeKey === "a1:2026-07-01:improve");
+    expect(read?.note).toBe("tightened the trigger");
+    expect(read?.date).toBe("2026-07-01");
+  });
+
+  it("recordIntervention is an idempotent no-op on an identical re-record (no second create)", async () => {
+    const backend = new MockBackend(entities);
+    const source: DataSource = new RayfinDataSource(backend, backend, {
+      canReview: () => true,
+    });
+    const decision = {
+      assetId: "a1",
+      action: "improve" as const,
+      outcome: "revised" as const,
+      actor: "codex",
+      date: "2026-07-01",
+    };
+    await source.recordIntervention(decision);
+    await source.recordIntervention(decision);
+    expect(backend.store.interventions).toHaveLength(1); // no duplicate created in Fabric
   });
 });
 

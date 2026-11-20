@@ -11,10 +11,13 @@
       "passed": 18,
       "failed": 2,
       "errored": 0,
+      "inconclusive": 0,
       "latencyMs": 900,
       "tokens": 0,
       "cost": 0,
-      "quality": "full"
+      "quality": "full",
+      "assetRevisionId": "rev-as-0-1",
+      "harness": "claude-code"
     },
     {
       "id": "eval-demo-as-1",
@@ -22,10 +25,11 @@
       "assetId": "as-1",
       "caseHash": "demo-case-b",
       "date": "2026-06-18",
-      "trials": 15,
+      "trials": 16,
       "passed": 11,
       "failed": 3,
       "errored": 1,
+      "inconclusive": 1,
       "latencyMs": 1200,
       "tokens": 0,
       "cost": 0,

@@ -191,8 +191,8 @@ export function ConnectionSection() {
           </div>
           <p className="mt-3 text-xs text-subtle">
             Read-only over your local seed and overlays. The HTTP server binds
-            127.0.0.1 and refuses a non-loopback bind unless
-            VAULT_MCP_ALLOW_PUBLIC is set, since it is unauthenticated.
+            127.0.0.1; a non-loopback bind requires bearer-token auth via
+            VAULT_MCP_AUTH_TOKEN, and there is no unauthenticated public mode.
           </p>
         </Panel>
       )}

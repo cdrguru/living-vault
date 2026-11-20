@@ -2,6 +2,7 @@ import { runDataSourceContract } from "./contract";
 import type {
   DataSource,
   EvalImportResult,
+  RoutingStatsImportResult,
   SubmissionDetail,
   SubmissionFilter,
   SubmissionItemDecisionInput,
@@ -28,6 +29,11 @@ import {
   finalizeSubmission,
 } from "./submissions";
 import { applyEvals } from "./evals";
+import { applyRoutingStats } from "./routingStats";
+import type { RecordInterventionInput } from "./DataSource";
+import type { InterventionRow } from "./interventions";
+import { applyIntervention } from "./recordIntervention";
+import { ensureRevisions } from "./revisions";
 import { applyTelemetry } from "./telemetry";
 import { telemetrySnapshot } from "./telemetrySnapshot";
 import type {
@@ -36,6 +42,8 @@ import type {
   EvalMeta,
   EvalResultRow,
   HarnessUsage,
+  RoutingStatRow,
+  RoutingStatsMeta,
   SubmissionItemRow,
   SubmissionRow,
   TelemetryMeta,
@@ -61,7 +69,30 @@ export class SeedDataSource implements DataSource {
       // Migration: datasets persisted before evalResults existed rehydrate without it;
       // default to [] so the contract loop and metrics never hit undefined.
       parsed.evalResults ??= [];
-      return parsed;
+      // Eval identity (PR12): rows persisted before the inconclusive bucket existed
+      // rehydrate without it; absent means no inconclusive trials were recorded,
+      // which is 0. Identity fields stay absent (null identity, honest derived cap).
+      parsed.evalResults = parsed.evalResults.map((row) => ({
+        ...row,
+        inconclusive: row.inconclusive ?? 0,
+      }));
+      // And the baseline table (PR12): empty until real control runs exist.
+      parsed.baselines ??= [];
+      // Same migration for revisions, plus a heal: a dataset persisted before revision
+      // tracking gets a seq-1 revision minted from each asset's CURRENT body, so its
+      // history starts now instead of never. Idempotent and in-memory only; the next
+      // commit persists it.
+      parsed.assetRevisions ??= [];
+      // And for interventions (PR5). Before PR5 these lived only in the sidecar, so a
+      // pre-PR5 persisted dataset has no interventions key; without this default the
+      // first recordIntervention would call appendIntervention(undefined, ...) and throw
+      // TypeError, losing the write. JSON.stringify drops the undefined key, so it never
+      // self-heals on its own.
+      parsed.interventions ??= [];
+      // And for routing stats: datasets persisted before the router evidence
+      // table existed rehydrate without it.
+      parsed.routingStats ??= [];
+      return ensureRevisions(parsed, { actor: "local-user", source: "import" });
     }
     return structuredClone(seedDataset);
   }
@@ -71,11 +102,20 @@ export class SeedDataSource implements DataSource {
   }
 
   private commit(dataset: VaultDataset): void {
-    const violations = runDataSourceContract(dataset);
+    // Reconcile revisions before the contract gate: any mutation that changed an
+    // asset's content (addAsset, updateAsset) gets that content captured as an
+    // immutable revision here, at the one place every write already funnels through.
+    // Idempotent, so the import paths (whose mergeProjection pass already minted with
+    // source "observed-scan") are untouched.
+    const reconciled = ensureRevisions(dataset, {
+      actor: "local-user",
+      source: "vault-write",
+    });
+    const violations = runDataSourceContract(reconciled);
     if (violations.length > 0) {
       throw new Error(`Contract violation: ${violations[0]}`);
     }
-    this.save(dataset);
+    this.save(reconciled);
   }
 
   async getDataset(): Promise<VaultDataset> {
@@ -287,6 +327,16 @@ export class SeedDataSource implements DataSource {
     return getWindowedHarnessUsage(window);
   }
 
+  async recordIntervention(
+    input: RecordInterventionInput,
+  ): Promise<InterventionRow> {
+    const dataset = this.load();
+    const { interventions, persisted } = applyIntervention(dataset, input);
+    dataset.interventions = interventions;
+    this.commit(dataset);
+    return structuredClone(persisted);
+  }
+
   async importProjection(incoming: ProjectionInput): Promise<ImportResult> {
     const dataset = this.load();
     // Reconcile by (type, slug) so the upstream snapshot enriches the catalog rows
@@ -339,6 +389,27 @@ export class SeedDataSource implements DataSource {
     return {
       applied: merged.evalResults.length,
       dropped: rows.length - merged.evalResults.length,
+    };
+  }
+
+  async importRoutingStats(
+    rows: RoutingStatRow[],
+    meta: RoutingStatsMeta,
+  ): Promise<RoutingStatsImportResult> {
+    const dataset = this.load();
+    // Same destructive-import guard as importTelemetry: applyRoutingStats replaces
+    // the whole routing-stats table, so an empty snapshot, or one whose rows
+    // reference no present asset, is a no op rather than wiping router evidence.
+    const assetIds = new Set(dataset.assets.map((asset) => asset.id));
+    const matched = rows.filter((row) => assetIds.has(row.assetId));
+    if (matched.length === 0) {
+      return { applied: 0, dropped: rows.length, skipped: "no-matching-rows" };
+    }
+    const merged = applyRoutingStats(dataset, rows, meta);
+    this.commit(merged);
+    return {
+      applied: merged.routingStats.length,
+      dropped: rows.length - merged.routingStats.length,
     };
   }
 
@@ -412,6 +483,19 @@ export class SeedDataSource implements DataSource {
       (membership) => membership.assetId !== id,
     );
     dataset.utilization = dataset.utilization.filter(
+      (row) => row.assetId !== id,
+    );
+    // A deleted asset takes its history and its evidence with it. Leaving either
+    // behind is a dangling row the contract rejects; evalResults was missing from
+    // this filter before revisions arrived, a latent bug the new dangling-revision
+    // check would have hit on the first delete of an eval-bearing asset.
+    dataset.evalResults = dataset.evalResults.filter(
+      (row) => row.assetId !== id,
+    );
+    dataset.assetRevisions = dataset.assetRevisions.filter(
+      (row) => row.assetId !== id,
+    );
+    dataset.routingStats = dataset.routingStats.filter(
       (row) => row.assetId !== id,
     );
     this.commit(dataset);

@@ -20,6 +20,7 @@ const META: EvalMeta = {
 
 function baseDataset(): VaultDataset {
   return {
+    routingStats: [],
     assets: [
       {
         id: "as-1",
@@ -47,7 +48,10 @@ function baseDataset(): VaultDataset {
     dependencies: [],
     bundleMemberships: [],
     utilization: [],
+    assetRevisions: [],
     evalResults: [],
+    baselines: [],
+    interventions: [],
   };
 }
 
@@ -62,6 +66,7 @@ function result(overrides: Partial<EvalResultRow>): EvalResultRow {
     passed: 4,
     failed: 1,
     errored: 0,
+    inconclusive: 0,
     latencyMs: 100,
     tokens: 0,
     cost: 0,

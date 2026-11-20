@@ -42,7 +42,9 @@ function emptyProjection(over: Partial<ProjectionInput> = {}): ProjectionInput {
 
 function dataset(over: Partial<VaultDataset> = {}): VaultDataset {
   return {
+    routingStats: [],
     assets: [],
+    assetRevisions: [],
     tags: [],
     origins: [],
     owners: [],
@@ -51,6 +53,8 @@ function dataset(over: Partial<VaultDataset> = {}): VaultDataset {
     dependencies: [],
     bundleMemberships: [],
     evalResults: [],
+    baselines: [],
+    interventions: [],
     utilization: [],
     ...over,
   };
@@ -79,6 +83,36 @@ describe("mergeProjection", () => {
     expect(merged.assets).toHaveLength(1);
     expect(merged.assets[0].body).toBe("new");
     expect(merged.assets[0].createdAt).toBe("2025-06-01T00:00:00Z");
+  });
+
+  it("preserves the replaced body as a revision: the observed-scan seam", () => {
+    // Real edits happen in the practitioner's own files and reach the Vault as a
+    // changed contentHash on the next import. This is the moment the old version
+    // would be destroyed, and the moment it must instead become history.
+    const current = mergeProjection(
+      dataset({
+        assets: [asset("fab-1", { body: "old-body", contentHash: "hash-old" })],
+      }),
+      emptyProjection(),
+      TENANT,
+    );
+    expect(current.assetRevisions).toHaveLength(1);
+
+    const incoming = emptyProjection({
+      assets: [asset("fab-1", { body: "new-body", contentHash: "hash-new" })],
+    });
+    const merged = mergeProjection(current, incoming, TENANT);
+    const history = merged.assetRevisions
+      .filter((rev) => rev.assetId === "fab-1")
+      .sort((a, b) => a.seq - b.seq);
+    expect(history).toHaveLength(2);
+    expect(history[0].body).toBe("old-body");
+    expect(history[1].body).toBe("new-body");
+    expect(history[1].source).toBe("observed-scan");
+
+    // Re-importing the same projection mints nothing: the merge stays idempotent.
+    const again = mergeProjection(merged, incoming, TENANT);
+    expect(again.assetRevisions).toHaveLength(2);
   });
 
   it("leaves rows that exist only in the current dataset untouched", () => {

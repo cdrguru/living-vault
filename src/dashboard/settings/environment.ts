@@ -1,3 +1,4 @@
+import { getFabricRuntimeConfig } from "@/services/rayfinClient";
 import type { PillSeverity, PillTone } from "@/dashboard/components/Pill";
 import { isProbeUtilization, type VaultDataset } from "@/data";
 
@@ -174,18 +175,15 @@ export function telemetryBanner(
 /** Read the live env signals from import.meta.env for the running app. */
 export function readEnvInput(): EnvInput {
   const env = import.meta.env;
+  const runtime = getFabricRuntimeConfig();
   return {
     dev: Boolean(env.DEV),
     demoMode: env.VITE_DEMO_MODE === "true",
     rayfinData: env.VITE_RAYFIN_DATA === "true",
-    // Match what bootstrapAuth() actually gates RayfinAuthService on, and what
-    // `rayfin env --framework vite` actually emits. It writes WORKSPACE_ID, ITEM_ID,
-    // and PORTAL_URL (plus TENANT_ID) but never VITE_FABRIC_CLIENT_ID, so keying off
-    // CLIENT_ID left this permanently false and mislabeled a real Fabric deploy as Mock.
     fabricConfigured: Boolean(
-      env.VITE_FABRIC_WORKSPACE_ID &&
-      env.VITE_FABRIC_ITEM_ID &&
-      env.VITE_FABRIC_PORTAL_URL,
+      (runtime?.workspaceId ?? env.VITE_FABRIC_WORKSPACE_ID) &&
+      (runtime?.itemId ?? env.VITE_FABRIC_ITEM_ID) &&
+      (runtime?.portalUrl ?? env.VITE_FABRIC_PORTAL_URL),
     ),
   };
 }

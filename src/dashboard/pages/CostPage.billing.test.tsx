@@ -102,6 +102,7 @@ const meta = (over: Partial<TelemetryMeta["tracked"]> = {}): TelemetryMeta => ({
 });
 
 const dataset: VaultDataset = {
+  routingStats: [],
   assets: [mkAsset("a1", "skill")],
   tags: [],
   origins: [],
@@ -110,7 +111,10 @@ const dataset: VaultDataset = {
   assetTags: [],
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [
     mkUtil("a1", { invocations: 10, successes: 4, errors: 6, cost: 0 }),
   ],

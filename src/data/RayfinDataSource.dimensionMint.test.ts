@@ -9,7 +9,9 @@ import type { RayfinEntities } from "./rayfinMapper";
 import type { AssetRow } from "./types";
 
 const emptyStore = (): RayfinEntities => ({
+  routingStats: [],
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [],
   owners: [],
@@ -18,6 +20,8 @@ const emptyStore = (): RayfinEntities => ({
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 });
 

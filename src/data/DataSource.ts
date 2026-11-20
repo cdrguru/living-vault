@@ -6,6 +6,11 @@ import type {
   EvalMeta,
   EvalResultRow,
   HarnessUsage,
+  InterventionAction,
+  InterventionOutcome,
+  InterventionRow,
+  RoutingStatRow,
+  RoutingStatsMeta,
   SubmissionItemDecision,
   SubmissionItemRow,
   SubmissionRow,
@@ -14,6 +19,17 @@ import type {
   UtilizationRow,
   VaultDataset,
 } from "./types";
+
+/** The raw decision an actor reports; the data source freezes the before-measurements. */
+export interface RecordInterventionInput {
+  assetId: string;
+  action: InterventionAction;
+  outcome: InterventionOutcome;
+  actor: string;
+  note?: string;
+  /** ISO date of the action; defaults to today. */
+  date?: string;
+}
 
 export interface DataSource {
   getDataset(): Promise<VaultDataset>;
@@ -52,6 +68,16 @@ export interface DataSource {
     rows: EvalResultRow[],
     meta: EvalMeta,
   ): Promise<EvalImportResult>;
+  /**
+   * Replace the routing-stats table with a router's per-asset daily decision
+   * aggregates and record its meta. Idempotent and contract-checked, mirroring
+   * importTelemetry. Rows referencing unknown assets are dropped; an import
+   * matching no known asset is a no op.
+   */
+  importRoutingStats(
+    rows: RoutingStatRow[],
+    meta: RoutingStatsMeta,
+  ): Promise<RoutingStatsImportResult>;
   /**
    * The real Claude Code usage keys that did not resolve to any governed catalog
    * asset, ranked highest count first. This is a read of the already loaded
@@ -100,6 +126,15 @@ export interface DataSource {
     id: string,
     status: SubmissionTransitionStatus,
   ): Promise<SubmissionRow>;
+  /**
+   * Record what an actor DID about a recommendation: the write half of the learning
+   * loop. The data source freezes the before-measurements (effectiveness and invocation
+   * count, and the asset's current revision) from its own dataset, then appends. Append
+   * only: an identical re-record is an idempotent no-op; a same-day change of mind
+   * appends a superseding row rather than destroying the first. Rejects an unknown
+   * assetId (an orphan record joins to nothing). Returns the persisted row.
+   */
+  recordIntervention(input: RecordInterventionInput): Promise<InterventionRow>;
 }
 
 /** A reviewer's decision on one staged item. */
@@ -157,5 +192,12 @@ export interface EvalImportResult {
   applied: number;
   dropped: number;
   /** Set when the import matched no known asset, so the eval table was left intact. */
+  skipped?: "no-matching-rows";
+}
+
+export interface RoutingStatsImportResult {
+  applied: number;
+  dropped: number;
+  /** Set when the import matched no known asset, so the routing-stats table was left intact. */
   skipped?: "no-matching-rows";
 }

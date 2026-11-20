@@ -12,7 +12,10 @@
       content="How The Living Vault measures agentic asset usage across AI coding harnesses: metadata only, local-first, honesty grades. No repository access required."
     />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Telemetry and privacy - The Living Vault" />
+    <meta
+      property="og:title"
+      content="Telemetry and privacy - The Living Vault"
+    />
     <meta
       property="og:description"
       content="Metadata-only collectors, per-harness honesty grades, and a clear split between the public demo and self-hosted real usage."
@@ -33,10 +36,14 @@
         --radius: 16px;
         --radius-sm: 11px;
         --maxw: 820px;
-        --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
         --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
         font-family: var(--font);
@@ -45,8 +52,14 @@
         color: var(--ink);
         background: var(--surface);
       }
-      a { color: var(--link); }
-      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 64px; }
+      a {
+        color: var(--link);
+      }
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 0 28px 64px;
+      }
       .site-header {
         border-bottom: 1px solid var(--line);
         background: var(--paper);
@@ -60,8 +73,14 @@
         gap: 16px;
         padding-bottom: 0;
       }
-      .brand { font-weight: 800; color: var(--navy); text-decoration: none; }
-      .brand .accent { color: var(--teal-text); }
+      .brand {
+        font-weight: 800;
+        color: var(--navy);
+        text-decoration: none;
+      }
+      .brand .accent {
+        color: var(--teal-text);
+      }
       /* Primary cross-page nav (canonical, identical across all pages) */
       .nav-links {
         display: flex;
@@ -76,7 +95,9 @@
         padding: 4px 2px;
         border-bottom: 2px solid transparent;
       }
-      .nav-links a:hover { color: var(--navy); }
+      .nav-links a:hover {
+        color: var(--navy);
+      }
       .nav-links a[aria-current="page"] {
         color: var(--navy);
         border-bottom-color: var(--teal);
@@ -95,22 +116,36 @@
         cursor: pointer;
         padding: 0;
       }
-      .nav-toggle:hover { border-color: var(--teal); }
+      .nav-toggle:hover {
+        border-color: var(--teal);
+      }
       .nav-toggle:focus-visible {
         outline: 2px solid var(--blue);
         outline-offset: 2px;
       }
-      .nav-toggle svg { width: 22px; height: 22px; display: block; }
-      .nav-toggle .icon-close { display: none; }
-      .nav-toggle[aria-expanded="true"] .icon-open { display: none; }
-      .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+      .nav-toggle svg {
+        width: 22px;
+        height: 22px;
+        display: block;
+      }
+      .nav-toggle .icon-close {
+        display: none;
+      }
+      .nav-toggle[aria-expanded="true"] .icon-open {
+        display: none;
+      }
+      .nav-toggle[aria-expanded="true"] .icon-close {
+        display: block;
+      }
       /* Mobile menu panel (hamburger target) */
       .mobile-menu {
         display: none;
         border-bottom: 1px solid var(--line);
         background: var(--paper);
       }
-      .mobile-menu.is-open { display: block; }
+      .mobile-menu.is-open {
+        display: block;
+      }
       .mobile-menu .wrap {
         display: flex;
         flex-direction: column;
@@ -126,17 +161,27 @@
         padding: 12px 6px;
         border-bottom: 1px solid var(--line);
       }
-      .mobile-menu a:last-of-type { border-bottom: none; }
+      .mobile-menu a:last-of-type {
+        border-bottom: none;
+      }
       .mobile-menu a:hover,
-      .mobile-menu a:focus-visible { color: var(--navy); }
+      .mobile-menu a:focus-visible {
+        color: var(--navy);
+      }
       .mobile-menu a:focus-visible {
         outline: 2px solid var(--blue);
         outline-offset: 2px;
       }
-      .mobile-menu a[aria-current="page"] { color: var(--navy); }
+      .mobile-menu a[aria-current="page"] {
+        color: var(--navy);
+      }
       @media (max-width: 760px) {
-        .nav-links { display: none; }
-        .nav-toggle { display: inline-flex; }
+        .nav-links {
+          display: none;
+        }
+        .nav-toggle {
+          display: inline-flex;
+        }
       }
       .eyebrow {
         font-size: 0.72rem;
@@ -152,7 +197,11 @@
         letter-spacing: -0.02em;
         margin: 12px 0 16px;
       }
-      .lead { font-size: 1.12rem; color: var(--ink-soft); margin-bottom: 32px; }
+      .lead {
+        font-size: 1.12rem;
+        color: var(--ink-soft);
+        margin-bottom: 32px;
+      }
       h2 {
         font-size: 1.35rem;
         font-weight: 800;
@@ -160,7 +209,10 @@
         margin: 36px 0 12px;
         letter-spacing: -0.01em;
       }
-      p, li { color: var(--ink-soft); }
+      p,
+      li {
+        color: var(--ink-soft);
+      }
       .card {
         background: var(--paper);
         border: 1px solid var(--line);
@@ -168,7 +220,9 @@
         padding: 22px 24px;
         margin: 20px 0;
       }
-      .card strong { color: var(--navy); }
+      .card strong {
+        color: var(--navy);
+      }
       table {
         width: 100%;
         border-collapse: collapse;
@@ -178,14 +232,22 @@
         margin: 16px 0;
         font-size: 0.92rem;
       }
-      th, td {
+      th,
+      td {
         text-align: left;
         padding: 12px 14px;
         border-bottom: 1px solid var(--line);
         vertical-align: top;
       }
-      th { background: var(--surface); color: var(--navy); font-weight: 700; }
-      tr:last-child th, tr:last-child td { border-bottom: none; }
+      th {
+        background: var(--surface);
+        color: var(--navy);
+        font-weight: 700;
+      }
+      tr:last-child th,
+      tr:last-child td {
+        border-bottom: none;
+      }
       .footer {
         margin-top: 48px;
         padding-top: 24px;
@@ -249,11 +311,31 @@
           aria-controls="mobile-menu"
           aria-label="Open menu"
         >
-          <svg class="icon-open" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <svg
+            class="icon-open"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 6h18M3 12h18M3 18h18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
           </svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <svg
+            class="icon-close"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -279,13 +361,14 @@
       </p>
 
       <p>
-        <a
-          class="btn"
-          href="/demo"
-          >Try the demo</a
-        >
-        <span style="margin-left: 12px; color: var(--ink-faint); font-size: 0.9rem"
-          >Public repo coming soon</span
+        <a class="btn" href="/demo">Try the demo</a>
+        <span style="margin-left: 12px; font-size: 0.9rem"
+          ><a
+            href="https://github.com/cdrguru/living-vault"
+            target="_blank"
+            rel="noopener"
+            >Public repo on GitHub</a
+          ></span
         >
       </p>
 
@@ -302,7 +385,10 @@
           <tr>
             <th scope="row">Claude Code</th>
             <td>Project transcript JSONL under your Claude config directory</td>
-            <td><strong>full</strong> per-asset invocations, success, errors, latency</td>
+            <td>
+              <strong>full</strong> per-asset invocations, success, errors,
+              latency
+            </td>
           </tr>
           <tr>
             <th scope="row">Codex</th>
@@ -317,40 +403,94 @@
           <tr>
             <th scope="row">Copilot</th>
             <td>Session event JSONL streams</td>
-            <td><strong>occupancy</strong> or <strong>derived</strong>; cost not faked</td>
+            <td>
+              <strong>occupancy</strong> or <strong>derived</strong>; cost not
+              faked
+            </td>
           </tr>
         </tbody>
       </table>
 
       <h2>Metadata only, never content</h2>
       <div class="card">
-        <p><strong>Collectors read:</strong> event types, tool and skill names, invocation and error counts, durations, token totals, ids, and timestamps.</p>
-        <p style="margin-bottom: 0"><strong>Never read:</strong> prompt text, model responses, reasoning, command text, tool arguments, tool results, file contents, file paths, summaries, titles, or auth tokens. Parser unit tests enforce this with sentinel content in fixtures.</p>
+        <p>
+          <strong>Collectors read:</strong> event types, tool and skill names,
+          invocation and error counts, durations, token totals, ids, and
+          timestamps.
+        </p>
+        <p style="margin-bottom: 0">
+          <strong>Never read:</strong> prompt text, model responses, reasoning,
+          command text, tool arguments, tool results, file contents, file paths,
+          summaries, titles, or auth tokens. Parser unit tests enforce this with
+          sentinel content in fixtures.
+        </p>
       </div>
 
-      <h3 style="color: var(--navy); font-size: 1.05rem">Notable exclusions by harness</h3>
+      <h3 style="color: var(--navy); font-size: 1.05rem">
+        Notable exclusions by harness
+      </h3>
       <ul>
-        <li><strong>Grok:</strong> chat history, prompt context, system prompts, terminal output, and worktree checkouts (can contain secrets).</li>
-        <li><strong>Copilot:</strong> message content, tool arguments and results, session-store database text columns. The collector does not open the SQLite store.</li>
-        <li><strong>Codex:</strong> function output strings and message payloads.</li>
-        <li><strong>Claude Code:</strong> transcript message bodies; only structural invocation metadata is parsed.</li>
+        <li>
+          <strong>Grok:</strong> chat history, prompt context, system prompts,
+          terminal output, and worktree checkouts (can contain secrets).
+        </li>
+        <li>
+          <strong>Copilot:</strong> message content, tool arguments and results,
+          session-store database text columns. The collector does not open the
+          SQLite store.
+        </li>
+        <li>
+          <strong>Codex:</strong> function output strings and message payloads.
+        </li>
+        <li>
+          <strong>Claude Code:</strong> transcript message bodies; only
+          structural invocation metadata is parsed.
+        </li>
       </ul>
 
       <h2 id="privacy">Where data lives</h2>
       <div class="card">
-        <p><strong>Public demo build:</strong> ships committed synthetic <code>utilization.json</code> and <code>harness-usage.json</code> only. No access to your machine.</p>
-        <p><strong>Live Fabric (owner push):</strong> curl <code>living-vault-collect.mjs</code> from the deployed app, run <code>node living-vault-collect.mjs telemetry</code>, then upload <code>./utilization.upload.json</code> in Settings. Fabric never reads your home directory.</p>
-        <p><strong>Local dev loop:</strong> repo collectors write gitignored <code>*.local.json</code> snapshots; the dev server prefers them. Demo builds never bundle real usage.</p>
-        <p style="margin-bottom: 0"><strong>Honesty over completeness:</strong> the UI labels each metric with a fidelity grade (<code>full | partial | occupancy | derived | none</code>). Unobserved assets show "no telemetry", not a measured zero.</p>
+        <p>
+          <strong>Public demo build:</strong> ships committed synthetic
+          <code>utilization.json</code> and
+          <code>harness-usage.json</code> only. No access to your machine.
+        </p>
+        <p>
+          <strong>Live Fabric (owner push):</strong> curl
+          <code>living-vault-collect.mjs</code> from the deployed app, run
+          <code>node living-vault-collect.mjs telemetry</code>, then upload
+          <code>./utilization.upload.json</code> in Settings. Fabric never reads
+          your home directory.
+        </p>
+        <p>
+          <strong>Local dev loop:</strong> repo collectors write gitignored
+          <code>*.local.json</code> snapshots; the dev server prefers them. Demo
+          builds never bundle real usage.
+        </p>
+        <p style="margin-bottom: 0">
+          <strong>Honesty over completeness:</strong> the UI labels each metric
+          with a fidelity grade (<code
+            >full | partial | occupancy | derived | none</code
+          >). Unobserved assets show "no telemetry", not a measured zero.
+        </p>
       </div>
 
       <h2>How it reaches the Monitor</h2>
       <ol>
         <li>Harness writes session logs locally (already happening today).</li>
-        <li>A metadata-only collector aggregates Claude Code usage into upload rows.</li>
-        <li>You upload <code>utilization.upload.json</code> in Settings (live Fabric).</li>
+        <li>
+          A metadata-only collector aggregates Claude Code usage into upload
+          rows.
+        </li>
+        <li>
+          You upload <code>utilization.upload.json</code> in Settings (live
+          Fabric).
+        </li>
         <li>Rows reconcile to governed catalog asset ids (type + slug).</li>
-        <li>Monitor, Effectiveness, and Cost surfaces render the signal with per-harness honesty grades.</li>
+        <li>
+          Monitor, Effectiveness, and Cost surfaces render the signal with
+          per-harness honesty grades.
+        </li>
       </ol>
 
       <h2>Public demo vs live Fabric push</h2>
@@ -371,12 +511,17 @@
           <tr>
             <th scope="row">Telemetry data</th>
             <td>Synthetic seed data in the demo build</td>
-            <td><code>./utilization.upload.json</code> you upload in Settings</td>
+            <td>
+              <code>./utilization.upload.json</code> you upload in Settings
+            </td>
           </tr>
           <tr>
             <th scope="row">Repo checkout required?</th>
             <td>No</td>
-            <td>No, curl <code>living-vault-collect.mjs</code> from the deployed app</td>
+            <td>
+              No, curl <code>living-vault-collect.mjs</code> from the deployed
+              app
+            </td>
           </tr>
           <tr>
             <th scope="row">Honesty grades</th>
@@ -390,14 +535,31 @@
       <div class="card">
         <p><strong>Deployed app (no repo):</strong></p>
         <ul>
-          <li><code>curl -fsSL …/living-vault-collect.mjs -o living-vault-collect.mjs</code></li>
-          <li><code>node living-vault-collect.mjs telemetry</code> → <code>./utilization.upload.json</code></li>
-          <li><code>node living-vault-collect.mjs assets</code> → <code>./living-vault-assets.json</code></li>
+          <li>
+            <code
+              >curl -fsSL …/living-vault-collect.mjs -o
+              living-vault-collect.mjs</code
+            >
+          </li>
+          <li>
+            <code>node living-vault-collect.mjs telemetry</code> →
+            <code>./utilization.upload.json</code>
+          </li>
+          <li>
+            <code>node living-vault-collect.mjs assets</code> →
+            <code>./living-vault-assets.json</code>
+          </li>
         </ul>
         <p><strong>App repo (local dev):</strong></p>
         <ul>
-          <li><code>node scripts/vault-telemetry.mjs</code> → gitignored <code>utilization.local.json</code></li>
-          <li><code>node scripts/vault-harness-usage.mjs</code> → gitignored <code>harness-usage.local.json</code></li>
+          <li>
+            <code>node scripts/vault-telemetry.mjs</code> → gitignored
+            <code>utilization.local.json</code>
+          </li>
+          <li>
+            <code>node scripts/vault-harness-usage.mjs</code> → gitignored
+            <code>harness-usage.local.json</code>
+          </li>
         </ul>
         <p style="margin-bottom: 0">
           Parsers read metadata only. Unit tests assert sentinel prompt content
@@ -474,12 +636,20 @@
       </div>
 
       <p>
-        <a href="index.html#telemetry">Back to overview telemetry section</a>
+        <a href="index.html#telemetry"
+          >Back to overview telemetry section</a
+        >
         · <a href="ecosystem.html">Ecosystem map</a>
       </p>
 
       <div class="footer">
-        The Living Vault · Built with Microsoft Rayfin for Fabric · Public repo coming soon
+        The Living Vault · Built with Microsoft Rayfin for Fabric ·
+        <a
+          href="https://github.com/cdrguru/living-vault"
+          target="_blank"
+          rel="noopener"
+          >Public repo on GitHub</a
+        >
       </div>
     </main>
     <script>
@@ -497,7 +667,10 @@
           setOpen(toggle.getAttribute("aria-expanded") !== "true");
         });
         document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+          if (
+            e.key === "Escape" &&
+            toggle.getAttribute("aria-expanded") === "true"
+          ) {
             setOpen(false);
             toggle.focus();
           }

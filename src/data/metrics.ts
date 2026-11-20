@@ -8,6 +8,11 @@ import type {
   UtilizationRow,
   VaultDataset,
 } from "./types";
+import {
+  EVIDENCE_CLASS_BY_SIGNAL,
+  type EvidenceClass,
+} from "./evidenceClass";
+import { scoringV3Enabled } from "./scoringFlags";
 import { hasOnlyProbeTelemetry } from "./telemetryProbe";
 
 export type Quadrant = "Stars" | "Risks" | "Shelfware" | "Dead weight";
@@ -59,42 +64,95 @@ export interface AssetScore {
 }
 
 export type ConfidenceGrade = "high" | "moderate" | "low" | "none";
-export type EffectivenessSignalId = "quality" | "adoption" | "retention";
+export type EffectivenessSignalId =
+  | "toolCallReliability"
+  | "evalPassRate"
+  | "adoption"
+  | "retention";
 
 export interface SignalScore {
   id: EffectivenessSignalId;
   present: boolean;
   value: number; // 0..1; meaningless when present is false
   weight: number; // nominal weight before renormalization
+  /** The kind of evidence behind this signal. See evidenceClass.ts. */
+  evidenceClass: EvidenceClass;
+}
+
+/** Options threaded into the legacy signal builder. See docs/SCORING_V3.md. */
+export interface EffectivenessSignalOptions {
+  /** The asset's eval outcomes, for the v3 evalPassRate signal. */
+  evals?: EvalSummary | null;
+  /** Explicit override of the VAULT_SCORING_V3 flag (tests, comparisons). */
+  scoringV3?: boolean;
 }
 
 /**
- * The effectiveness signals for one asset's windowed usage. quality is the
- * highest weight (hardest to game), adoption the lowest (raw volume is gameable),
- * retention only present when the window spans at least two days so a single-day
- * window does not penalize an asset for a signal that cannot be measured.
+ * The effectiveness signals for one asset's windowed usage.
+ *
+ * toolCallReliability (formerly misnamed `quality`) is the share of tool calls
+ * that returned without error: it measures whether the asset RUNS cleanly, not
+ * whether the task it served succeeded, and the rename exists so nobody reads
+ * it as task quality again. retention is only present when the window spans at
+ * least two days so a single-day window does not penalize an asset for a
+ * signal that cannot be measured.
+ *
+ * Under the default (v2) weights all signals are operational telemetry:
+ * toolCallReliability 0.5, adoption 0.2, retention 0.3.
+ *
+ * Under VAULT_SCORING_V3 the composite finally weights outcome evidence above
+ * run evidence: evalPassRate (customer-eval, present only when eval rows
+ * exist) enters at 0.5, toolCallReliability drops to 0.2, retention stays 0.3,
+ * and adoption drops to weight 0 while remaining in the list as a DISPLAYED
+ * diagnostic (volume is a fact worth seeing and it is not value). An asset
+ * with no evals renormalizes over what it has (composeEffectiveScore), so it
+ * still scores; its confidence is what stays capped.
  */
 export function effectivenessSignals(
   usage: UsageSummary,
   windowDays: number,
+  options: EffectivenessSignalOptions = {},
 ): SignalScore[] {
+  const v3 = options.scoringV3 ?? scoringV3Enabled();
   const hasUsage = usage.invocations > 0;
   const retentionPresent = hasUsage && windowDays >= 2;
-  return [
-    { id: "quality", present: hasUsage, value: usage.successRate, weight: 0.5 },
+  const evals = options.evals ?? null;
+  const evalsPresent = v3 && evals !== null && evals.trials > 0;
+  const signals: SignalScore[] = [
+    {
+      id: "toolCallReliability",
+      present: hasUsage,
+      value: usage.successRate,
+      weight: v3 ? 0.2 : 0.5,
+      evidenceClass: EVIDENCE_CLASS_BY_SIGNAL.toolCallReliability,
+    },
+  ];
+  if (v3) {
+    signals.push({
+      id: "evalPassRate",
+      present: evalsPresent,
+      value: evalsPresent ? evalPassRate(evals) : 0,
+      weight: 0.5,
+      evidenceClass: EVIDENCE_CLASS_BY_SIGNAL.evalPassRate,
+    });
+  }
+  signals.push(
     {
       id: "adoption",
       present: hasUsage,
       value: Math.min(usage.invocations / ADOPTION_TARGET, 1),
-      weight: 0.2,
+      weight: v3 ? 0 : 0.2,
+      evidenceClass: EVIDENCE_CLASS_BY_SIGNAL.adoption,
     },
     {
       id: "retention",
       present: retentionPresent,
       value: retentionPresent ? Math.min(usage.activeDays / windowDays, 1) : 0,
       weight: 0.3,
+      evidenceClass: EVIDENCE_CLASS_BY_SIGNAL.retention,
     },
-  ];
+  );
+  return signals;
 }
 
 /**
@@ -111,9 +169,14 @@ export function composeEffectiveScore(signals: SignalScore[]): number | null {
   return weightSum === 0 ? null : weighted / weightSum;
 }
 
-/** The honesty grade of the effectiveness data path. v1 rides the Claude Code
- *  telemetry path, which is fully instrumented ("full"). Wired in so a future
- *  derived source downgrades the confidence automatically. */
+/** The PINNED honesty grade of the v2 effectiveness path. Hardcoding "full"
+ *  makes sourceTier a constant, which leaves sample size as the only live
+ *  input to evidenceSufficient: volume is the only thing that buys trust.
+ *  Under VAULT_SCORING_V3 this constant is unpinned: scoreAsset derives the
+ *  per-asset grade from the telemetry actually recorded (assetHonesty), so a
+ *  probe-only or partially tracked asset can no longer buy sufficiency with
+ *  volume alone. Kept for the v2 path so the flag-off scores stay
+ *  byte-identical. */
 export const EFFECTIVENESS_SOURCE_QUALITY: HarnessMetricQuality = "full";
 
 const GRADE_ORDER: ConfidenceGrade[] = ["none", "low", "moderate", "high"];
@@ -147,18 +210,18 @@ const sampleGrade = (invocations: number): ConfidenceGrade => {
 /**
  * The per-asset confidence grade and whether the evidence is sufficient to
  * classify. confidence is the lower of the source tier and the sample grade, or
- * "none" when the high-weight quality signal is absent (zero invocations).
- * Evidence is sufficient at moderate or above.
+ * "none" when the high-weight toolCallReliability signal is absent (zero
+ * invocations). Evidence is sufficient at moderate or above.
  */
 export function gradeConfidence(
   usage: UsageSummary,
   signals: SignalScore[],
   sourceQuality: HarnessMetricQuality = EFFECTIVENESS_SOURCE_QUALITY,
 ): { confidence: ConfidenceGrade; evidenceSufficient: boolean } {
-  const qualityPresent = signals.some(
-    (signal) => signal.id === "quality" && signal.present,
+  const reliabilityPresent = signals.some(
+    (signal) => signal.id === "toolCallReliability" && signal.present,
   );
-  const confidence: ConfidenceGrade = qualityPresent
+  const confidence: ConfidenceGrade = reliabilityPresent
     ? minGrade(sourceTier(sourceQuality), sampleGrade(usage.invocations))
     : "none";
   return {
@@ -563,21 +626,43 @@ export function utilizationByOrigin(dataset: VaultDataset): OriginUsage[] {
   );
 }
 
+/** Options threaded through scoreAsset/scoreAssets. See docs/SCORING_V3.md. */
+export interface ScoreAssetOptions {
+  /** Per-asset eval summaries; computed from the dataset when omitted. */
+  evals?: Map<string, EvalSummary>;
+  /** Explicit override of the VAULT_SCORING_V3 flag (tests, comparisons). */
+  scoringV3?: boolean;
+}
+
 export function scoreAsset(
   asset: AssetRow,
   dataset: VaultDataset,
   usage = utilizationByAsset(dataset),
   windowDays = windowDaysOf(dataset),
+  options: ScoreAssetOptions = {},
 ): AssetScore {
+  const v3 = options.scoringV3 ?? scoringV3Enabled();
   const checks = governanceChecks(asset, dataset);
   const governedScore =
     checks.filter((check) => check.pass).length / checks.length;
   const currentUsage = usage.get(asset.id) ?? emptyUsage(asset.id);
-  const signals = effectivenessSignals(currentUsage, windowDays);
+  const evals = v3
+    ? ((options.evals ?? evalResultsByAsset(dataset)).get(asset.id) ?? null)
+    : null;
+  const signals = effectivenessSignals(currentUsage, windowDays, {
+    evals,
+    scoringV3: v3,
+  });
   const effectiveScore = composeEffectiveScore(signals);
+  // v2 pins the source quality to "full" (volume is the only live input to
+  // sufficiency); v3 derives it from what the telemetry actually recorded, so
+  // occupancy or partially tracked sources cap confidence regardless of volume.
   const { confidence, evidenceSufficient } = gradeConfidence(
     currentUsage,
     signals,
+    v3
+      ? assetHonesty(dataset, asset.id, currentUsage)
+      : EFFECTIVENESS_SOURCE_QUALITY,
   );
   const governed = governedScore >= GOVERNED_THRESHOLD;
   // Derive effective from the same effectiveScore the UI shows, so the quadrant
@@ -643,11 +728,16 @@ export function classifyAsset(score: AssetScore): {
 export function scoreAssets(
   dataset: VaultDataset,
   window?: DateWindow,
+  options: ScoreAssetOptions = {},
 ): AssetScore[] {
+  const v3 = options.scoringV3 ?? scoringV3Enabled();
   const usage = utilizationByAssetWindowed(dataset, window);
   const windowDays = windowDaysOf(dataset, window);
+  const evals = v3
+    ? (options.evals ?? evalResultsByAssetWindowed(dataset, window))
+    : undefined;
   return dataset.assets.map((asset) =>
-    scoreAsset(asset, dataset, usage, windowDays),
+    scoreAsset(asset, dataset, usage, windowDays, { evals, scoringV3: v3 }),
   );
 }
 
@@ -1195,6 +1285,37 @@ export type SignalName = keyof typeof DEFAULT_SIGNAL_WEIGHTS;
 const SIGNAL_NAMES = Object.keys(DEFAULT_SIGNAL_WEIGHTS) as SignalName[];
 
 /**
+ * The AES weights under VAULT_SCORING_V3 (docs/SCORING_V3.md).
+ * errorResistance is DELETED, not zeroed: it is 1 - errorRate while
+ * reliability is bayesianRate(successes, invocations - successes), which are
+ * complementary transforms of the same is_error boolean. Keeping both counted
+ * one measurement twice for 0.65 of the nominal weight (about 76% of the
+ * renormalized score with retention absent). adoption is kept at weight 0 as a
+ * displayed diagnostic: invocation volume is a fact worth seeing and it is not
+ * value, so it can no longer move the estimate at all.
+ */
+export const SIGNAL_WEIGHTS_V3 = {
+  reliability: 0.45,
+  latencyQuality: 0.1,
+  retention: 0.15,
+  adoption: 0,
+} as const;
+const SIGNAL_NAMES_V3 = Object.keys(SIGNAL_WEIGHTS_V3) as SignalName[];
+
+/**
+ * The single evidence class each AES signal carries (see evidenceClass.ts).
+ * Every AES signal is operational telemetry: all five derive from harness tool
+ * traffic, none from graded task outcomes.
+ */
+export const AES_SIGNAL_EVIDENCE_CLASS: Record<SignalName, EvidenceClass> = {
+  reliability: EVIDENCE_CLASS_BY_SIGNAL.reliability,
+  errorResistance: EVIDENCE_CLASS_BY_SIGNAL.errorResistance,
+  latencyQuality: EVIDENCE_CLASS_BY_SIGNAL.latencyQuality,
+  retention: EVIDENCE_CLASS_BY_SIGNAL.retention,
+  adoption: EVIDENCE_CLASS_BY_SIGNAL.adoption,
+} as const;
+
+/**
  * The signals the live dataset can supply per asset. Confidence COVERAGE is
  * measured against this obtainable set, NOT all five defined signals, so an
  * asset is never penalized for evidence the system never gathers. Retention
@@ -1208,6 +1329,13 @@ const SIGNAL_NAMES = Object.keys(DEFAULT_SIGNAL_WEIGHTS) as SignalName[];
 const DATASET_OBSERVABLE_SIGNALS: SignalName[] = [
   "reliability",
   "errorResistance",
+  "latencyQuality",
+  "adoption",
+];
+
+/** The v3 obtainable set: errorResistance no longer exists as a signal. */
+const DATASET_OBSERVABLE_SIGNALS_V3: SignalName[] = [
+  "reliability",
   "latencyQuality",
   "adoption",
 ];
@@ -1234,10 +1362,13 @@ export interface EvalSummary {
   passed: number;
   failed: number;
   errored: number;
+  /** Trials whose verdict was unusable. Recorded, and excluded from the pass-rate denominator. */
+  inconclusive: number;
   latencyMs: number;
   tokens: number;
   cost: number;
-  /** The weakest honesty grade among the asset's eval rows (modeled collapsed to derived). */
+  /** The weakest honesty grade among the asset's eval rows (modeled collapsed to
+   *  derived, null-revision rows capped at derived; see evalRowHonesty). */
   quality: HonestyGrade;
 }
 
@@ -1250,6 +1381,20 @@ export function evalQualityToHonesty(
   quality: HarnessMetricQuality,
 ): HonestyGrade {
   return quality === "modeled" ? "derived" : quality;
+}
+
+/**
+ * The honesty grade one eval row actually earns. A row with no assetRevisionId
+ * is capped at "derived" REGARDLESS of its declared quality: a result that
+ * cannot say which version of the asset it ran against is self-certification,
+ * the exact hole DEFAULT_EVAL_QUALITY = "derived" (evals.mjs) was introduced
+ * to close from the collector side. Enforced here too so imported or legacy
+ * rows that bypassed the collector get the same honest cap. The cap gates
+ * CONFIDENCE via the assetHonesty min-cap, never the effectiveness estimate.
+ */
+export function evalRowHonesty(row: EvalResultRow): HonestyGrade {
+  const declared = evalQualityToHonesty(row.quality);
+  return row.assetRevisionId == null ? minHonesty(declared, "derived") : declared;
 }
 
 // Honesty grades weakest to strongest, so minHonesty takes the lower-confidence one.
@@ -1285,7 +1430,8 @@ export function evalResultsByAssetWindowed(
     );
     let quality: HonestyGrade = "full";
     for (const row of rows) {
-      quality = minHonesty(quality, evalQualityToHonesty(row.quality));
+      // Per-row honesty, with the null-revision cap: see evalRowHonesty.
+      quality = minHonesty(quality, evalRowHonesty(row));
     }
     summaries.set(assetId, {
       assetId,
@@ -1293,6 +1439,9 @@ export function evalResultsByAssetWindowed(
       passed: rows.reduce((sum, row) => sum + row.passed, 0),
       failed: rows.reduce((sum, row) => sum + row.failed, 0),
       errored: rows.reduce((sum, row) => sum + row.errored, 0),
+      // Pre-identity snapshots lack the field at runtime; absent means none
+      // were recorded, which is 0.
+      inconclusive: rows.reduce((sum, row) => sum + (row.inconclusive ?? 0), 0),
       latencyMs: trials ? latencyTotal / trials : 0,
       tokens: rows.reduce((sum, row) => sum + row.tokens, 0),
       cost: rows.reduce((sum, row) => sum + row.cost, 0),
@@ -1309,9 +1458,16 @@ export function evalResultsByAsset(
   return evalResultsByAssetWindowed(dataset);
 }
 
-/** Pass rate of an eval summary: passed over trials, 0 with no trials. */
+/**
+ * Pass rate of an eval summary: passed over CONCLUSIVE trials (trials minus
+ * inconclusive), 0 with none. An unusable verdict is neither a pass nor a
+ * failure; counting it in the denominator would book "we could not tell" as
+ * evidence against the asset, which is the same bias as dropping it, mirrored.
+ * Legacy summaries carry inconclusive 0, so their rate is unchanged.
+ */
 export function evalPassRate(summary: EvalSummary): number {
-  return summary.trials > 0 ? summary.passed / summary.trials : 0;
+  const conclusive = summary.trials - (summary.inconclusive ?? 0);
+  return conclusive > 0 ? summary.passed / conclusive : 0;
 }
 
 // Bayesian reliability prior: Beta(1,1) is the uniform prior, so a 1/1 record
@@ -1417,10 +1573,13 @@ export interface AssetSignalInputs {
   /**
    * The signals the data source can in principle supply for this asset.
    * Confidence coverage is measured against this set, so signals nobody collects
-   * do not penalize the score. Defaults to all defined signals (the literal
-   * methodology view); the dataset adapter narrows it to what it can produce.
+   * do not penalize the score. Defaults to all defined signals for the active
+   * scoring version (the literal methodology view); the dataset adapter narrows
+   * it to what it can produce.
    */
   observableSignals?: SignalName[];
+  /** Explicit override of the VAULT_SCORING_V3 flag (tests, comparisons). */
+  scoringV3?: boolean;
 }
 
 /**
@@ -1433,6 +1592,11 @@ export interface AssetSignalInputs {
  * the tier is gated by the resulting confidence grade.
  */
 export function scoreFromSignals(inputs: AssetSignalInputs): AssetScoreResult {
+  const v3 = inputs.scoringV3 ?? scoringV3Enabled();
+  const signalNames = v3 ? SIGNAL_NAMES_V3 : SIGNAL_NAMES;
+  const weights: Partial<Record<SignalName, number>> = v3
+    ? SIGNAL_WEIGHTS_V3
+    : DEFAULT_SIGNAL_WEIGHTS;
   const {
     invocations,
     successes,
@@ -1441,17 +1605,24 @@ export function scoreFromSignals(inputs: AssetSignalInputs): AssetScoreResult {
     retention = null,
     honesty = "full",
     counterfactual = null,
-    observableSignals = SIGNAL_NAMES,
+    observableSignals = signalNames,
   } = inputs;
 
   const hasVolume = invocations > 0;
 
-  // Each signal is null when its inputs are absent, never coerced to 0.
+  // Each signal is null when its inputs are absent, never coerced to 0. Under
+  // v3, errorResistance is not computed at all: it is the same is_error boolean
+  // reliability already measures, and a deleted double-count must not linger as
+  // a reported-but-unweighted score.
   const signalScores: Record<string, number | null> = {
     reliability: hasVolume
       ? bayesianRate(successes, Math.max(0, invocations - successes))
       : null,
-    errorResistance: hasVolume ? 1 - clamp01(errors / invocations) : null,
+    ...(v3
+      ? {}
+      : {
+          errorResistance: hasVolume ? 1 - clamp01(errors / invocations) : null,
+        }),
     latencyQuality:
       latencyMs != null && latencyMs > 0
         ? LATENCY_REFERENCE_MS / (LATENCY_REFERENCE_MS + latencyMs)
@@ -1464,22 +1635,23 @@ export function scoreFromSignals(inputs: AssetSignalInputs): AssetScoreResult {
 
   // Composite over every PRESENT (non-null) signal. observedWeight is the summed
   // weight of those signals, i.e. the denominator of the weighted average. Note
-  // this iterates all SIGNAL_NAMES, NOT observableSignals, and that is deliberate:
-  // observableSignals governs only the confidence COVERAGE denominator below (how
-  // complete the evidence we EXPECTED to gather is). The effectiveness score itself
-  // uses all real evidence available, so a signal that happens to be present is
-  // never discarded just because the data source did not list it as obtainable.
+  // this iterates all of the version's signal names, NOT observableSignals, and
+  // that is deliberate: observableSignals governs only the confidence COVERAGE
+  // denominator below (how complete the evidence we EXPECTED to gather is). The
+  // effectiveness score itself uses all real evidence available, so a signal
+  // that happens to be present is never discarded just because the data source
+  // did not list it as obtainable.
   let weighted = 0;
   let observedWeight = 0;
   const missingSignals: string[] = [];
-  for (const name of SIGNAL_NAMES) {
+  for (const name of signalNames) {
     const score = signalScores[name];
     if (score == null) {
       missingSignals.push(name);
       continue;
     }
-    weighted += DEFAULT_SIGNAL_WEIGHTS[name] * score;
-    observedWeight += DEFAULT_SIGNAL_WEIGHTS[name];
+    weighted += (weights[name] ?? 0) * score;
+    observedWeight += weights[name] ?? 0;
   }
 
   // No meaningful signal at all: unknown, not zero-effective.
@@ -1597,7 +1769,9 @@ export function scoreAssetDetailed(
   asset: AssetRow,
   dataset: VaultDataset,
   usage = utilizationByAsset(dataset),
+  options: { scoringV3?: boolean } = {},
 ): AssetScoreResult {
+  const v3 = options.scoringV3 ?? scoringV3Enabled();
   const summary = usage.get(asset.id) ?? emptyUsage(asset.id);
   const honesty = assetHonesty(dataset, asset.id, summary);
   return scoreFromSignals({
@@ -1607,8 +1781,15 @@ export function scoreAssetDetailed(
     latencyMs: summary.latencyMs,
     retention: null,
     honesty,
+    // counterfactual stays null BY DESIGN until a real no-asset-control
+    // Baseline with real trials exists (plan risk R2): wiring it earlier would
+    // move the point estimate at COUNTERFACTUAL_GAIN_WEIGHT on fabricated
+    // evidence.
     counterfactual: null,
-    observableSignals: DATASET_OBSERVABLE_SIGNALS,
+    observableSignals: v3
+      ? DATASET_OBSERVABLE_SIGNALS_V3
+      : DATASET_OBSERVABLE_SIGNALS,
+    scoringV3: v3,
   });
 }
 

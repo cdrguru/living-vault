@@ -5,6 +5,7 @@
  */
 export type RayfinEntityName =
   | "Asset"
+  | "AssetRevision"
   | "Tag"
   | "Origin"
   | "Owner"
@@ -14,6 +15,8 @@ export type RayfinEntityName =
   | "BundleMembership"
   | "Utilization"
   | "EvalResult"
+  | "RoutingStat"
+  | "Intervention"
   | "Submission"
   | "SubmissionItem";
 

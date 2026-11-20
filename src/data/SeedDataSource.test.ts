@@ -45,6 +45,30 @@ describe("SeedDataSource CRUD", () => {
     await expect(ds.addAsset(baseInput)).resolves.toBeTruthy();
   });
 
+  it("rehydrates a PRE-PR5 dataset (no interventions key) and recordIntervention does not crash", async () => {
+    // Before PR5 interventions lived only in the sidecar, so a persisted localStorage
+    // dataset has no interventions key. Without load()'s default, recordIntervention would
+    // call appendIntervention(undefined, ...) and throw TypeError, silently losing the
+    // write. This is the regression guard for that upgrade path.
+    const legacy = structuredClone(seedDataset) as Partial<VaultDataset>;
+    delete legacy.interventions;
+    localStorage.setItem("living-vault:dataset:v1", JSON.stringify(legacy));
+    const ds = new SeedDataSource();
+    expect((await ds.getDataset()).interventions).toEqual([]);
+    const assetId = (await ds.getDataset()).assets[0].id;
+    const row = await ds.recordIntervention({
+      assetId,
+      action: "improve",
+      outcome: "revised",
+      actor: "claude-code",
+      date: "2026-07-01",
+    });
+    expect(row.id).toBeTruthy();
+    // And it persisted, readable by a fresh source.
+    const reloaded = await new SeedDataSource().getDataset();
+    expect(reloaded.interventions.some((i) => i.id === row.id)).toBe(true);
+  });
+
   it("expands tagIds into assetTags on add", async () => {
     const ds = new SeedDataSource();
     const created = await ds.addAsset({

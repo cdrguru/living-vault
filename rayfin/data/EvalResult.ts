@@ -31,12 +31,28 @@ export class EvalResult {
   @int() passed!: number;
   @int() failed!: number;
   @int() errored!: number;
+  /** The fourth outcome bucket: the run completed but the verdict was unusable.
+   *  Recorded, never dropped; a dropped inconclusive silently biases the retained
+   *  sample toward clean verdicts. Counted inside trials. */
+  @int() inconclusive!: number;
   @int() latencyMs!: number;
   @int() tokens!: number;
   @decimal({ precision: 12, scale: 6 }) cost!: number;
   @text({ max: 64, optional: true }) model?: string;
   @set("full", "partial", "occupancy", "derived", "modeled", "none")
   quality!: "full" | "partial" | "occupancy" | "derived" | "modeled" | "none";
+
+  // Eval identity (WP4 / PR12): which asset VERSION the result ran against, which
+  // harness ran it, and what it was compared to. All three are DURABLE BARE
+  // references (no @one, no SQL REFERENCES), following the Intervention precedent:
+  // an eval row referencing an unknown or pruned revision/baseline must survive as
+  // a fact with capped honesty, never fail an insert or be dropped (dropping is
+  // what biases the sample). A row with a null assetRevisionId is capped at
+  // "derived" honesty on read regardless of its declared quality: self-declared
+  // "full" on an unversioned result is self-certification.
+  @uuid({ optional: true }) assetRevisionId?: string;
+  @text({ max: 32, optional: true }) harness?: string;
+  @uuid({ optional: true }) baselineId?: string;
 
   // Relationship navigation for the Fabric data model. The scalar @uuid() assetId above
   // stays the source of truth the app reads.

@@ -35,6 +35,7 @@ import {
 import { MonitorInspector } from "@/dashboard/monitor/MonitorInspector";
 import { monitorEdges, monitorNodes } from "@/dashboard/monitor/monitorMeta";
 import { HarnessSummaryStrip } from "@/dashboard/monitor/HarnessSummaryStrip";
+import { RoutingSummaryPanel } from "@/dashboard/monitor/RoutingSummaryPanel";
 import { HarnessUsagePanel } from "@/dashboard/monitor/HarnessUsagePanel";
 import { OrphanedUsagePanel } from "@/dashboard/monitor/OrphanedUsagePanel";
 import { neighborhood } from "@/dashboard/monitor/subgraph";
@@ -288,6 +289,12 @@ export function MonitorPage() {
           panel at the bottom so harness telemetry is discoverable up top. */}
       <div data-rise style={rise(40)}>
         <HarnessSummaryStrip detailsHref={HARNESS_PANEL_ID} />
+      </div>
+
+      {/* Region 1c: routing accounting from a router's imported stats. Empty
+          state (not zeroes) when no router has reported. */}
+      <div data-rise style={rise(50)}>
+        <RoutingSummaryPanel />
       </div>
 
       {/* Region 2: the filter toolbar drives both the queue and the canvas. */}

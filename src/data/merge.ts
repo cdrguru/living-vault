@@ -1,3 +1,4 @@
+import { ensureRevisions } from "./revisions";
 import type {
   AssetDependencyRow,
   AssetRow,
@@ -246,18 +247,39 @@ export function mergeProjection(
     (row) => `${row.bundleId}${KEY_SEP}${row.assetId}`,
   );
 
-  return {
-    assets,
-    tags,
-    origins,
-    owners,
-    bundles,
-    assetTags,
-    dependencies,
-    bundleMemberships,
-    utilization: current.utilization,
-    evalResults: current.evalResults,
-    telemetryMeta: current.telemetryMeta,
-    evalMeta: current.evalMeta,
-  };
+  // Reconcile revision history over the merged result. This is the observed-scan
+  // seam: a real edit happens in the practitioner's own files, arrives here as a
+  // changed contentHash on the next import, and the version it replaced is already
+  // in assetRevisions from the previous reconcile. Running over the WHOLE merged
+  // dataset (not just incoming rows) also heals current-side assets that predate
+  // revision tracking, which is what makes every import path in every data source a
+  // self-migrating one. Idempotent, so re-importing the same projection mints nothing.
+  return ensureRevisions(
+    {
+      assets,
+      tags,
+      origins,
+      owners,
+      bundles,
+      assetTags,
+      dependencies,
+      bundleMemberships,
+      assetRevisions: current.assetRevisions,
+      utilization: current.utilization,
+      evalResults: current.evalResults,
+      // Baselines are named comparison targets preserved verbatim; a projection
+      // never carries them, like the intervention log below.
+      baselines: current.baselines,
+      // Interventions are an append-only log preserved verbatim across an import; a
+      // projection never carries them.
+      interventions: current.interventions,
+      // Routing stats are router evidence preserved verbatim across an import; a
+      // projection never carries them.
+      routingStats: current.routingStats,
+      telemetryMeta: current.telemetryMeta,
+      evalMeta: current.evalMeta,
+      routingStatsMeta: current.routingStatsMeta,
+    },
+    { actor: "projection-import", source: "observed-scan" },
+  );
 }

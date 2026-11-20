@@ -260,7 +260,8 @@
           "successes": 59,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 270000
+          "tokens": 270000,
+          "unattributedLoads": 1
         },
         {
           "date": "2026-03-12",
@@ -269,7 +270,8 @@
           "successes": 55,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 255600
+          "tokens": 255600,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-03-17",
@@ -278,7 +280,8 @@
           "successes": 56,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 259200
+          "tokens": 259200,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-03-22",
@@ -287,7 +290,8 @@
           "successes": 58,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 266400
+          "tokens": 266400,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-03-27",
@@ -296,7 +300,8 @@
           "successes": 53,
           "errors": 15,
           "latencyMs": 2200,
-          "tokens": 244800
+          "tokens": 244800,
+          "unattributedLoads": 1
         },
         {
           "date": "2026-04-01",
@@ -305,7 +310,8 @@
           "successes": 57,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 262800
+          "tokens": 262800,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-04-06",
@@ -314,7 +320,8 @@
           "successes": 59,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 270000
+          "tokens": 270000,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-04-11",
@@ -323,7 +330,8 @@
           "successes": 59,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 270000
+          "tokens": 270000,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-04-16",
@@ -332,7 +340,8 @@
           "successes": 53,
           "errors": 15,
           "latencyMs": 2200,
-          "tokens": 244800
+          "tokens": 244800,
+          "unattributedLoads": 1
         },
         {
           "date": "2026-04-21",
@@ -341,7 +350,8 @@
           "successes": 62,
           "errors": 17,
           "latencyMs": 2200,
-          "tokens": 284400
+          "tokens": 284400,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-04-26",
@@ -350,7 +360,8 @@
           "successes": 55,
           "errors": 15,
           "latencyMs": 2200,
-          "tokens": 252000
+          "tokens": 252000,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-05-01",
@@ -359,7 +370,8 @@
           "successes": 62,
           "errors": 17,
           "latencyMs": 2200,
-          "tokens": 284400
+          "tokens": 284400,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-05-06",
@@ -368,7 +380,8 @@
           "successes": 55,
           "errors": 15,
           "latencyMs": 2200,
-          "tokens": 252000
+          "tokens": 252000,
+          "unattributedLoads": 1
         },
         {
           "date": "2026-05-11",
@@ -377,7 +390,8 @@
           "successes": 64,
           "errors": 18,
           "latencyMs": 2200,
-          "tokens": 295200
+          "tokens": 295200,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-05-16",
@@ -386,7 +400,8 @@
           "successes": 62,
           "errors": 18,
           "latencyMs": 2200,
-          "tokens": 288000
+          "tokens": 288000,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-05-21",
@@ -395,7 +410,8 @@
           "successes": 63,
           "errors": 18,
           "latencyMs": 2200,
-          "tokens": 291600
+          "tokens": 291600,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-05-26",
@@ -404,7 +420,8 @@
           "successes": 62,
           "errors": 18,
           "latencyMs": 2200,
-          "tokens": 288000
+          "tokens": 288000,
+          "unattributedLoads": 1
         },
         {
           "date": "2026-05-31",
@@ -413,7 +430,8 @@
           "successes": 56,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 259200
+          "tokens": 259200,
+          "unattributedLoads": 0
         },
         {
           "date": "2026-06-05",
@@ -422,7 +440,300 @@
           "successes": 57,
           "errors": 16,
           "latencyMs": 2200,
-          "tokens": 262800
+          "tokens": 262800,
+          "unattributedLoads": 0
+        }
+      ],
+      "skillUses": [
+        {
+          "skill": "skill-creator",
+          "date": "2026-03-07",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-03-12",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-03-12",
+          "loads": 2
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-03-12",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-03-17",
+          "loads": 3
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-03-17",
+          "loads": 3
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-03-17",
+          "loads": 2
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-03-17",
+          "loads": 2
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-03-22",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-03-27",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-03-27",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-03-27",
+          "loads": 1
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-03-27",
+          "loads": 2
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-04-01",
+          "loads": 3
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-04-01",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-04-06",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-04-06",
+          "loads": 1
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-04-06",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-04-11",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-04-11",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-04-11",
+          "loads": 1
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-04-11",
+          "loads": 3
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-04-16",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-04-16",
+          "loads": 1
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-04-16",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-04-21",
+          "loads": 1
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-04-21",
+          "loads": 3
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-04-26",
+          "loads": 3
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-04-26",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-01",
+          "loads": 2
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-01",
+          "loads": 3
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-01",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-06",
+          "loads": 3
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-06",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-06",
+          "loads": 3
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-05-06",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-11",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-11",
+          "loads": 3
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-11",
+          "loads": 3
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-05-11",
+          "loads": 3
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-16",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-16",
+          "loads": 3
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-16",
+          "loads": 2
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-05-16",
+          "loads": 3
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-21",
+          "loads": 3
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-21",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-21",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-26",
+          "loads": 3
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-05-26",
+          "loads": 2
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-26",
+          "loads": 3
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-05-26",
+          "loads": 1
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-05-31",
+          "loads": 1
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-05-31",
+          "loads": 2
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-05-31",
+          "loads": 2
+        },
+        {
+          "skill": "sample-app-builder",
+          "date": "2026-06-05",
+          "loads": 1
+        },
+        {
+          "skill": "sample-data-modeler",
+          "date": "2026-06-05",
+          "loads": 1
+        },
+        {
+          "skill": "deneb-visuals",
+          "date": "2026-06-05",
+          "loads": 3
+        },
+        {
+          "skill": "skill-creator",
+          "date": "2026-06-05",
+          "loads": 3
         }
       ],
       "tracked": {
@@ -430,7 +741,8 @@
         "errors": "partial",
         "latency": "full",
         "tokens": "full",
-        "cost": "modeled"
+        "cost": "modeled",
+        "skills": "derived"
       }
     },
     {

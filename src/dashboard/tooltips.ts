@@ -122,6 +122,8 @@ export const TOOLTIPS = {
     "Claude Code telemetry that matched no catalog asset, ranked by volume, hinting an asset is missing or misnamed. It is unattributed usage, not errors.",
   "monitor.harnessUsage":
     "Real usage per agent harness, read locally from each tool's own session logs (counts and timings only, never message content). Grains differ (Codex counts tool calls, Claude Code counts governed-asset invocations), so read each card on its own terms, not as a leaderboard.",
+  "monitor.routing":
+    "Routing decisions reported by a router: how many routed requests a governed asset answered locally versus falling back to an external model, the measured external spend, and the modeled cost the local hits avoided. Covers routed traffic only, never the whole fleet, and the avoided-cost figure is a labeled counterfactual, not measured spend.",
   "monitor.filters":
     "Narrow the queue and the map by health, issue, type, bundle or domain, and severity, combined with AND. Clear all resets every dimension at once.",
 

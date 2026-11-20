@@ -27,10 +27,14 @@
         --link: #1463c2;
         --radius: 16px;
         --maxw: 1000px;
-        --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
         --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
         font-family: var(--font);
@@ -38,8 +42,14 @@
         background: var(--surface);
         line-height: 1.6;
       }
-      a { color: var(--link); }
-      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 64px; }
+      a {
+        color: var(--link);
+      }
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 0 28px 64px;
+      }
       .site-header {
         border-bottom: 1px solid var(--line);
         background: var(--paper);
@@ -52,8 +62,14 @@
         justify-content: space-between;
         padding-bottom: 0;
       }
-      .brand { font-weight: 800; color: var(--navy); text-decoration: none; }
-      .brand .accent { color: var(--teal-text); }
+      .brand {
+        font-weight: 800;
+        color: var(--navy);
+        text-decoration: none;
+      }
+      .brand .accent {
+        color: var(--teal-text);
+      }
       /* Primary cross-page nav (canonical, identical across all pages) */
       .nav-links {
         display: flex;
@@ -68,7 +84,9 @@
         padding: 4px 2px;
         border-bottom: 2px solid transparent;
       }
-      .nav-links a:hover { color: var(--navy); }
+      .nav-links a:hover {
+        color: var(--navy);
+      }
       .nav-links a[aria-current="page"] {
         color: var(--navy);
         border-bottom-color: var(--teal);
@@ -87,22 +105,36 @@
         cursor: pointer;
         padding: 0;
       }
-      .nav-toggle:hover { border-color: var(--teal); }
+      .nav-toggle:hover {
+        border-color: var(--teal);
+      }
       .nav-toggle:focus-visible {
         outline: 2px solid var(--blue);
         outline-offset: 2px;
       }
-      .nav-toggle svg { width: 22px; height: 22px; display: block; }
-      .nav-toggle .icon-close { display: none; }
-      .nav-toggle[aria-expanded="true"] .icon-open { display: none; }
-      .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+      .nav-toggle svg {
+        width: 22px;
+        height: 22px;
+        display: block;
+      }
+      .nav-toggle .icon-close {
+        display: none;
+      }
+      .nav-toggle[aria-expanded="true"] .icon-open {
+        display: none;
+      }
+      .nav-toggle[aria-expanded="true"] .icon-close {
+        display: block;
+      }
       /* Mobile menu panel (hamburger target) */
       .mobile-menu {
         display: none;
         border-bottom: 1px solid var(--line);
         background: var(--paper);
       }
-      .mobile-menu.is-open { display: block; }
+      .mobile-menu.is-open {
+        display: block;
+      }
       .mobile-menu .wrap {
         display: flex;
         flex-direction: column;
@@ -118,14 +150,20 @@
         padding: 12px 6px;
         border-bottom: 1px solid var(--line);
       }
-      .mobile-menu a:last-of-type { border-bottom: none; }
+      .mobile-menu a:last-of-type {
+        border-bottom: none;
+      }
       .mobile-menu a:hover,
-      .mobile-menu a:focus-visible { color: var(--navy); }
+      .mobile-menu a:focus-visible {
+        color: var(--navy);
+      }
       .mobile-menu a:focus-visible {
         outline: 2px solid var(--blue);
         outline-offset: 2px;
       }
-      .mobile-menu a[aria-current="page"] { color: var(--navy); }
+      .mobile-menu a[aria-current="page"] {
+        color: var(--navy);
+      }
       .eyebrow {
         font-size: 0.72rem;
         font-weight: 700;
@@ -140,7 +178,12 @@
         letter-spacing: -0.02em;
         margin: 10px 0 14px;
       }
-      .lead { font-size: 1.1rem; color: var(--ink-soft); max-width: 62ch; margin-bottom: 28px; }
+      .lead {
+        font-size: 1.1rem;
+        color: var(--ink-soft);
+        max-width: 62ch;
+        margin-bottom: 28px;
+      }
       .diagram-wrap {
         background: var(--paper);
         border: 1px solid var(--line);
@@ -149,7 +192,12 @@
         margin-bottom: 32px;
         overflow-x: auto;
       }
-      .stack-svg { display: block; width: 100%; min-width: 720px; height: auto; }
+      .stack-svg {
+        display: block;
+        width: 100%;
+        min-width: 720px;
+        height: auto;
+      }
       .legend {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -169,8 +217,15 @@
         color: var(--teal-text);
         margin-bottom: 6px;
       }
-      .leg-card p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
-      .leg-card.cousin { border-style: dashed; opacity: 0.9; }
+      .leg-card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--ink-soft);
+      }
+      .leg-card.cousin {
+        border-style: dashed;
+        opacity: 0.9;
+      }
       h2 {
         font-size: 1.3rem;
         font-weight: 800;
@@ -274,10 +329,18 @@
         color: var(--ink-soft);
       }
       @media (max-width: 760px) {
-        .legend { grid-template-columns: 1fr; }
-        .proof-row { grid-template-columns: repeat(2, 1fr); }
-        .nav-links { display: none; }
-        .nav-toggle { display: inline-flex; }
+        .legend {
+          grid-template-columns: 1fr;
+        }
+        .proof-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .nav-links {
+          display: none;
+        }
+        .nav-toggle {
+          display: inline-flex;
+        }
       }
     </style>
   </head>
@@ -300,11 +363,31 @@
           aria-controls="mobile-menu"
           aria-label="Open menu"
         >
-          <svg class="icon-open" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <svg
+            class="icon-open"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 6h18M3 12h18M3 18h18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
           </svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <svg
+            class="icon-close"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -342,75 +425,477 @@
               <stop offset="0" stop-color="#1BB59F" />
               <stop offset="1" stop-color="#2E8FF5" />
             </linearGradient>
-            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <marker
+              id="arr"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
               <path d="M0 0 L10 5 L0 10 z" fill="#2E8FF5" />
             </marker>
           </defs>
 
           <!-- ROW 1: Distribution -->
-          <rect x="40" y="30" width="840" height="88" rx="14" fill="#f6f9fb" stroke="#1BB59F" stroke-width="2" />
-          <text x="60" y="58" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">DISTRIBUTION</text>
-          <rect x="300" y="48" width="320" height="52" rx="10" fill="#fff" stroke="#1BB59F" stroke-width="2" />
-          <text x="460" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#213B5E">The Library</text>
-          <text x="460" y="90" text-anchor="middle" font-size="11" fill="#586b7e">install · use · sync across harnesses</text>
+          <rect
+            x="40"
+            y="30"
+            width="840"
+            height="88"
+            rx="14"
+            fill="#f6f9fb"
+            stroke="#1BB59F"
+            stroke-width="2"
+          />
+          <text
+            x="60"
+            y="58"
+            font-family="var(--mono)"
+            font-size="11"
+            fill="#0f7d6c"
+            font-weight="700"
+            letter-spacing="2"
+          >
+            DISTRIBUTION
+          </text>
+          <rect
+            x="300"
+            y="48"
+            width="320"
+            height="52"
+            rx="10"
+            fill="#fff"
+            stroke="#1BB59F"
+            stroke-width="2"
+          />
+          <text
+            x="460"
+            y="72"
+            text-anchor="middle"
+            font-size="16"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            The Library
+          </text>
+          <text
+            x="460"
+            y="90"
+            text-anchor="middle"
+            font-size="11"
+            fill="#586b7e"
+          >
+            install · use · sync across harnesses
+          </text>
 
           <!-- arrow down -->
-          <path d="M 460 130 L 460 158" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+          <path
+            d="M 460 130 L 460 158"
+            stroke="url(#g-accent)"
+            stroke-width="2.5"
+            marker-end="url(#arr)"
+          />
 
           <!-- ROW 2: Catalog upstream -->
-          <rect x="40" y="168" width="840" height="100" rx="14" fill="#f6f9fb" stroke="#34CFA6" stroke-width="2" />
-          <text x="60" y="196" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">CATALOG UPSTREAM</text>
-          <rect x="180" y="206" width="240" height="48" rx="10" fill="#fff" stroke="#34CFA6" stroke-width="2" />
-          <text x="300" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#213B5E">the-catalog-source</text>
-          <text x="300" y="244" text-anchor="middle" font-size="10" fill="#586b7e">catalog.yaml</text>
-          <path d="M 432 230 L 488 230" stroke="#2E8FF5" stroke-width="2" marker-end="url(#arr)" />
-          <rect x="500" y="206" width="240" height="48" rx="10" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
-          <text x="620" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">fabric-library.json</text>
-          <text x="620" y="244" text-anchor="middle" font-size="10" fill="#586b7e">catalog projection snapshot</text>
+          <rect
+            x="40"
+            y="168"
+            width="840"
+            height="100"
+            rx="14"
+            fill="#f6f9fb"
+            stroke="#34CFA6"
+            stroke-width="2"
+          />
+          <text
+            x="60"
+            y="196"
+            font-family="var(--mono)"
+            font-size="11"
+            fill="#0f7d6c"
+            font-weight="700"
+            letter-spacing="2"
+          >
+            CATALOG UPSTREAM
+          </text>
+          <rect
+            x="180"
+            y="206"
+            width="240"
+            height="48"
+            rx="10"
+            fill="#fff"
+            stroke="#34CFA6"
+            stroke-width="2"
+          />
+          <text
+            x="300"
+            y="228"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            the-catalog-source
+          </text>
+          <text
+            x="300"
+            y="244"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            catalog.yaml
+          </text>
+          <path
+            d="M 432 230 L 488 230"
+            stroke="#2E8FF5"
+            stroke-width="2"
+            marker-end="url(#arr)"
+          />
+          <rect
+            x="500"
+            y="206"
+            width="240"
+            height="48"
+            rx="10"
+            fill="#fff"
+            stroke="#2E8FF5"
+            stroke-width="2"
+          />
+          <text
+            x="620"
+            y="228"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            fabric-library.json
+          </text>
+          <text
+            x="620"
+            y="244"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            catalog projection snapshot
+          </text>
 
-          <path d="M 460 278 L 460 306" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+          <path
+            d="M 460 278 L 460 306"
+            stroke="url(#g-accent)"
+            stroke-width="2.5"
+            marker-end="url(#arr)"
+          />
 
           <!-- ROW 3: Living Vault app -->
-          <rect x="40" y="316" width="840" height="120" rx="14" fill="#eef6fb" stroke="#213B5E" stroke-width="2.5" />
-          <text x="60" y="344" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">THE LIVING VAULT (RAYFIN FABRIC APP)</text>
-          <rect x="80" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#1BB59F" stroke-width="2" />
-          <text x="180" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Govern</text>
-          <text x="180" y="400" text-anchor="middle" font-size="10" fill="#586b7e">editable catalog</text>
-          <rect x="300" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
-          <text x="400" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Measure</text>
-          <text x="400" y="400" text-anchor="middle" font-size="10" fill="#586b7e">cross-harness Monitor</text>
-          <rect x="520" y="358" width="200" height="62" rx="10" fill="#fff" stroke="#34CFA6" stroke-width="2" />
-          <text x="620" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Improve</text>
-          <text x="620" y="400" text-anchor="middle" font-size="10" fill="#586b7e">effectiveness signal</text>
-          <rect x="740" y="358" width="120" height="62" rx="10" fill="#fff" stroke="#213B5E" stroke-width="1.5" stroke-dasharray="4 3" />
-          <text x="800" y="386" text-anchor="middle" font-size="11" font-weight="700" fill="#213B5E">/model</text>
-          <text x="800" y="404" text-anchor="middle" font-size="9" fill="#586b7e">canvas</text>
+          <rect
+            x="40"
+            y="316"
+            width="840"
+            height="120"
+            rx="14"
+            fill="#eef6fb"
+            stroke="#213B5E"
+            stroke-width="2.5"
+          />
+          <text
+            x="60"
+            y="344"
+            font-family="var(--mono)"
+            font-size="11"
+            fill="#0f7d6c"
+            font-weight="700"
+            letter-spacing="2"
+          >
+            THE LIVING VAULT (RAYFIN FABRIC APP)
+          </text>
+          <rect
+            x="80"
+            y="358"
+            width="200"
+            height="62"
+            rx="10"
+            fill="#fff"
+            stroke="#1BB59F"
+            stroke-width="2"
+          />
+          <text
+            x="180"
+            y="382"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            Govern
+          </text>
+          <text
+            x="180"
+            y="400"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            editable catalog
+          </text>
+          <rect
+            x="300"
+            y="358"
+            width="200"
+            height="62"
+            rx="10"
+            fill="#fff"
+            stroke="#2E8FF5"
+            stroke-width="2"
+          />
+          <text
+            x="400"
+            y="382"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            Measure
+          </text>
+          <text
+            x="400"
+            y="400"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            cross-harness Monitor
+          </text>
+          <rect
+            x="520"
+            y="358"
+            width="200"
+            height="62"
+            rx="10"
+            fill="#fff"
+            stroke="#34CFA6"
+            stroke-width="2"
+          />
+          <text
+            x="620"
+            y="382"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            Improve
+          </text>
+          <text
+            x="620"
+            y="400"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            effectiveness signal
+          </text>
+          <rect
+            x="740"
+            y="358"
+            width="120"
+            height="62"
+            rx="10"
+            fill="#fff"
+            stroke="#213B5E"
+            stroke-width="1.5"
+            stroke-dasharray="4 3"
+          />
+          <text
+            x="800"
+            y="386"
+            text-anchor="middle"
+            font-size="11"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            /model
+          </text>
+          <text
+            x="800"
+            y="404"
+            text-anchor="middle"
+            font-size="9"
+            fill="#586b7e"
+          >
+            canvas
+          </text>
 
-          <path d="M 460 446 L 460 474" stroke="url(#g-accent)" stroke-width="2.5" marker-end="url(#arr)" />
+          <path
+            d="M 460 446 L 460 474"
+            stroke="url(#g-accent)"
+            stroke-width="2.5"
+            marker-end="url(#arr)"
+          />
 
           <!-- ROW 4: Fabric platform -->
-          <rect x="40" y="484" width="520" height="100" rx="14" fill="#f6f9fb" stroke="#213B5E" stroke-width="2" />
-          <text x="60" y="512" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">MICROSOFT FABRIC</text>
-          <text x="300" y="538" text-anchor="middle" font-size="14" font-weight="700" fill="#213B5E">Rayfin semantic model (9 entities)</text>
-          <text x="300" y="556" text-anchor="middle" font-size="11" fill="#586b7e">Asset · Utilization · Tags · Bundles · Dependencies</text>
-          <text x="300" y="572" text-anchor="middle" font-size="11" fill="#586b7e">MSSQL + GraphQL data layer</text>
+          <rect
+            x="40"
+            y="484"
+            width="520"
+            height="100"
+            rx="14"
+            fill="#f6f9fb"
+            stroke="#213B5E"
+            stroke-width="2"
+          />
+          <text
+            x="60"
+            y="512"
+            font-family="var(--mono)"
+            font-size="11"
+            fill="#0f7d6c"
+            font-weight="700"
+            letter-spacing="2"
+          >
+            MICROSOFT FABRIC
+          </text>
+          <text
+            x="300"
+            y="538"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            Rayfin semantic model (9 entities)
+          </text>
+          <text
+            x="300"
+            y="556"
+            text-anchor="middle"
+            font-size="11"
+            fill="#586b7e"
+          >
+            Asset · Utilization · Tags · Bundles · Dependencies
+          </text>
+          <text
+            x="300"
+            y="572"
+            text-anchor="middle"
+            font-size="11"
+            fill="#586b7e"
+          >
+            MSSQL + GraphQL data layer
+          </text>
 
           <!-- Governance box -->
-          <rect x="580" y="484" width="300" height="100" rx="14" fill="#fff" stroke="#2E8FF5" stroke-width="2" />
-          <text x="600" y="512" font-family="var(--mono)" font-size="11" fill="#0f7d6c" font-weight="700" letter-spacing="2">GOVERNANCE</text>
-          <text x="730" y="538" text-anchor="middle" font-size="13" font-weight="700" fill="#213B5E">Inside the Vault</text>
-          <text x="730" y="556" text-anchor="middle" font-size="10" fill="#586b7e">submissions queue · contract gate</text>
-          <text x="730" y="572" text-anchor="middle" font-size="10" fill="#586b7e">honesty grades · RBAC (Fabric gated)</text>
+          <rect
+            x="580"
+            y="484"
+            width="300"
+            height="100"
+            rx="14"
+            fill="#fff"
+            stroke="#2E8FF5"
+            stroke-width="2"
+          />
+          <text
+            x="600"
+            y="512"
+            font-family="var(--mono)"
+            font-size="11"
+            fill="#0f7d6c"
+            font-weight="700"
+            letter-spacing="2"
+          >
+            GOVERNANCE
+          </text>
+          <text
+            x="730"
+            y="538"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="700"
+            fill="#213B5E"
+          >
+            Inside the Vault
+          </text>
+          <text
+            x="730"
+            y="556"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            submissions queue · contract gate
+          </text>
+          <text
+            x="730"
+            y="572"
+            text-anchor="middle"
+            font-size="10"
+            fill="#586b7e"
+          >
+            honesty grades · RBAC (Fabric gated)
+          </text>
 
           <!-- Power BI branch -->
-          <path d="M 300 594 L 300 610 L 460 610" stroke="#9fb1c8" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)" />
-          <rect x="460" y="588" width="200" height="28" rx="8" fill="#fff" stroke="#9fb1c8" stroke-width="1.5" stroke-dasharray="4 3" />
-          <text x="560" y="607" text-anchor="middle" font-size="11" font-weight="600" fill="#586b7e">Power BI (optional downstream)</text>
+          <path
+            d="M 300 594 L 300 610 L 460 610"
+            stroke="#9fb1c8"
+            stroke-width="2"
+            stroke-dasharray="5 4"
+            marker-end="url(#arr)"
+          />
+          <rect
+            x="460"
+            y="588"
+            width="200"
+            height="28"
+            rx="8"
+            fill="#fff"
+            stroke="#9fb1c8"
+            stroke-width="1.5"
+            stroke-dasharray="4 3"
+          />
+          <text
+            x="560"
+            y="607"
+            text-anchor="middle"
+            font-size="11"
+            font-weight="600"
+            fill="#586b7e"
+          >
+            Power BI (optional downstream)
+          </text>
 
           <!-- Telemetry side feed -->
-          <rect x="40" y="358" width="28" height="62" rx="6" fill="#1BB59F" opacity="0.15" />
-          <text x="24" y="392" font-size="9" fill="#0f7d6c" transform="rotate(-90 24 392)">local harness logs</text>
-          <path d="M 68 389 L 78 389" stroke="#1BB59F" stroke-width="2" marker-end="url(#arr)" />
+          <rect
+            x="40"
+            y="358"
+            width="28"
+            height="62"
+            rx="6"
+            fill="#1BB59F"
+            opacity="0.15"
+          />
+          <text
+            x="24"
+            y="392"
+            font-size="9"
+            fill="#0f7d6c"
+            transform="rotate(-90 24 392)"
+          >
+            local harness logs
+          </text>
+          <path
+            d="M 68 389 L 78 389"
+            stroke="#1BB59F"
+            stroke-width="2"
+            marker-end="url(#arr)"
+          />
         </svg>
       </div>
 
@@ -418,27 +903,45 @@
       <div class="legend">
         <div class="leg-card">
           <div class="name">The Library</div>
-          <p>Distribution catalog. Installs the same agentic assets across Claude Code, Codex, Copilot, Grok, and devices.</p>
+          <p>
+            Distribution catalog. Installs the same agentic assets across Claude
+            Code, Codex, Copilot, Grok, and devices.
+          </p>
         </div>
         <div class="leg-card">
           <div class="name">the-catalog-source</div>
-          <p>Upstream catalog for asset-side projection into <code>fabric-library.json</code>. Not the same repo as The Library.</p>
+          <p>
+            Upstream catalog for asset-side projection into
+            <code>fabric-library.json</code>. Not the same repo as The Library.
+          </p>
         </div>
         <div class="leg-card">
           <div class="name">The Living Vault</div>
-          <p>Rayfin Fabric app: system of record + effectiveness monitor. This is the operational product surface.</p>
+          <p>
+            Rayfin Fabric app: system of record + effectiveness monitor. This is
+            the operational product surface.
+          </p>
         </div>
         <div class="leg-card cousin">
           <div class="name">the-vault (cousin)</div>
-          <p>Separate personal skill library. Tooling source only; does not feed the Living Vault catalog.</p>
+          <p>
+            Separate personal skill library. Tooling source only; does not feed
+            the Living Vault catalog.
+          </p>
         </div>
         <div class="leg-card">
           <div class="name">Microsoft Fabric</div>
-          <p>Hosts the Rayfin app bundle and semantic model. Live read/write path deploys on request; demo SWA runs at zero Fabric cost.</p>
+          <p>
+            Hosts the Rayfin app bundle and semantic model. Live read/write path
+            deploys on request; demo SWA runs at zero Fabric cost.
+          </p>
         </div>
         <div class="leg-card">
           <div class="name">Power BI</div>
-          <p>Optional analytics consumer of the Fabric semantic model. The Vault's Monitor is the live ops UI; Power BI is not a substitute.</p>
+          <p>
+            Optional analytics consumer of the Fabric semantic model. The
+            Vault's Monitor is the live ops UI; Power BI is not a substitute.
+          </p>
         </div>
       </div>
 
@@ -519,7 +1022,10 @@
       </div>
 
       <div class="note">
-        <strong>Closed loop:</strong> The Library distributes assets across harnesses. the-catalog-source projects the governed catalog. The Living Vault measures which assets earn their place. Telemetry reads local harness logs (metadata only) and never ships in the public demo build.
+        <strong>Closed loop:</strong> The Library distributes assets across
+        harnesses. the-catalog-source projects the governed catalog. The Living
+        Vault measures which assets earn their place. Telemetry reads local
+        harness logs (metadata only) and never ships in the public demo build.
       </div>
 
       <h2>Common confusions</h2>
@@ -527,9 +1033,9 @@
         <article class="faq-item">
           <h3>Is The Library the same as the Living Vault?</h3>
           <p>
-            No. The Library is distribution (install across harnesses). The Living
-            Vault is governance and measurement inside Fabric. They complement
-            each other; neither replaces the other.
+            No. The Library is distribution (install across harnesses). The
+            Living Vault is governance and measurement inside Fabric. They
+            complement each other; neither replaces the other.
           </p>
         </article>
         <article class="faq-item">
@@ -561,12 +1067,24 @@
 
       <p>
         <a class="btn" href="/demo">Try the demo</a>
-        <a href="index.html" style="margin-left: 16px; font-weight: 600">Full overview</a>
-        <a href="telemetry-guide.html" style="margin-left: 16px; font-weight: 600">Telemetry guide</a>
+        <a href="index.html" style="margin-left: 16px; font-weight: 600"
+          >Full overview</a
+        >
+        <a
+          href="telemetry-guide.html"
+          style="margin-left: 16px; font-weight: 600"
+          >Telemetry guide</a
+        >
       </p>
 
       <div class="footer">
-        The Living Vault · Public repo coming soon
+        The Living Vault ·
+        <a
+          href="https://github.com/cdrguru/living-vault"
+          target="_blank"
+          rel="noopener"
+          >Public repo on GitHub</a
+        >
       </div>
     </main>
     <script>
@@ -584,7 +1102,10 @@
           setOpen(toggle.getAttribute("aria-expanded") !== "true");
         });
         document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+          if (
+            e.key === "Escape" &&
+            toggle.getAttribute("aria-expanded") === "true"
+          ) {
             setOpen(false);
             toggle.focus();
           }

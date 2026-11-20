@@ -767,7 +767,7 @@ describe("effectivenessSignals and composeEffectiveScore", () => {
     const signals = effectivenessSignals(usage, 1); // windowDays < 2
     const retention = signals.find((s) => s.id === "retention");
     expect(retention?.present).toBe(false);
-    // quality 0.8 (w 0.5) + adoption min(100/500,1)=0.2 (w 0.2), renormalized over 0.7
+    // toolCallReliability 0.8 (w 0.5) + adoption min(100/500,1)=0.2 (w 0.2), renormalized over 0.7
     const score = composeEffectiveScore(signals);
     expect(score).toBeCloseTo((0.5 * 0.8 + 0.2 * 0.2) / 0.7, 6);
   });
@@ -781,7 +781,7 @@ describe("effectivenessSignals and composeEffectiveScore", () => {
     const usage = usageOf({ invocations: 100, successRate: 1, activeDays: 5 });
     const signals = effectivenessSignals(usage, 10);
     expect(signals.find((s) => s.id === "retention")?.present).toBe(true);
-    // q 1*0.5 + adoption 0.2*0.2 + retention 0.5*0.3 = 0.5 + 0.04 + 0.15 = 0.69
+    // toolCallReliability 1*0.5 + adoption 0.2*0.2 + retention 0.5*0.3 = 0.69
     expect(composeEffectiveScore(signals)).toBeCloseTo(0.69, 6);
   });
 });
@@ -1093,6 +1093,7 @@ describe("effectiveness drift", () => {
   it("ranks regressing below risk and above fragile dependencies", () => {
     const retired = asset("oldtool", { status: "retired" });
     const ds: VaultDataset = {
+      routingStats: [],
       assets: [
         // risky: effective but ungoverned -> Risks quadrant
         asset("risky", { ownerId: undefined, originId: undefined }),
@@ -1107,7 +1108,10 @@ describe("effectiveness drift", () => {
       assetTags: [],
       dependencies: [{ assetId: "fragile", dependsOnAssetId: "oldtool" }],
       bundleMemberships: [],
+      assetRevisions: [],
       evalResults: [],
+      baselines: [],
+      interventions: [],
       utilization: [
         richRow("risky", "2026-06-01", 200, 190),
         richRow("slipping", "2026-06-01", 60, 60),

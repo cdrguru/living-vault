@@ -23,6 +23,8 @@ export function stubSource(
     importProjection: unsupported,
     importTelemetry: unsupported,
     importEvalResults: unsupported,
+    importRoutingStats: unsupported,
+    recordIntervention: unsupported,
     getUnattributedUsage: () => [],
     getHarnessUsage: () => [],
     submitProjection: unsupported,

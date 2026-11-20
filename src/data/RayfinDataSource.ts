@@ -2,6 +2,7 @@ import { runDataSourceContract } from "./contract";
 import type {
   DataSource,
   EvalImportResult,
+  RoutingStatsImportResult,
   SubmissionDetail,
   SubmissionFilter,
   SubmissionItemDecisionInput,
@@ -11,6 +12,9 @@ import type {
   TelemetryResult,
   UnattributedUsage,
 } from "./DataSource";
+import type { RecordInterventionInput } from "./DataSource";
+import type { InterventionRow } from "./interventions";
+import { applyIntervention } from "./recordIntervention";
 import { getWindowedHarnessUsage } from "./harnessUsage";
 import { contentHashOf } from "./hash";
 import {
@@ -34,13 +38,17 @@ import {
   finalizeSubmission,
 } from "./submissions";
 import { applyEvals } from "./evals";
+import { applyRoutingStats } from "./routingStats";
 import { applyTelemetry } from "./telemetry";
 import { telemetrySnapshot } from "./telemetrySnapshot";
 import type {
   AssetInput,
+  AssetRevisionRow,
   AssetRow,
   EvalMeta,
   EvalResultRow,
+  RoutingStatRow,
+  RoutingStatsMeta,
   HarnessUsage,
   SubmissionItemRow,
   SubmissionRow,
@@ -333,6 +341,18 @@ export class RayfinDataSource implements DataSource {
         tag: { id: tagId },
       });
     }
+    // Capture version 1: every asset's initial content is a revision from birth, so a
+    // later edit has a before to compare against.
+    await this.createRevision(writer, {
+      tenantId: row.tenantId,
+      assetId: created.id,
+      seq: 1,
+      body: row.body,
+      contentHash: row.contentHash,
+      createdAt: row.updatedAt,
+      createdByActor: "fabric-user",
+      source: "vault-write",
+    });
     return { ...row, id: created.id };
   }
 
@@ -362,6 +382,38 @@ export class RayfinDataSource implements DataSource {
     }
     this.assertContract(candidate);
     await writer.update("Asset", { id }, assetUpdateColumns(updated));
+    // Preserve history when the content changed. Fabric has no SQL migration
+    // backfill (rayfin up db apply creates the table empty), so an asset edited
+    // before it has any revision gets TWO rows: seq 1 freezes the pre-edit body that
+    // would otherwise be destroyed right here, seq 2 records the new one. With prior
+    // history, just the next seq.
+    if (updated.contentHash !== current.contentHash) {
+      const prior = dataset.assetRevisions
+        .filter((rev) => rev.assetId === id)
+        .reduce((max, rev) => Math.max(max, rev.seq), 0);
+      if (prior === 0) {
+        await this.createRevision(writer, {
+          tenantId: current.tenantId,
+          assetId: id,
+          seq: 1,
+          body: current.body,
+          contentHash: current.contentHash,
+          createdAt: current.updatedAt,
+          createdByActor: "fabric-user",
+          source: "import",
+        });
+      }
+      await this.createRevision(writer, {
+        tenantId: updated.tenantId,
+        assetId: id,
+        seq: prior === 0 ? 2 : prior + 1,
+        body: updated.body,
+        contentHash: updated.contentHash,
+        createdAt: updated.updatedAt,
+        createdByActor: "fabric-user",
+        source: "vault-write",
+      });
+    }
     if (tagIds) {
       for (const tag of dataset.assetTags.filter((t) => t.assetId === id)) {
         await writer.delete("AssetTag", {
@@ -420,6 +472,15 @@ export class RayfinDataSource implements DataSource {
         (membership) => membership.assetId !== id,
       ),
       utilization: dataset.utilization.filter((row) => row.assetId !== id),
+      // A deleted asset takes its evidence and its history with it. evalResults was
+      // missing from this candidate before revisions arrived, so deleting an
+      // eval-bearing asset failed the dangling-eval contract check on the client:
+      // the same latent bug as the two local stores, fixed the same day.
+      evalResults: dataset.evalResults.filter((row) => row.assetId !== id),
+      assetRevisions: dataset.assetRevisions.filter(
+        (row) => row.assetId !== id,
+      ),
+      routingStats: dataset.routingStats.filter((row) => row.assetId !== id),
     };
     this.assertContract(candidate);
     // Fabric has no cascade delete: remove the dependent join and utilization rows
@@ -458,6 +519,15 @@ export class RayfinDataSource implements DataSource {
     for (const row of dataset.utilization.filter((u) => u.assetId === id)) {
       await writer.delete("Utilization", { id: row.id });
     }
+    for (const row of dataset.evalResults.filter((e) => e.assetId === id)) {
+      await writer.delete("EvalResult", { id: row.id });
+    }
+    for (const row of dataset.routingStats.filter((r) => r.assetId === id)) {
+      await writer.delete("RoutingStat", { id: row.id });
+    }
+    for (const row of dataset.assetRevisions.filter((r) => r.assetId === id)) {
+      await writer.delete("AssetRevision", { id: row.id });
+    }
     await writer.delete("Asset", { id });
   }
 
@@ -491,7 +561,44 @@ export class RayfinDataSource implements DataSource {
     );
     this.assertContract(merged);
     await this.applyMerge(writer, dataset, merged, joinIds);
+    // mergeProjection's ensureRevisions pass minted revision rows for every asset the
+    // import created or whose body it changed (and for any asset that predates
+    // revision tracking). Revisions are append-only, so the diff is exactly the rows
+    // whose (assetId, seq) the live table does not hold yet. Ids are omitted on
+    // create (the local rev-* ids are deterministic placeholders; Fabric mints the
+    // @uuid() primary key). Written AFTER applyMerge so the referenced assets exist.
+    const have = new Set(
+      dataset.assetRevisions.map((rev) => `${rev.assetId}::${rev.seq}`),
+    );
+    for (const rev of merged.assetRevisions) {
+      if (have.has(`${rev.assetId}::${rev.seq}`)) continue;
+      await this.createRevision(writer, rev);
+    }
     return delta;
+  }
+
+  /**
+   * Create one AssetRevision row. The id is always omitted: Fabric mints the @uuid()
+   * primary key, and any locally minted rev-* id is a deterministic placeholder that
+   * must not reach a uuid column. Scalar FK plus relationship object, same as every
+   * other child-entity create (the scalar satisfies NOT NULL, the relationship keeps
+   * the snake_case asset_id column the reader selects populated).
+   */
+  private async createRevision(
+    writer: RayfinWriter,
+    rev: Omit<AssetRevisionRow, "id"> & { id?: string },
+  ): Promise<void> {
+    await writer.create("AssetRevision", {
+      tenantId: rev.tenantId,
+      assetId: rev.assetId,
+      asset: { id: rev.assetId },
+      seq: rev.seq,
+      body: rev.body,
+      contentHash: rev.contentHash,
+      createdAt: new Date(rev.createdAt),
+      createdByActor: rev.createdByActor,
+      source: rev.source,
+    });
   }
 
   /**
@@ -872,16 +979,61 @@ export class RayfinDataSource implements DataSource {
         passed: row.passed,
         failed: row.failed,
         errored: row.errored,
+        inconclusive: row.inconclusive ?? 0,
         latencyMs: row.latencyMs,
         tokens: row.tokens,
         cost: row.cost,
         model: row.model,
         quality: row.quality,
+        // Eval identity (PR12): bare references pass through as-is; a null
+        // revision keeps its honest derived cap (applied at read).
+        assetRevisionId: row.assetRevisionId ?? undefined,
+        harness: row.harness,
+        baselineId: row.baselineId ?? undefined,
       });
     }
     return {
       applied: candidate.evalResults.length,
       dropped: rows.length - candidate.evalResults.length,
+    };
+  }
+
+  async importRoutingStats(
+    rows: RoutingStatRow[],
+    meta: RoutingStatsMeta,
+  ): Promise<RoutingStatsImportResult> {
+    const writer = this.requireWriter();
+    const dataset = await this.currentDataset();
+    // Same destructive-import guard as importTelemetry.
+    const assetIds = new Set(dataset.assets.map((asset) => asset.id));
+    const matched = rows.filter((row) => assetIds.has(row.assetId));
+    if (matched.length === 0) {
+      return { applied: 0, dropped: rows.length, skipped: "no-matching-rows" };
+    }
+    const candidate = applyRoutingStats(dataset, rows, meta);
+    this.assertContract(candidate);
+    // applyRoutingStats replaces the whole routing-stats table; mirror that on Fabric
+    // by deleting the existing rows then inserting the new set. Row ids are synthetic
+    // (not uuids), so the id is omitted on create and Fabric mints the @uuid() key.
+    for (const row of dataset.routingStats) {
+      await writer.delete("RoutingStat", { id: row.id });
+    }
+    for (const row of candidate.routingStats) {
+      await writer.create("RoutingStat", {
+        tenantId: row.tenantId,
+        assetId: row.assetId,
+        asset: { id: row.assetId },
+        date: new Date(row.date),
+        localHits: row.localHits,
+        externalFallbacks: row.externalFallbacks,
+        belowThreshold: row.belowThreshold,
+        externalCost: row.externalCost,
+        avoidedCostEstimate: row.avoidedCostEstimate,
+      });
+    }
+    return {
+      applied: candidate.routingStats.length,
+      dropped: rows.length - candidate.routingStats.length,
     };
   }
 
@@ -1016,6 +1168,40 @@ export class RayfinDataSource implements DataSource {
     if (!submission) throw new Error(`Unknown submission "${id}"`);
     await writer.update("Submission", { id }, { status });
     return { ...submission, status };
+  }
+
+  async recordIntervention(
+    input: RecordInterventionInput,
+  ): Promise<InterventionRow> {
+    const writer = this.requireWriter();
+    const dataset = await this.currentDataset();
+    const applied = applyIntervention(dataset, input);
+    // Append-only: an identical re-record is an idempotent no-op, so nothing is created.
+    if (applied.noop) return applied.persisted;
+    const candidate: VaultDataset = {
+      ...dataset,
+      interventions: applied.interventions,
+    };
+    this.assertContract(candidate);
+    const row = applied.persisted;
+    await writer.create("Intervention", {
+      // id is omitted: Fabric mints the @uuid() primary key. The local uuid is a
+      // placeholder for the in-memory candidate only.
+      tenantId: row.tenantId,
+      assetId: row.assetId,
+      revisionIdBefore: row.revisionIdBefore,
+      date: new Date(row.date),
+      action: row.action,
+      outcome: row.outcome,
+      actor: row.actor,
+      note: row.note,
+      effectiveScoreBefore: row.effectiveScoreBefore ?? undefined,
+      invocationsBefore: row.invocationsBefore,
+      dedupeKey: row.dedupeKey,
+      supersedesId: row.supersedesId,
+      recordedAt: new Date(row.recordedAt),
+    });
+    return row;
   }
 }
 

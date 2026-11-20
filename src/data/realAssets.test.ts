@@ -26,6 +26,7 @@ describe('realAssetsProjection', () => {
 
   it('merges into a dataset with no coherence or referential violations', () => {
     const empty: VaultDataset = {
+      routingStats: [],
       assets: [],
       tags: [
         { id: 'tag-c-0', tenantId: TENANT, kind: 'capability', name: 'quality' },
@@ -40,7 +41,10 @@ describe('realAssetsProjection', () => {
       assetTags: [],
       dependencies: [],
       bundleMemberships: [],
+      assetRevisions: [],
       evalResults: [],
+      baselines: [],
+      interventions: [],
       utilization: [],
     };
     const merged = mergeProjection(empty, realAssetsProjection, TENANT);

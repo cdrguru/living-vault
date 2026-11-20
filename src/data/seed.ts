@@ -1,4 +1,5 @@
 import { evalSnapshot } from "./evalSnapshot";
+import { interventionsSnapshot } from "./interventionsSnapshot";
 import { modelRate } from "./harnessCost";
 import { contentHashOf } from "./hash";
 import demoTelemetry from "./imports/utilization.json";
@@ -457,6 +458,10 @@ assets.forEach((asset, index) => {
  */
 export const baseDataset: VaultDataset = {
   assets,
+  // Empty at the literal: composeSeedDataset routes through mergeProjection, whose
+  // ensureRevisions pass backfills a seq-1 revision for every asset in the merged
+  // result, base and overlay alike.
+  assetRevisions: [],
   tags,
   origins,
   owners,
@@ -466,6 +471,9 @@ export const baseDataset: VaultDataset = {
   bundleMemberships,
   utilization,
   evalResults: [],
+  baselines: [],
+  interventions: [],
+  routingStats: [],
 };
 
 /**
@@ -477,6 +485,7 @@ export const baseDataset: VaultDataset = {
  */
 const REAL_ONLY_BASE: VaultDataset = {
   assets: [],
+  assetRevisions: [],
   tags,
   origins: [],
   owners: [],
@@ -486,6 +495,9 @@ const REAL_ONLY_BASE: VaultDataset = {
   bundleMemberships: [],
   utilization: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
+  routingStats: [],
 };
 
 /**
@@ -524,10 +536,15 @@ export function composeSeedDataset(realOnly: boolean): VaultDataset {
   const demoEvalResults = evalSnapshot.rows.filter((row) =>
     knownAssetIds.has(row.assetId),
   );
+  // Interventions are an append-only audit log that may reference a since-deleted asset,
+  // so unlike utilization/evals they are NOT filtered to known assets: a tombstone for a
+  // removed asset is still real history. The loop and UI look up interventions by asset
+  // id, so a dangling one is simply never surfaced, never an error.
   return {
     ...merged,
     utilization: demoUtilization,
     evalResults: demoEvalResults,
+    interventions: interventionsSnapshot,
   };
 }
 

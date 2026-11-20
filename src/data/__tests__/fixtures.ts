@@ -65,7 +65,9 @@ export const makeUtilRow = (
 export const makeDataset = (
   over: Partial<VaultDataset> = {},
 ): VaultDataset => ({
+  routingStats: [],
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [],
   owners: [],
@@ -75,5 +77,7 @@ export const makeDataset = (
   bundleMemberships: [],
   utilization: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   ...over,
 });
