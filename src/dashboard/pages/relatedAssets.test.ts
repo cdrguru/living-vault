@@ -136,6 +136,7 @@ const manyTagsMate = mkAsset({ id: "many-tags-mate", type: "workflow" });
 const manyBundlesMate = mkAsset({ id: "many-bundles-mate", type: "workflow" });
 
 const dataset: VaultDataset = {
+  routingStats: [],
   assets: [
     current,
     depRequired,
@@ -180,7 +181,10 @@ const dataset: VaultDataset = {
       assetId: manyBundlesMate.id,
     })),
   ],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 };
 

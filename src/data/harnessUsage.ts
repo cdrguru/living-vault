@@ -60,8 +60,9 @@ export function harnessDateBounds(): DateWindow | null {
 /**
  * Re-aggregate one harness over a date window from its daily rows. A source with
  * no daily breakdown keeps its all-time totals (windowing is a no-op for it).
+ * Per-skill loads are filtered to the same window.
  */
-function windowedSource(source: HarnessUsage, window: DateWindow): HarnessUsage {
+export function windowedSource(source: HarnessUsage, window: DateWindow): HarnessUsage {
   const daily = source.daily ?? [];
   if (!daily.length) return source;
   const days = daily.filter(
@@ -99,6 +100,13 @@ function windowedSource(source: HarnessUsage, window: DateWindow): HarnessUsage 
     latencyMs: latN ? Math.round(latSum / latN) : 0,
     windowStart: from,
     windowEnd: to,
+    ...(source.skillUses
+      ? {
+          skillUses: source.skillUses.filter(
+            (row) => row.date >= window.start && row.date <= window.end,
+          ),
+        }
+      : {}),
   };
 }
 

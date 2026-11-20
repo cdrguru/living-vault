@@ -15,6 +15,7 @@ import {
   codexWorkspaceUsageSnapshot,
   type HarnessUsage,
 } from "@/data";
+import { codexSkillUseByAsset } from "@/data/codexSkillUse";
 
 import {
   formatLatencyMs,
@@ -59,7 +60,13 @@ function WorkspaceMetric({ label, value }: { label: string; value: ReactNode }) 
  * detectable error count flagged "partial"; tokens muted when a harness does not
  * log them. The note explains the grain so cards are not read as a leaderboard.
  */
-function HarnessCard({ usage }: { usage: HarnessUsage }) {
+function HarnessCard({
+  usage,
+  assets,
+}: {
+  usage: HarnessUsage;
+  assets: ReadonlyArray<{ id: string; type: string }>;
+}) {
   const successRate = successRateOf(usage);
   // A success rate is honest when successes are fully measured or derived from
   // real counts (calls minus failures); when only failures are detectable
@@ -70,6 +77,11 @@ function HarnessCard({ usage }: { usage: HarnessUsage }) {
     (codexWorkspaceUsageSnapshot.totals.turns > 0 ||
       codexWorkspaceUsageSnapshot.totals.sessions > 0 ||
       codexWorkspaceUsageSnapshot.totals.reviews > 0);
+
+  // Codex skills loaded in the window that match no Vault asset (Codex built-ins,
+  // project skills). Listed, never minted as assets.
+  const unresolvedSkills =
+    usage.source === "codex" ? codexSkillUseByAsset(usage, assets).unresolved : [];
 
   return (
     <li className="rounded-lg border border-border bg-surface-inset p-3">
@@ -157,17 +169,42 @@ function HarnessCard({ usage }: { usage: HarnessUsage }) {
             />
             <WorkspaceMetric
               label="Admin sessions"
-              value={formatCompact(codexWorkspaceUsageSnapshot.totals.sessions)}
+              value={codexWorkspaceUsageSnapshot.coverage?.sessions === false
+                ? "Unavailable" : formatCompact(codexWorkspaceUsageSnapshot.totals.sessions)}
             />
             <WorkspaceMetric
               label="Code reviews"
-              value={formatCompact(codexWorkspaceUsageSnapshot.totals.reviews)}
+              value={codexWorkspaceUsageSnapshot.coverage?.reviews === false
+                ? "Unavailable" : formatCompact(codexWorkspaceUsageSnapshot.totals.reviews)}
             />
           </div>
           <p className="mt-2 text-xs text-subtle">
             Codex admin analytics export, separate from local rollout logs.
+            {codexWorkspaceUsageSnapshot.coverage && (
+              <> Turns are prompt-and-response exchanges from the Messages chart.
+                Sessions and reviews are not included in this export.</>
+            )}
           </p>
         </div>
+      )}
+
+      {unresolvedSkills.length > 0 && (
+        <details className="mt-2 text-xs text-muted">
+          <summary className="cursor-pointer">
+            {formatNumber(unresolvedSkills.length)} Codex skill
+            {unresolvedSkills.length === 1 ? "" : "s"} with no Vault asset
+          </summary>
+          <ul className="mt-1 space-y-0.5 pl-3">
+            {unresolvedSkills.map((row) => (
+              <li className="flex justify-between gap-3" key={row.skill}>
+                <span className="truncate font-mono">{row.skill}</span>
+                <span className="font-mono tabular-nums">
+                  {formatNumber(row.loads)} loads
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
 
       {usage.note && (
@@ -183,7 +220,8 @@ function HarnessCard({ usage }: { usage: HarnessUsage }) {
  * the already loaded snapshot only; adds no VaultDataset contract fields.
  */
 export function HarnessUsagePanel() {
-  const { getHarnessUsage } = useVault();
+  const { getHarnessUsage, dataset } = useVault();
+  const assets = dataset?.assets ?? [];
   const sources = getHarnessUsage();
 
   return (
@@ -202,7 +240,7 @@ export function HarnessUsagePanel() {
       ) : (
         <ul className="space-y-2.5">
           {sources.map((usage) => (
-            <HarnessCard key={usage.source} usage={usage} />
+            <HarnessCard assets={assets} key={usage.source} usage={usage} />
           ))}
         </ul>
       )}

@@ -79,7 +79,9 @@ const mkAsset = (id: string, type: AssetRow["type"]): AssetRow => ({
 });
 
 const emptyDataset = (over: Partial<VaultDataset> = {}): VaultDataset => ({
+  routingStats: [],
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [],
   owners: [],
@@ -88,6 +90,8 @@ const emptyDataset = (over: Partial<VaultDataset> = {}): VaultDataset => ({
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
   ...over,
 });

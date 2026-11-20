@@ -14,12 +14,12 @@ Parser unit tests feed fixtures laced with sentinel content and assert it never 
 
 ## Per-harness sources (typical)
 
-| Harness | What is read (metadata paths) | Typical grade |
-| --- | --- | --- |
-| Claude Code | Project transcript JSONL files | `full` |
-| Codex | Session rollout JSONL files | `partial` |
-| Grok | Session metadata and unified log | `partial` |
-| Copilot | Session event JSONL streams | `occupancy` or `derived` |
+| Harness     | What is read (metadata paths)    | Typical grade            |
+| ----------- | -------------------------------- | ------------------------ |
+| Claude Code | Project transcript JSONL files   | `full`                   |
+| Codex       | Session rollout JSONL files      | `partial`                |
+| Grok        | Session metadata and unified log | `partial`                |
+| Copilot     | Session event JSONL streams      | `occupancy` or `derived` |
 
 ### Notable exclusions
 
@@ -30,12 +30,12 @@ Parser unit tests feed fixtures laced with sentinel content and assert it never 
 
 ## Where data lives
 
-| Build | Telemetry data |
-| --- | --- |
-| **Public demo** | Committed synthetic `utilization.json` and `harness-usage.json` only |
-| **Self-host** | Real usage in gitignored `*.local.json` on your disk; never bundled into shipped builds |
+| Build           | Telemetry data                                                                          |
+| --------------- | --------------------------------------------------------------------------------------- |
+| **Public demo** | Committed synthetic `utilization.json` and `harness-usage.json` only                    |
+| **Self-host**   | Real usage in gitignored `*.local.json` on your disk; never bundled into shipped builds |
 
-The public demo cannot access your machine. Self-host collectors run only when you execute them locally (public repo coming soon).
+The public demo cannot access your machine. Self-host collectors run only when you execute them locally (source: [github.com/cdrguru/living-vault](https://github.com/cdrguru/living-vault)).
 
 ### Collector entrypoints (self-host)
 
@@ -50,13 +50,13 @@ The dev app prefers `*.local.json` when present. Demo and CI builds never includ
 
 Each harness metric carries a fidelity label:
 
-| Grade | Meaning |
-| --- | --- |
-| `full` | Directly instrumented end to end |
-| `partial` | Measured where logs allow; gaps marked |
-| `occupancy` | Presence and activity only |
-| `derived` | Inferred from adjacent signals |
-| `none` | Not measurable; shown as a gap |
+| Grade       | Meaning                                |
+| ----------- | -------------------------------------- |
+| `full`      | Directly instrumented end to end       |
+| `partial`   | Measured where logs allow; gaps marked |
+| `occupancy` | Presence and activity only             |
+| `derived`   | Inferred from adjacent signals         |
+| `none`      | Not measurable; shown as a gap         |
 
 The product does not fabricate figures. Assets with no matching telemetry show "no telemetry", not a measured zero. Copilot cost is shown as untracked when dollar amounts are not available in logs.
 

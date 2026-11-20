@@ -1,0 +1,20 @@
+{
+  "demo": true,
+  "version": 1,
+  "rows": [
+    {
+      "id": "demo-iv-1",
+      "tenantId": "tenant-fabricagent",
+      "assetId": "as-1",
+      "date": "2026-06-15",
+      "action": "improve",
+      "outcome": "revised",
+      "actor": "claude-code",
+      "note": "tightened the trigger description and trimmed a redundant step",
+      "effectiveScoreBefore": 0.52,
+      "invocationsBefore": 1180,
+      "dedupeKey": "as-1:2026-06-15:improve",
+      "recordedAt": "2026-06-15T00:00:00.000Z"
+    }
+  ]
+}

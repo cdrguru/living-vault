@@ -15,6 +15,7 @@ import { DemoAuthService } from "@/services/DemoAuthService";
 import { stubSource } from "@/__tests__/harness";
 
 const EMPTY: VaultDataset = {
+  routingStats: [],
   assets: [],
   tags: [],
   origins: [],
@@ -23,7 +24,10 @@ const EMPTY: VaultDataset = {
   assetTags: [],
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 };
 

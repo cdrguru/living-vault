@@ -51,6 +51,7 @@ const assetTags: AssetTagRow[] = [
 ];
 
 const dataset: VaultDataset = {
+  routingStats: [],
   assets: [
     mkAsset({ id: 'a1' }),
     mkAsset({ id: 'a2' }),
@@ -63,7 +64,10 @@ const dataset: VaultDataset = {
   assetTags,
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [util('a1', '2026-06-01', 10, 2), util('a1', '2026-06-02', 6), util('a2', '2026-06-02', 4)],
 };
 

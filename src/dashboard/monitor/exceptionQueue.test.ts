@@ -60,6 +60,7 @@ const staleStar = mkAsset({
 });
 
 const dataset: VaultDataset = {
+  routingStats: [],
   assets: [star, risk, shelfware, deadWeight, staleStar],
   tags: [{ id: "t1", tenantId: TENANT, kind: "domain", name: "d" }],
   origins: [{ id: "org-1", tenantId: TENANT, name: "o", kind: "local" }],
@@ -80,7 +81,10 @@ const dataset: VaultDataset = {
   ],
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [heavy("star"), heavy("risk"), heavy("stalestar")],
 };
 

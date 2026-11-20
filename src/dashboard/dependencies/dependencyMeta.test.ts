@@ -31,6 +31,7 @@ const baseDataset = (
   dependencies: VaultDataset["dependencies"],
   assets: AssetRow[],
 ): VaultDataset => ({
+  routingStats: [],
   assets,
   tags: [],
   origins: [{ id: "org-1", tenantId: TENANT, name: "o", kind: "local" }],
@@ -47,7 +48,10 @@ const baseDataset = (
   assetTags: [],
   dependencies,
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 });
 

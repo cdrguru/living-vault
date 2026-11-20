@@ -1,0 +1,1151 @@
+{
+  "legacyFull": [
+    {
+      "id": "g-star",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": 0.726,
+      "governed": true,
+      "effective": true,
+      "quadrant": "Stars",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.9,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.48,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.6,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-thin",
+      "governedScore": 1,
+      "effectiveScore": 0.5312,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "low",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.006,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-zero",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-flaky",
+      "governedScore": 1,
+      "effectiveScore": 0.418,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.5,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.24,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.4,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-probe",
+      "governedScore": 1,
+      "effectiveScore": 0.5304,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "low",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.002,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-eval-a",
+      "governedScore": 1,
+      "effectiveScore": 0.514,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.12,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.3,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-eval-b",
+      "governedScore": 1,
+      "effectiveScore": 0.45799999999999996,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.7,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.24,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.2,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-massive",
+      "governedScore": 1,
+      "effectiveScore": 0.925,
+      "governed": true,
+      "effective": true,
+      "quadrant": "Stars",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.85,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-single-day",
+      "governedScore": 1,
+      "effectiveScore": 0.49,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.3,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-ungoverned",
+      "governedScore": 0.3333333333333333,
+      "effectiveScore": 0.48000000000000004,
+      "governed": false,
+      "effective": false,
+      "quadrant": "Dead weight",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.2,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dup-a",
+      "governedScore": 1,
+      "effectiveScore": 0.484,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "low",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.9,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.02,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dup-b",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-stale",
+      "governedScore": 1,
+      "effectiveScore": 0.44200000000000006,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": true,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.06,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-nolatency",
+      "governedScore": 1,
+      "effectiveScore": 0.49200000000000005,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.16,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.2,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dep-retired",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    }
+  ],
+  "legacyWindowed": [
+    {
+      "id": "g-star",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": 0.8140000000000001,
+      "governed": true,
+      "effective": true,
+      "quadrant": "Stars",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.9,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.32,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-thin",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-zero",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-flaky",
+      "governedScore": 1,
+      "effectiveScore": 0.42400000000000004,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.5,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.12,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.5,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-probe",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-eval-a",
+      "governedScore": 1,
+      "effectiveScore": 0.649,
+      "governed": true,
+      "effective": true,
+      "quadrant": "Stars",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.12,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.75,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-eval-b",
+      "governedScore": 1,
+      "effectiveScore": 0.5479999999999999,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.7,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.24,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.5,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-massive",
+      "governedScore": 1,
+      "effectiveScore": 0.885,
+      "governed": true,
+      "effective": true,
+      "quadrant": "Stars",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.85,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 1,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-single-day",
+      "governedScore": 1,
+      "effectiveScore": 0.535,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "high",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.3,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.25,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-ungoverned",
+      "governedScore": 0.3333333333333333,
+      "effectiveScore": 0.5700000000000001,
+      "governed": false,
+      "effective": false,
+      "quadrant": "Dead weight",
+      "confidence": "moderate",
+      "evidenceSufficient": true,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.8,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.1,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.5,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dup-a",
+      "governedScore": 1,
+      "effectiveScore": 0.529,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "low",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": true,
+          "value": 0.9,
+          "weight": 0.5
+        },
+        {
+          "present": true,
+          "value": 0.02,
+          "weight": 0.2
+        },
+        {
+          "present": true,
+          "value": 0.25,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dup-b",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-stale",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": true,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-nolatency",
+      "governedScore": 1,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "id": "g-dep-retired",
+      "governedScore": 0.8333333333333334,
+      "effectiveScore": null,
+      "governed": true,
+      "effective": false,
+      "quadrant": "Shelfware",
+      "confidence": "none",
+      "evidenceSufficient": false,
+      "stale": false,
+      "signals": [
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.5
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.2
+        },
+        {
+          "present": false,
+          "value": 0,
+          "weight": 0.3
+        }
+      ]
+    }
+  ],
+  "aes": [
+    {
+      "id": "g-star",
+      "assetEffectivenessScore": 0.8743166167043668,
+      "evidenceConfidenceScore": 1,
+      "evidenceConfidenceGrade": "A",
+      "effectivenessTier": "exceptional",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.8966942148760331,
+        "errorResistance": 0.9,
+        "latencyQuality": 0.7142857142857143,
+        "retention": null,
+        "adoption": 0.882281560759254
+      }
+    },
+    {
+      "id": "g-thin",
+      "assetEffectivenessScore": 0.779176304062304,
+      "evidenceConfidenceScore": 0.03,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.8,
+        "errorResistance": 1,
+        "latencyQuality": 0.8,
+        "retention": null,
+        "adoption": 0.22299858452958235
+      }
+    },
+    {
+      "id": "g-zero",
+      "assetEffectivenessScore": 0,
+      "evidenceConfidenceScore": 0,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0,
+      "missingSignals": [
+        "reliability",
+        "errorResistance",
+        "latencyQuality",
+        "retention",
+        "adoption"
+      ],
+      "signalScores": {
+        "reliability": null,
+        "errorResistance": null,
+        "latencyQuality": null,
+        "retention": null,
+        "adoption": null
+      }
+    },
+    {
+      "id": "g-flaky",
+      "assetEffectivenessScore": 0.5291339800498207,
+      "evidenceConfidenceScore": 1,
+      "evidenceConfidenceGrade": "A",
+      "effectivenessTier": "average",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.5,
+        "errorResistance": 0.5,
+        "latencyQuality": 0.47619047619047616,
+        "retention": null,
+        "adoption": 0.7714483542329993
+      }
+    },
+    {
+      "id": "g-probe",
+      "assetEffectivenessScore": 0.7133976758406758,
+      "evidenceConfidenceScore": 0.005,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.6666666666666666,
+        "errorResistance": 1,
+        "latencyQuality": 0.9523809523809523,
+        "retention": null,
+        "adoption": 0.11149929226479117
+      }
+    },
+    {
+      "id": "g-eval-a",
+      "assetEffectivenessScore": 0.7655740942427828,
+      "evidenceConfidenceScore": 0.15,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.7903225806451613,
+        "errorResistance": 0.8,
+        "latencyQuality": 0.6896551724137931,
+        "retention": null,
+        "adoption": 0.6612730157466338
+      }
+    },
+    {
+      "id": "g-eval-b",
+      "assetEffectivenessScore": 0.6915438620354019,
+      "evidenceConfidenceScore": 0.25,
+      "evidenceConfidenceGrade": "D",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.6967213114754098,
+        "errorResistance": 0.7,
+        "latencyQuality": 0.5714285714285714,
+        "retention": null,
+        "adoption": 0.7714483542329993
+      }
+    },
+    {
+      "id": "g-massive",
+      "assetEffectivenessScore": 0.8653164259715863,
+      "evidenceConfidenceScore": 1,
+      "evidenceConfidenceGrade": "A",
+      "effectivenessTier": "exceptional",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.8493013972055888,
+        "errorResistance": 0.85,
+        "latencyQuality": 0.8333333333333334,
+        "retention": null,
+        "adoption": 1
+      }
+    },
+    {
+      "id": "g-single-day",
+      "assetEffectivenessScore": 0.7830565310979749,
+      "evidenceConfidenceScore": 1,
+      "evidenceConfidenceGrade": "A",
+      "effectivenessTier": "strong",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.7960526315789473,
+        "errorResistance": 0.8,
+        "latencyQuality": 0.6666666666666666,
+        "retention": null,
+        "adoption": 0.8070770055608566
+      }
+    },
+    {
+      "id": "g-ungoverned",
+      "assetEffectivenessScore": 0.7672104793967472,
+      "evidenceConfidenceScore": 0.5,
+      "evidenceConfidenceGrade": "C",
+      "effectivenessTier": "strong",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.7884615384615384,
+        "errorResistance": 0.8,
+        "latencyQuality": 0.7407407407407407,
+        "retention": null,
+        "adoption": 0.6324714110546878
+      }
+    },
+    {
+      "id": "g-dup-a",
+      "assetEffectivenessScore": 0.7888182289820318,
+      "evidenceConfidenceScore": 0.1,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.8333333333333334,
+        "errorResistance": 0.9,
+        "latencyQuality": 0.7692307692307693,
+        "retention": null,
+        "adoption": 0.38572417711649964
+      }
+    },
+    {
+      "id": "g-dup-b",
+      "assetEffectivenessScore": 0,
+      "evidenceConfidenceScore": 0,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0,
+      "missingSignals": [
+        "reliability",
+        "errorResistance",
+        "latencyQuality",
+        "retention",
+        "adoption"
+      ],
+      "signalScores": {
+        "reliability": null,
+        "errorResistance": null,
+        "latencyQuality": null,
+        "retention": null,
+        "adoption": null
+      }
+    },
+    {
+      "id": "g-stale",
+      "assetEffectivenessScore": 0.7427265497260657,
+      "evidenceConfidenceScore": 0.3,
+      "evidenceConfidenceGrade": "D",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0.85,
+      "missingSignals": [
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.78125,
+        "errorResistance": 0.8,
+        "latencyQuality": 0.6451612903225806,
+        "retention": null,
+        "adoption": 0.5523893823489764
+      }
+    },
+    {
+      "id": "g-nolatency",
+      "assetEffectivenessScore": 0.7831949278824372,
+      "evidenceConfidenceScore": 0.6000000000000001,
+      "evidenceConfidenceGrade": "C",
+      "effectivenessTier": "strong",
+      "observedWeight": 0.75,
+      "missingSignals": [
+        "latencyQuality",
+        "retention"
+      ],
+      "signalScores": {
+        "reliability": 0.7926829268292683,
+        "errorResistance": 0.8,
+        "latencyQuality": null,
+        "retention": null,
+        "adoption": 0.7068887883865701
+      }
+    },
+    {
+      "id": "g-dep-retired",
+      "assetEffectivenessScore": 0,
+      "evidenceConfidenceScore": 0,
+      "evidenceConfidenceGrade": "E",
+      "effectivenessTier": "insufficient-evidence",
+      "observedWeight": 0,
+      "missingSignals": [
+        "reliability",
+        "errorResistance",
+        "latencyQuality",
+        "retention",
+        "adoption"
+      ],
+      "signalScores": {
+        "reliability": null,
+        "errorResistance": null,
+        "latencyQuality": null,
+        "retention": null,
+        "adoption": null
+      }
+    }
+  ],
+  "aesEffectiveRate": {
+    "rate": 0.8333333333333334,
+    "effectiveCount": 5,
+    "evaluatedCount": 6,
+    "insufficientEvidence": 9
+  },
+  "aesEffectiveRateWindowed": {
+    "rate": 0.8,
+    "effectiveCount": 4,
+    "evaluatedCount": 5,
+    "insufficientEvidence": 10
+  },
+  "effectiveAssetRate": 0.2222222222222222,
+  "classificationCounts": {
+    "Stars": 2,
+    "Risks": 0,
+    "Shelfware": 6,
+    "Dead weight": 1,
+    "insufficientEvidence": 6
+  }
+}

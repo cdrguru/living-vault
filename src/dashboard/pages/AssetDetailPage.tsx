@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 import {
   assetHonesty,
+  assetInterventionEffect,
   assetSignal,
   assetTrend,
   bundlesOf,
@@ -18,6 +19,7 @@ import {
 } from "@/data";
 import type { AssetRow, HonestyGrade, TagRow } from "@/data";
 import { lifecycleOf, scopeOf } from "@/data/assetStatus";
+import { codexSkillUseByAsset } from "@/data/codexSkillUse";
 import { useVault } from "@/dashboard/VaultContext";
 import {
   formatCurrency,
@@ -29,6 +31,7 @@ import { AssetStateBadges } from "@/dashboard/components/AssetStateBadge";
 import { Button } from "@/dashboard/components/Button";
 import { EmptyState } from "@/dashboard/components/EmptyState";
 import { GovernanceChecklist } from "@/dashboard/components/GovernanceChecklist";
+import { InterventionEffectPanel } from "@/dashboard/components/InterventionEffectPanel";
 import { KpiCard } from "@/dashboard/components/KpiCard";
 import { Meter } from "@/dashboard/components/Meter";
 import { Panel } from "@/dashboard/components/Panel";
@@ -200,7 +203,7 @@ function RelatedAssetRow({ item }: { item: RelatedAssetViewModel }) {
 }
 
 export function AssetDetailPage() {
-  const { dataset, loading, retireAsset } = useVault();
+  const { dataset, loading, retireAsset, getHarnessUsage } = useVault();
   const { assetId } = useParams();
   const [confirmRetire, setConfirmRetire] = useState(false);
   const [relatedQuery, setRelatedQuery] = useState("");
@@ -263,6 +266,9 @@ export function AssetDetailPage() {
   const { usage } = score;
   const series = dailySeries(dataset, asset.id);
   const evalSummary = evalResultsByAsset(dataset).get(asset.id);
+  // The read-side of the closed loop: "did the last change help?", or null when this
+  // asset has never been acted on.
+  const interventionEffect = assetInterventionEffect(dataset, asset.id);
   const owner = asset.ownerId
     ? dataset.owners.find((row) => row.id === asset.ownerId)
     : undefined;
@@ -287,6 +293,20 @@ export function AssetDetailPage() {
     dataset.utilization,
     dataset.telemetryMeta,
   );
+  // Codex loads of this skill in the active window, beside its Claude Code use. Only a
+  // skill can be loaded; "not measured" when the Codex snapshot has no skill grade.
+  const codexLine =
+    asset.type === "skill"
+      ? (() => {
+          const codex = codexSkillUseByAsset(
+            getHarnessUsage().find((row) => row.source === "codex"),
+            [asset],
+          );
+          if (!codex.measured) return "Codex: not measured";
+          const loads = codex.byAsset[asset.id] ?? 0;
+          return `Codex: ${formatNumber(loads)} load${loads === 1 ? "" : "s"} (derived from shell calls)`;
+        })()
+      : undefined;
   const trendTone =
     usage.invocations === 0
       ? "text-subtle"
@@ -515,6 +535,7 @@ export function AssetDetailPage() {
 
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <KpiCard
+            detail={codexLine}
             label="Invocations"
             value={formatNumber(usage.invocations)}
           />
@@ -595,6 +616,9 @@ export function AssetDetailPage() {
           </div>
         </Panel>
       )}
+
+      {/* Effect of the last change (only when this asset has an intervention) */}
+      {interventionEffect && <InterventionEffectPanel view={interventionEffect} />}
 
       {/* Metadata */}
       <Panel title="Metadata">

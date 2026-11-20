@@ -59,7 +59,9 @@ const mkUtil = (
 });
 
 const emptyDataset = (over: Partial<VaultDataset> = {}): VaultDataset => ({
+  routingStats: [],
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [],
   owners: [],
@@ -68,6 +70,8 @@ const emptyDataset = (over: Partial<VaultDataset> = {}): VaultDataset => ({
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
   ...over,
 });

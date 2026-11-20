@@ -56,6 +56,7 @@ const dataset = (
   assets: AssetRow[],
   utilization: UtilizationRow[],
 ): VaultDataset => ({
+  routingStats: [],
   assets,
   tags: [],
   origins: [],
@@ -65,7 +66,10 @@ const dataset = (
   dependencies: [],
   bundleMemberships: [],
   utilization,
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
 });
 
 const harness = (
@@ -249,5 +253,81 @@ describe("the zero state", () => {
     // reads as a broken tool. The reason is real and is the product's whole thesis: those
     // harnesses do not record which asset ran.
     expect(renderTerminal(empty())).toContain("do not record WHICH");
+  });
+});
+
+describe("routing accounting in the report", () => {
+  const routingDataset = () => {
+    const base = dataset(
+      [asset("as-1", "ZZQQ-ALPHA")],
+      [usage("as-1", 10)],
+    );
+    return {
+      ...base,
+      routingStats: [
+        {
+          id: "rs-1",
+          tenantId: TENANT,
+          assetId: "as-1",
+          date: "2026-07-20",
+          localHits: 6,
+          externalFallbacks: 2,
+          belowThreshold: 1,
+          externalCost: 0.5,
+          avoidedCostEstimate: 2,
+        },
+      ],
+      routingStatsMeta: {
+        source: "router",
+        generatedAt: "2026-07-20T00:00:00Z",
+        windowStart: "2026-07-13",
+        windowEnd: "2026-07-20",
+        decisions: 9,
+        tracked: {
+          localHits: "full" as const,
+          externalFallbacks: "full" as const,
+          belowThreshold: "full" as const,
+          externalCost: "full" as const,
+          avoidedCostEstimate: "modeled" as const,
+        },
+      },
+    };
+  };
+
+  it("is null, and renders no routing section, when no router has reported", () => {
+    const report = buildTokenCapitalReport(input());
+    expect(report.routing).toBeNull();
+    expect(renderShareable(report)).not.toContain("## Routing");
+    expect(renderTerminal(report)).not.toContain("Routing cache hits");
+  });
+
+  it("reports the hit rate over routed traffic and both cost sides", () => {
+    const report = buildTokenCapitalReport(input({ dataset: routingDataset() }));
+    expect(report.routing?.hitRate).toBeCloseTo(0.75);
+    expect(report.routing?.routedDecisions).toBe(8);
+    expect(report.routing?.externalCost).toBeCloseTo(0.5);
+    expect(report.routing?.avoidedCostEstimate).toBeCloseTo(2);
+    expect(report.routing?.tracked?.avoidedCostEstimate).toBe("modeled");
+  });
+
+  it("keeps the shareable routing block aggregate-only and scope-labeled", () => {
+    const shareable = renderShareable(
+      buildTokenCapitalReport(input({ dataset: routingDataset() })),
+    );
+    expect(shareable).toContain("## Routing (of routed traffic only)");
+    expect(shareable).toContain("75% cache hit rate");
+    // The modeled counterfactual must carry its grade, never pass as measured.
+    expect(shareable).toContain("modeled: a counterfactual, not measured spend");
+    // Still no asset names anywhere in the public artifact.
+    expect(shareable).not.toContain("ZZQQ-ALPHA");
+  });
+
+  it("labels the terminal routing lines with scope and grades", () => {
+    const terminal = renderTerminal(
+      buildTokenCapitalReport(input({ dataset: routingDataset() })),
+    );
+    expect(terminal).toContain("Routing cache hits    75%");
+    expect(terminal).toContain("routed traffic only");
+    expect(terminal).toContain("modeled, counterfactual");
   });
 });

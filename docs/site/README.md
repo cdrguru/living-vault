@@ -4,31 +4,31 @@ Marketing and trust artifacts for audiences who **cannot** access the private ap
 
 ## What is in the bundle
 
-| File | Purpose |
-| --- | --- |
-| `index.html` | Main landing page (pitch, live Fabric screenshots, CTAs) |
-| `ecosystem.html` | Infographic + handoff table + stack proof quartet |
-| `telemetry-guide.html` | Public telemetry and privacy explainer with FAQ |
-| `PRIVACY.md` | Sanitized privacy posture (link from trust conversations) |
-| `ARCHITECTURE.md` | Sanitized architecture note (no secrets, no private paths) |
-| `images/` | Seed/demo screenshots referenced by older sections |
-| `images/fabricapp/` | Live Fabric captures (2026-06-19); preferred for pitch |
+| File                   | Purpose                                                    |
+| ---------------------- | ---------------------------------------------------------- |
+| `index.html`           | Main landing page (pitch, live Fabric screenshots, CTAs)   |
+| `ecosystem.html`       | Infographic + handoff table + stack proof quartet          |
+| `telemetry-guide.html` | Public telemetry and privacy explainer with FAQ            |
+| `PRIVACY.md`           | Sanitized privacy posture (link from trust conversations)  |
+| `ARCHITECTURE.md`      | Sanitized architecture note (no secrets, no private paths) |
+| `images/`              | Seed/demo screenshots referenced by older sections         |
+| `images/fabricapp/`    | Live Fabric captures (2026-06-19); preferred for pitch     |
 
 ## Public CTAs (no private repo)
 
 - **Try the demo:** `/demo` on the co-hosted SWA (for example `https://agreeable-glacier-0db060a0f.7.azurestaticapps.net/demo`)
 - **Telemetry guide:** `telemetry-guide.html` (same origin)
 - **Ecosystem map:** `ecosystem.html`
-- **Source code:** public repo coming soon (do not link to the private app repo)
+- **Source code:** [github.com/cdrguru/living-vault](https://github.com/cdrguru/living-vault) (the public showcase repo; still never link the private app repo)
 
 ## Audience guide
 
-| Audience | Start here | Why |
-| --- | --- | --- |
-| Evaluator / prospect | `index.html` | Full pitch, demo CTA, live Fabric proof |
+| Audience                    | Start here                            | Why                                       |
+| --------------------------- | ------------------------------------- | ----------------------------------------- |
+| Evaluator / prospect        | `index.html`                          | Full pitch, demo CTA, live Fabric proof   |
 | Security / privacy reviewer | `telemetry-guide.html` + `PRIVACY.md` | Metadata-only posture without repo access |
-| Architect / Fabric admin | `ecosystem.html` + `ARCHITECTURE.md` | Name disambiguation and stack handoffs |
-| Social / conference | Stack quartet in `images/fabricapp/` | SQL → Monitor → Overview → Power BI story |
+| Architect / Fabric admin    | `ecosystem.html` + `ARCHITECTURE.md`  | Name disambiguation and stack handoffs    |
+| Social / conference         | Stack quartet in `images/fabricapp/`  | SQL → Monitor → Overview → Power BI story |
 
 ## Refresh from the private app repo
 

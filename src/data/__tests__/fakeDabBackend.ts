@@ -112,7 +112,10 @@ export class FakeDabBackend implements RayfinReader, RayfinWriter {
       AssetDependency: this.store.dependencies,
       BundleMembership: this.store.bundleMemberships,
       Utilization: this.store.utilization,
+      RoutingStat: this.store.routingStats,
       EvalResult: this.store.evalResults,
+      AssetRevision: this.store.assetRevisions,
+      Intervention: this.store.interventions,
       // This catalog-only fake does not exercise the submission tables.
       Submission: [],
       SubmissionItem: [],

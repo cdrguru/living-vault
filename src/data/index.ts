@@ -34,6 +34,11 @@ export type {
   ModelSpend,
 } from "./harnessCost";
 export * from "./metrics";
+export {
+  assetInterventionEffect,
+  type InterventionEffectView,
+} from "./interventionEffect";
+export type { Verdict, VerdictResult } from "./verdict";
 export { compareCodexBilling, selectCostBasis } from "./costBasis";
 export type {
   CodexBillingComparison,
@@ -58,7 +63,7 @@ export function createDataSource(): DataSource {
     const canReview = makeReviewGuard(async () => {
       const { bootstrapAuth } = await import("@/services/bootstrap");
       const [user, entities] = await Promise.all([
-        bootstrapAuth().getCurrentUser(),
+        bootstrapAuth().then((auth) => auth.getCurrentUser()),
         reader.readAll(),
       ]);
       return { email: user?.email, owners: entities.owners };

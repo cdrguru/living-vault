@@ -26,6 +26,35 @@
           /* no-op */
         }
       })();
+
+      // Capture UTM parameters and a cross-domain referrer into localStorage so
+      // the demo can attribute a visit. The same capture also runs on the
+      // marketing landing (docs/marketing/living-vault.html); keep the two in sync.
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var utmSource = params.get('utm_source');
+          if (utmSource) {
+            // A url carrying utm_source is a fresh campaign touch: write the whole
+            // tuple from this url so a later touch never inherits a stale medium
+            // or campaign from an earlier one.
+            localStorage.setItem('living-vault:utm_source', utmSource);
+            var utmMedium = params.get('utm_medium');
+            if (utmMedium) localStorage.setItem('living-vault:utm_medium', utmMedium);
+            else localStorage.removeItem('living-vault:utm_medium');
+            var utmCampaign = params.get('utm_campaign');
+            if (utmCampaign) localStorage.setItem('living-vault:utm_campaign', utmCampaign);
+            else localStorage.removeItem('living-vault:utm_campaign');
+          }
+          // Capture document.referrer if present and from a different domain.
+          var referrer = document.referrer;
+          if (referrer && referrer.indexOf(window.location.hostname) === -1) {
+            localStorage.setItem('living-vault:referrer', referrer);
+          }
+        } catch (e) {
+          /* no-op */
+        }
+      })();
     </script>
   </head>
   <body>

@@ -56,6 +56,17 @@ export const FIELDS: Record<string, string[]> = {
     "cost",
     "model",
   ],
+  RoutingStat: [
+    "id",
+    "tenantId",
+    "asset_id",
+    "date",
+    "localHits",
+    "externalFallbacks",
+    "belowThreshold",
+    "externalCost",
+    "avoidedCostEstimate",
+  ],
   EvalResult: [
     "id",
     "tenantId",
@@ -66,11 +77,54 @@ export const FIELDS: Record<string, string[]> = {
     "passed",
     "failed",
     "errored",
+    "inconclusive",
     "latencyMs",
     "tokens",
     "cost",
     "model",
     "quality",
+    // Eval identity (PR12): durable bare references (no @one), so like the
+    // submission island they are selected as authored camelCase, not snake_case.
+    "assetRevisionId",
+    "harness",
+    "baselineId",
+  ],
+  Baseline: [
+    "id",
+    "tenantId",
+    "kind",
+    "assetRevisionId",
+    "label",
+    "createdAt",
+  ],
+  AssetRevision: [
+    "id",
+    "tenantId",
+    "asset_id",
+    "seq",
+    "body",
+    "contentHash",
+    "createdAt",
+    "createdByActor",
+    "source",
+  ],
+  // Intervention references are bare @uuid scalars (no @one), so like the submission
+  // island they are selected as authored camelCase, not snake_case.
+  Intervention: [
+    "id",
+    "tenantId",
+    "assetId",
+    "revisionIdBefore",
+    "date",
+    "action",
+    "outcome",
+    "actor",
+    "note",
+    "effectiveScoreBefore",
+    "invocationsBefore",
+    "dedupeKey",
+    "supersedesId",
+    "recordedAt",
   ],
   // Submission/SubmissionItem FKs are plain @uuid scalars (no @one navigation), so
   // they are selected as authored camelCase, not snake_case.
@@ -197,6 +251,10 @@ export function createRayfinReader(): RayfinReader {
         bundleMemberships,
         utilization,
         evalResults,
+        routingStats,
+        baselines,
+        assetRevisions,
+        interventions,
       ] = await Promise.all([
         read("Asset"),
         read("Tag"),
@@ -208,6 +266,10 @@ export function createRayfinReader(): RayfinReader {
         read("BundleMembership"),
         read("Utilization"),
         read("EvalResult"),
+        read("RoutingStat"),
+        read("Baseline"),
+        read("AssetRevision"),
+        read("Intervention"),
       ]);
       return {
         assets,
@@ -220,6 +282,10 @@ export function createRayfinReader(): RayfinReader {
         bundleMemberships,
         utilization,
         evalResults,
+        routingStats,
+        baselines,
+        assetRevisions,
+        interventions,
       } as unknown as RayfinEntities;
     },
 

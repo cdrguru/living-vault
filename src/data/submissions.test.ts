@@ -33,6 +33,7 @@ function assetRow(over: Partial<AssetRow> = {}): AssetRow {
 
 function datasetWith(assets: AssetRow[]): VaultDataset {
   return {
+    routingStats: [],
     assets,
     tags: [],
     origins: [],
@@ -41,7 +42,10 @@ function datasetWith(assets: AssetRow[]): VaultDataset {
     assetTags: [],
     dependencies: [],
     bundleMemberships: [],
+    assetRevisions: [],
     evalResults: [],
+    baselines: [],
+    interventions: [],
     utilization: [],
   };
 }

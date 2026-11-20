@@ -9,7 +9,9 @@ import { FABRIC_TENANT_ID, RayfinDataSource } from "./RayfinDataSource";
 import type { RayfinEntities } from "./rayfinMapper";
 
 const emptyStore = (): RayfinEntities => ({
+  routingStats: [],
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [],
   owners: [],
@@ -18,6 +20,8 @@ const emptyStore = (): RayfinEntities => ({
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 });
 

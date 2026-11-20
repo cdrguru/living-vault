@@ -23,6 +23,7 @@ const evalRow = (
   passed: 4,
   failed: 1,
   errored: 0,
+  inconclusive: 0,
   latencyMs: 100,
   tokens: 0,
   cost: 0,
@@ -107,9 +108,22 @@ describe("assetHonesty eval cap", () => {
     );
   });
 
-  it("a full-grade eval does not change the honesty grade (min keeps the stronger source)", () => {
+  it("a full-grade eval WITH revision identity does not change the honesty grade", () => {
+    expect(
+      assetHonesty(
+        datasetWith([
+          evalRow("a1", { quality: "full", assetRevisionId: "rev-a1-1" }),
+        ]),
+        "a1",
+      ),
+    ).toBe("full");
+  });
+
+  it("a full-grade eval WITHOUT revision identity is capped at derived (PR12)", () => {
+    // Declared quality cannot exceed what the row can prove: a result that
+    // cannot say which version it ran against is self-certification.
     expect(
       assetHonesty(datasetWith([evalRow("a1", { quality: "full" })]), "a1"),
-    ).toBe("full");
+    ).toBe("derived");
   });
 });

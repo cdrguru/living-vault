@@ -11,6 +11,7 @@ import {
 } from "./normalize";
 
 const EMPTY: VaultDataset = {
+  routingStats: [],
   assets: [],
   tags: [],
   origins: [],
@@ -19,7 +20,10 @@ const EMPTY: VaultDataset = {
   assetTags: [],
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 };
 

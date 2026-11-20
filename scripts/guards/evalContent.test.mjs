@@ -69,6 +69,12 @@ describe("eval-content guard", () => {
       "passed",
       "failed",
       "errored",
+      // PR12 identity metadata: a count and three opaque references, never
+      // authored text. harness names the runner (claude-code, codex, ...).
+      "inconclusive",
+      "assetRevisionId",
+      "harness",
+      "baselineId",
       "latencyMs",
       "tokens",
       "cost",

@@ -7,6 +7,8 @@ import { telemetrySnapshot } from "./telemetrySnapshot";
 import type { RayfinEntities } from "./rayfinMapper";
 
 const emptyEntities: RayfinEntities = {
+  routingStats: [],
+  assetRevisions: [],
   assets: [],
   tags: [],
   origins: [],
@@ -16,6 +18,8 @@ const emptyEntities: RayfinEntities = {
   dependencies: [],
   bundleMemberships: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 };
 

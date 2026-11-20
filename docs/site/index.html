@@ -7,6 +7,37 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      // Capture UTM parameters and a cross-domain referrer into localStorage at
+      // the campaign entry point. The demo (/demo) reads from the same origin, so
+      // an attribution captured here survives a click through to the demo. Keep
+      // this in sync with the copy in the demo entry (index.html at the repo root).
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var utmSource = params.get('utm_source');
+          if (utmSource) {
+            // A url carrying utm_source is a fresh campaign touch: write the whole
+            // tuple from this url so a later touch never inherits a stale medium
+            // or campaign from an earlier one.
+            localStorage.setItem('living-vault:utm_source', utmSource);
+            var utmMedium = params.get('utm_medium');
+            if (utmMedium) localStorage.setItem('living-vault:utm_medium', utmMedium);
+            else localStorage.removeItem('living-vault:utm_medium');
+            var utmCampaign = params.get('utm_campaign');
+            if (utmCampaign) localStorage.setItem('living-vault:utm_campaign', utmCampaign);
+            else localStorage.removeItem('living-vault:utm_campaign');
+          }
+          // Capture document.referrer if present and from a different domain.
+          var referrer = document.referrer;
+          if (referrer && referrer.indexOf(window.location.hostname) === -1) {
+            localStorage.setItem('living-vault:referrer', referrer);
+          }
+        } catch (e) {
+          /* no-op */
+        }
+      })();
+    </script>
     <meta
       name="description"
       content="The Living Vault: a Fabric-native, editable system of record and effectiveness monitor for agentic assets across AI coding harnesses."
@@ -22,8 +53,9 @@
     />
     <meta
       property="og:image"
-      content="images/fabricapp/living-vault-monitor-demo.png"
+      content="https://vault.fabricprompts.com/images/fabricapp/living-vault-monitor-demo.png"
     />
+    <meta property="og:url" content="https://vault.fabricprompts.com/" />
     <meta name="twitter:card" content="summary_large_image" />
     <!-- Public demo (no repo access required): -->
     <!-- /demo -->
@@ -368,6 +400,13 @@
         padding: 8px 6px 0;
         border-bottom: none;
       }
+      .mobile-menu .menu-note a {
+        display: inline;
+        padding: 0;
+        border-bottom: none;
+        color: var(--ink-soft);
+        text-decoration: underline;
+      }
 
       /* Secondary in-page section anchors (subordinate to the primary nav) */
       .section-subnav {
@@ -516,16 +555,20 @@
       .btn-ghost:hover {
         background: rgba(255, 255, 255, 0.14);
       }
-      .soon-pill {
+      .repo-pill {
         display: inline-flex;
         align-items: center;
         font-size: 0.86rem;
         font-weight: 600;
         color: var(--on-dark-soft);
-        border: 1px dashed rgba(255, 255, 255, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.28);
         border-radius: 999px;
         padding: 11px 18px;
-        cursor: default;
+        text-decoration: none;
+      }
+      .repo-pill:hover {
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.5);
       }
       .hero-pills {
         display: flex;
@@ -2169,7 +2212,13 @@
         <div class="nav-status">
           <a class="nav-cta" href="/demo">Try the demo</a>
           <span class="nav-status-note"
-            >Live now &middot; public repo coming soon</span
+            >Live now &middot;
+            <a
+              href="https://github.com/cdrguru/living-vault"
+              target="_blank"
+              rel="noopener"
+              >public repo</a
+            ></span
           >
         </div>
         <button
@@ -2220,7 +2269,13 @@
           <a href="#surfaces">Surfaces</a>
           <a class="menu-cta" href="/demo">Try the demo</a>
           <span class="menu-note"
-            >Live now &middot; public repo coming soon</span
+            >Live now &middot;
+            <a
+              href="https://github.com/cdrguru/living-vault"
+              target="_blank"
+              rel="noopener"
+              >public repo on GitHub</a
+            ></span
           >
         </nav>
       </div>
@@ -2260,8 +2315,12 @@
             <div class="hero-cta">
               <a class="btn btn-primary" href="/demo">Try the demo</a>
               <a class="btn btn-ghost" href="#telemetry">How telemetry works</a>
-              <span class="soon-pill" title="Source repository is private today"
-                >Public repo coming soon</span
+              <a
+                class="repo-pill"
+                href="https://github.com/cdrguru/living-vault"
+                target="_blank"
+                rel="noopener"
+                >Public repo on GitHub</a
               >
             </div>
             <div class="hero-pills">
@@ -4213,7 +4272,14 @@
             Mission control for agentic assets across AI coding harnesses.
           </div>
           <div style="margin-top: 6px">
-            Built with Microsoft Rayfin for Fabric · Public repo coming soon
+            Built with Microsoft Rayfin for Fabric ·
+            <a
+              href="https://github.com/cdrguru/living-vault"
+              target="_blank"
+              rel="noopener"
+              style="color: inherit; text-decoration: underline"
+              >Public repo on GitHub</a
+            >
           </div>
         </div>
       </div>

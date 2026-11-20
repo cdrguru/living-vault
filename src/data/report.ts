@@ -1,4 +1,5 @@
 import { harnessSpend } from "./harnessCost";
+import { routingTotals } from "./routingMetrics";
 import {
   classificationCounts,
   duplicateClusters,
@@ -81,6 +82,27 @@ export interface TokenCapitalReport {
   duplicates: { clusters: number; assets: number };
   stale: number;
   spend: { total: number | null };
+  /**
+   * Routing accounting, present only when a router (external or local)
+   * has imported routing stats. Null means "no router ran", which must never
+   * render as a zero hit rate. Every number is scoped to ROUTED traffic only.
+   */
+  routing: {
+    routedDecisions: number;
+    localHits: number;
+    externalFallbacks: number;
+    /** localHits / routedDecisions; null when nothing was routed in the window. */
+    hitRate: number | null;
+    /** Measured external spend on fallbacks. A measured zero is honestly zero. */
+    externalCost: number;
+    /** Modeled counterfactual, never measured spend. */
+    avoidedCostEstimate: number;
+    /** Honesty grades from the import meta; null when the meta is absent. */
+    tracked: {
+      externalCost: HarnessMetricQuality;
+      avoidedCostEstimate: HarnessMetricQuality;
+    } | null;
+  } | null;
   harnesses: ReportHarness[];
 }
 
@@ -124,6 +146,27 @@ export function buildTokenCapitalReport(input: ReportInput): TokenCapitalReport 
           ? priced.reduce((sum, row) => sum + row.cost, 0)
           : null,
     },
+    routing:
+      dataset.routingStats.length === 0
+        ? null
+        : (() => {
+            const totals = routingTotals(dataset);
+            return {
+              routedDecisions: totals.routedDecisions,
+              localHits: totals.localHits,
+              externalFallbacks: totals.externalFallbacks,
+              hitRate: totals.hitRate,
+              externalCost: totals.externalCost,
+              avoidedCostEstimate: totals.avoidedCostEstimate,
+              tracked: dataset.routingStatsMeta
+                ? {
+                    externalCost: dataset.routingStatsMeta.tracked.externalCost,
+                    avoidedCostEstimate:
+                      dataset.routingStatsMeta.tracked.avoidedCostEstimate,
+                  }
+                : null,
+            };
+          })(),
     harnesses: harnesses.map((source): ReportHarness => {
       const row = spend.find((s) => s.source === source.source);
       return {
@@ -180,6 +223,19 @@ export function renderShareable(report: TokenCapitalReport): string {
     `- **${duplicates.assets}** assets are exact duplicates of another, across ${duplicates.clusters} cluster(s).`,
     `- **${report.stale}** are stale.`,
     `- Modeled spend across all harnesses: **${usd(report.spend.total)}**.`,
+    ...(report.routing
+      ? [
+          "",
+          "## Routing (of routed traffic only)",
+          "",
+          `- **${pct(report.routing.hitRate)} cache hit rate**: ${report.routing.localHits.toLocaleString()} of ${report.routing.routedDecisions.toLocaleString()} routed decisions were answered locally by a governed asset.`,
+          `- Measured external routing spend: **${usd(report.routing.externalCost)}** (${report.routing.tracked?.externalCost ?? "ungraded"}).`,
+          `- Avoided external cost: **${usd(report.routing.avoidedCostEstimate)}** (${report.routing.tracked?.avoidedCostEstimate ?? "ungraded"}: a counterfactual, not measured spend).`,
+          "",
+          "These rates cover only traffic that went through the router. Usage that never touched",
+          "the router is not in the denominator, so this is not a fleet-wide figure.",
+        ]
+      : []),
     "",
     "## By harness",
     "",
@@ -249,6 +305,13 @@ export function renderTerminal(report: TokenCapitalReport): string {
     `  Exact duplicates      ${duplicates.assets} across ${duplicates.clusters} cluster(s)`,
     `  Stale                 ${report.stale}`,
     `  Modeled spend         ${usd(report.spend.total)}`,
+    ...(report.routing
+      ? [
+          `  Routing cache hits    ${pct(report.routing.hitRate)}  (${report.routing.localHits.toLocaleString()} local, ${report.routing.externalFallbacks.toLocaleString()} external; routed traffic only)`,
+          `  External routing cost ${usd(report.routing.externalCost)}  (${report.routing.tracked?.externalCost ?? "ungraded"})`,
+          `  Avoided cost, modeled ${usd(report.routing.avoidedCostEstimate)}  (${report.routing.tracked?.avoidedCostEstimate ?? "ungraded"}, counterfactual)`,
+        ]
+      : []),
     "",
   ];
 

@@ -9,6 +9,7 @@ import type { AssetRow, SubmissionItemRow, SubmissionRow } from "./types";
 
 const CATALOG = {
   assets: [],
+  assetRevisions: [],
   tags: [],
   origins: [{ id: "g1", tenantId: "t", name: "repo", kind: "local" }],
   owners: [
@@ -26,6 +27,9 @@ const CATALOG = {
   bundleMemberships: [],
   utilization: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
+  routingStats: [],
 } as unknown as RayfinEntities;
 
 function stagedAsset(over: Partial<AssetRow> = {}): AssetRow {

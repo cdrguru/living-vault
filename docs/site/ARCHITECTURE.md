@@ -10,12 +10,12 @@ The product answers operational questions at a glance: what exists, what is gove
 
 ## Ecosystem (keep names distinct)
 
-| System | Role |
-| --- | --- |
-| **The Library** | Distribution catalog. Installs assets across harnesses. |
-| **the-catalog-source** | Upstream catalog projection source for the Vault asset catalog. |
-| **The Living Vault** | Fabric app: govern, measure, improve. |
-| **the-vault** | Cousin personal skill library. Tooling source only; not the Vault data backbone. |
+| System                 | Role                                                                             |
+| ---------------------- | -------------------------------------------------------------------------------- |
+| **The Library**        | Distribution catalog. Installs assets across harnesses.                          |
+| **the-catalog-source** | Upstream catalog projection source for the Vault asset catalog.                  |
+| **The Living Vault**   | Fabric app: govern, measure, improve.                                            |
+| **the-vault**          | Cousin personal skill library. Tooling source only; not the Vault data backbone. |
 
 There is no continuous automatic sync between all four. Each handoff is intentional. See `ecosystem.html` for the handoff table.
 
@@ -28,24 +28,24 @@ There is no continuous automatic sync between all four. Each handoff is intentio
 
 ### Nine Rayfin entities
 
-| Entity | Role |
-| --- | --- |
-| **Asset** | Governed catalog row (skill, subagent, MCP, etc.) |
-| **Owner** | Optional owner attribution |
-| **Origin** | Optional upstream source |
-| **Tag** | Taxonomy label |
-| **Bundle** | Named asset grouping |
-| **AssetTag** | Asset ↔ Tag join |
-| **AssetBundle** | Asset ↔ Bundle join |
-| **AssetDependency** | Requires / required-by edges |
-| **Utilization** | Daily effectiveness facts (invocations, tokens, cost estimates) |
+| Entity              | Role                                                            |
+| ------------------- | --------------------------------------------------------------- |
+| **Asset**           | Governed catalog row (skill, subagent, MCP, etc.)               |
+| **Owner**           | Optional owner attribution                                      |
+| **Origin**          | Optional upstream source                                        |
+| **Tag**             | Taxonomy label                                                  |
+| **Bundle**          | Named asset grouping                                            |
+| **AssetTag**        | Asset ↔ Tag join                                                |
+| **AssetBundle**     | Asset ↔ Bundle join                                             |
+| **AssetDependency** | Requires / required-by edges                                    |
+| **Utilization**     | Daily effectiveness facts (invocations, tokens, cost estimates) |
 
 ## Two runtime paths
 
-| Path | Purpose |
-| --- | --- |
-| **Demo Static Web App** | Zero Fabric cost. Synthetic seed data and demo auth. Public URL for evaluators. |
-| **Live Fabric deploy** | Rayfin semantic model + Fabric SSO. Read/write on the same nine entities. Deployed and exercised (2026-06-19). |
+| Path                    | Purpose                                                                                                        |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Demo Static Web App** | Zero Fabric cost. Synthetic seed data and demo auth. Public URL for evaluators.                                |
+| **Live Fabric deploy**  | Rayfin semantic model + Fabric SSO. Read/write on the same nine entities. Deployed and exercised (2026-06-19). |
 
 ## Telemetry (conceptual)
 
@@ -73,5 +73,5 @@ The Rayfin semantic model is Fabric-native and Power BI-ready. The Living Vault'
 
 - Interactive demo: public SWA (synthetic data)
 - Live Fabric deploy: exercised on Rayfin + MSSQL (2026-06-19)
-- Source repository: private today; **public repo coming soon**
+- Source repository: [github.com/cdrguru/living-vault](https://github.com/cdrguru/living-vault) (public showcase repo)
 - Public docs bundle: this folder, publishable as `the-living-vault-docs`

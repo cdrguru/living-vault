@@ -9,6 +9,8 @@ import {
 } from "./rayfinMapper";
 
 const entities: RayfinEntities = {
+  routingStats: [],
+  assetRevisions: [],
   assets: [
     {
       id: "a1",
@@ -26,7 +28,7 @@ const entities: RayfinEntities = {
       contentHash: contentHashOf("skill", "b"),
       owner_id: "o1",
       origin_id: "g1",
-      createdAt: new Date("2026-01-02T03:04:05Z"),
+      createdAt: "2026-01-02T03:04:05Z",
       updatedAt: new Date("2026-06-01T00:00:00Z"),
     },
   ],
@@ -40,6 +42,8 @@ const entities: RayfinEntities = {
   dependencies: [{ id: "dep1", asset_id: "a1", dependsOn_id: "a1" }],
   bundleMemberships: [{ id: "bm1", bundle_id: "b1", asset_id: "a1" }],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [
     {
       id: "u1",
@@ -59,7 +63,7 @@ const entities: RayfinEntities = {
 };
 
 describe("entitiesToDataset", () => {
-  it("converts Date fields to ISO strings", () => {
+  it("normalizes Rayfin 2 JSON date strings and stored Date values", () => {
     const dataset = entitiesToDataset(entities);
     expect(dataset.assets[0].createdAt).toBe("2026-01-02T03:04:05.000Z");
     expect(dataset.assets[0].updatedAt).toBe("2026-06-01T00:00:00.000Z");

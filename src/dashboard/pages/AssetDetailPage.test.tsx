@@ -38,6 +38,7 @@ const mkRelatedAsset = (
 });
 
 const relatedBase = (assets: AssetRow[]): VaultDataset => ({
+  routingStats: [],
   assets,
   tags: [],
   origins: [],
@@ -54,7 +55,10 @@ const relatedBase = (assets: AssetRow[]): VaultDataset => ({
   assetTags: [],
   dependencies: [],
   bundleMemberships: [],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 });
 
@@ -374,6 +378,7 @@ describe("AssetDetailPage", () => {
           passed: 18,
           failed: 2,
           errored: 0,
+          inconclusive: 0,
           latencyMs: 100,
           tokens: 0,
           cost: 0,
@@ -399,6 +404,47 @@ describe("AssetDetailPage", () => {
       // Wait for the async load to settle (the asset name appears), then assert absence.
       expect(await screen.findByText("Solo Asset")).toBeInTheDocument();
       expect(screen.queryByText("Eval evidence")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("intervention effect (the closed loop, made visible)", () => {
+    const withIntervention = (): VaultDataset => {
+      const dataset = relatedBase([soloAsset]);
+      dataset.interventions = [
+        {
+          id: "iv-solo",
+          tenantId: RELATED_TENANT,
+          assetId: "solo-asset",
+          date: "2026-07-01",
+          action: "retire",
+          outcome: "deferred",
+          actor: "codex",
+          note: "seasonal, keep",
+          effectiveScoreBefore: null,
+          invocationsBefore: 0,
+          dedupeKey: "solo-asset:2026-07-01:retire",
+          recordedAt: "2026-07-01T00:00:00.000Z",
+        },
+      ];
+      return dataset;
+    };
+
+    it("shows the effect panel for an asset that has an intervention", async () => {
+      renderAssetDetail(vi.fn(), withIntervention(), "solo-asset");
+      expect(
+        await screen.findByText("Effect of the last change"),
+      ).toBeInTheDocument();
+      // A deferral reads honestly: nothing to measure, and the note is surfaced.
+      expect(screen.getByText(/nothing to measure/)).toBeInTheDocument();
+      expect(screen.getByText(/seasonal, keep/)).toBeInTheDocument();
+    });
+
+    it("omits the panel for an asset with no interventions", async () => {
+      renderAssetDetail(vi.fn(), datasetWithNoRelated, "solo-asset");
+      expect(await screen.findByText("Solo Asset")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Effect of the last change"),
+      ).not.toBeInTheDocument();
     });
   });
 });

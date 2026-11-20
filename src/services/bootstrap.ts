@@ -1,3 +1,5 @@
+import { resolveRayfinConfig } from "@microsoft/rayfin-client";
+
 import type { IAuthService } from "./IAuthService";
 import { DemoAuthService } from "./DemoAuthService";
 import { MockAuthService } from "./MockAuthService";
@@ -18,7 +20,7 @@ function isLocalBackendUrl(url: string): boolean {
 // later callers (e.g. the RayfinDataSource review guard resolving the current
 // user) reuse the same service instead of re-initializing the client and
 // throwing "Rayfin client is already initialized."
-let cachedAuthService: IAuthService | null = null;
+let cachedAuthService: Promise<IAuthService> | null = null;
 
 /**
  * Read VITE_* env vars, initialize the Rayfin client, and return the right
@@ -29,53 +31,50 @@ let cachedAuthService: IAuthService | null = null;
  * - Localhost API URL -> {@link MockAuthService}
  * - Anything else     -> {@link RayfinAuthService} (requires VITE_FABRIC_* vars)
  */
-export function bootstrapAuth(): IAuthService {
+export function bootstrapAuth(): Promise<IAuthService> {
   if (cachedAuthService) return cachedAuthService;
-  cachedAuthService = createAuthService();
+  cachedAuthService = createAuthService().catch((error: unknown) => {
+    cachedAuthService = null;
+    throw error;
+  });
   return cachedAuthService;
 }
 
-function createAuthService(): IAuthService {
+async function createAuthService(): Promise<IAuthService> {
   const demoMode =
     (import.meta.env.DEV &&
       import.meta.env.VITE_FORCE_FABRIC_AUTH !== "true") ||
     import.meta.env.VITE_DEMO_MODE === "true";
   if (demoMode) return new DemoAuthService();
 
-  const apiUrl = import.meta.env.VITE_RAYFIN_API_URL || "http://localhost:5168";
-  const localDev = isLocalBackendUrl(apiUrl);
-  const publishableKey = import.meta.env.VITE_RAYFIN_PUBLISHABLE_KEY;
-
-  if (!publishableKey && !localDev) {
-    throw new Error(
-      "VITE_RAYFIN_PUBLISHABLE_KEY environment variable is required",
-    );
-  }
-
-  const client = initRayfinClient({
-    baseUrl: apiUrl.endsWith("/") ? apiUrl : `${apiUrl}/`,
-    publishableKey: publishableKey ?? "local-dev-key",
-    localDev,
+  const { baseUrl, publishableKey, runtimeConfig } = await resolveRayfinConfig({
+    apiUrl: import.meta.env.VITE_RAYFIN_API_URL ||
+      (isLocalBackendUrl(window.location.origin) ? "http://localhost:5168" : undefined),
+    publishableKey: import.meta.env.VITE_RAYFIN_PUBLISHABLE_KEY,
+    workspaceId: import.meta.env.VITE_FABRIC_WORKSPACE_ID,
+    itemId: import.meta.env.VITE_FABRIC_ITEM_ID,
+    portalUrl: import.meta.env.VITE_FABRIC_PORTAL_URL,
+    tenantId: import.meta.env.VITE_FABRIC_TENANT_ID,
   });
+  if (!baseUrl) throw new Error("Missing Rayfin API URL in runtime configuration.");
+  const localDev = isLocalBackendUrl(baseUrl);
+  const { workspaceId, itemId: projectId, portalUrl: fabricPortalUrl } = runtimeConfig;
 
   if (localDev) {
+    const client = initRayfinClient({
+      baseUrl, publishableKey: publishableKey ?? "local-dev-key", runtimeConfig,
+    }, true);
     return new MockAuthService(client);
   }
-
-  const workspaceId = import.meta.env.VITE_FABRIC_WORKSPACE_ID;
-  const projectId = import.meta.env.VITE_FABRIC_ITEM_ID;
-  const fabricPortalUrl = import.meta.env.VITE_FABRIC_PORTAL_URL;
-
-  if (!workspaceId || !projectId || !fabricPortalUrl) {
-    throw new Error(
-      "Missing required Fabric config. Set VITE_FABRIC_WORKSPACE_ID, VITE_FABRIC_ITEM_ID, and VITE_FABRIC_PORTAL_URL.",
-    );
+  if (!publishableKey || !workspaceId || !projectId || !fabricPortalUrl) {
+    throw new Error("Missing Fabric publishable key, workspace, item, or portal URL in runtime configuration.");
   }
-
+  const client = initRayfinClient({ baseUrl, publishableKey, runtimeConfig }, false);
   return new RayfinAuthService(client, {
     workspaceId,
     projectId,
     fabricPortalUrl,
+    tenantId: runtimeConfig.tenantId,
     returnOrigin: window.location.origin,
   });
 }

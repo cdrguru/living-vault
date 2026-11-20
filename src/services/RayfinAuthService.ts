@@ -3,9 +3,8 @@ import {
   initEmbeddedAuth as sdkInitEmbeddedAuth,
   type FabricAuthOptions,
 } from '@microsoft/rayfin-auth-provider-fabric';
-import type { RayfinClient } from '@microsoft/rayfin-client';
 
-import type { BlankAppSchema } from '../../rayfin/data/schema';
+import type { AppClient } from './rayfinClient';
 
 import { type AuthUser, type IAuthService, toAuthUser } from './IAuthService';
 
@@ -15,13 +14,13 @@ import { type AuthUser, type IAuthService, toAuthUser } from './IAuthService';
  *
  * Used whenever the API URL is not localhost. Requires Fabric workspace,
  * project, and portal config to be passed at construction time. See
- * `bootstrapAuth()` for how those are read from VITE_FABRIC_* env vars.
+ * `bootstrapAuth()` for deployment-time configuration resolution.
  */
 export class RayfinAuthService implements IAuthService {
   readonly fabricAuthEnabled = true;
 
   constructor(
-    private readonly client: RayfinClient<BlankAppSchema>,
+    private readonly client: AppClient,
     private readonly fabricOptions: FabricAuthOptions
   ) {}
 

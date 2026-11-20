@@ -8,12 +8,12 @@ states exactly what it reads, what it never reads, and where data lives.
 
 Per-harness collectors read each tool's own local session logs:
 
-| Harness | Local source (env override) |
-| --- | --- |
-| Claude Code | `~/.claude/projects/**/*.jsonl` (`LIVING_VAULT_CLAUDE_DIR`) |
-| Codex | `~/.codex/sessions/**/rollout-*.jsonl` (`LIVING_VAULT_CODEX_DIR`) |
-| Grok | `~/.grok/sessions/<cwd>/<id>/` + `~/.grok/logs/unified.jsonl` (`LIVING_VAULT_GROK_DIR`, `LIVING_VAULT_GROK_UNIFIED`) |
-| Copilot | `~/.copilot/session-state/<id>/events.jsonl` (`LIVING_VAULT_COPILOT_DIR`) |
+| Harness     | Local source (env override)                                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | `~/.claude/projects/**/*.jsonl` (`LIVING_VAULT_CLAUDE_DIR`)                                                          |
+| Codex | `~/.codex/sessions/**/rollout-*.jsonl` and compressed `rollout-*.jsonl.zst`, plus `~/.codex/archived_sessions` (`LIVING_VAULT_CODEX_DIR`) |
+| Grok        | `~/.grok/sessions/<cwd>/<id>/` + `~/.grok/logs/unified.jsonl` (`LIVING_VAULT_GROK_DIR`, `LIVING_VAULT_GROK_UNIFIED`) |
+| Copilot     | `~/.copilot/session-state/<id>/events.jsonl` (`LIVING_VAULT_COPILOT_DIR`)                                            |
 
 ## Metadata only, never content
 
@@ -21,9 +21,21 @@ The collectors read **only** structural metadata: event types, tool/skill/model
 names, invocation and error counts, durations, token counts, ids, and timestamps.
 They **never** read prompt text, model responses, reasoning, command text, tool
 arguments, tool results, file contents, file paths, summaries, titles, or auth
-tokens. This is enforced in the parser unit tests, which feed fixtures laced with
-sentinel content and assert it never appears in the output
-(`scripts/telemetry/{codex,grok,copilot}.test.mjs`).
+tokens, with the one Codex exception below. This is enforced in the parser unit
+tests, which feed fixtures laced with sentinel content and assert it never appears
+in the output (`scripts/telemetry/{codex,grok,copilot}.test.mjs`).
+
+**The one exception: Codex skill loads.** Codex records no structured "skill used"
+event; a skill load shows up only as a shell command that reads a `SKILL.md`. So the
+Codex collector reads the command input of its shell tools (`exec` input,
+`exec_command` and `shell_command` arguments) for one purpose only: matching a
+`skills/<name>/SKILL.md` path. From a match it keeps the skill name, and emits only
+that name with a load count and a date. A `SKILL.md` it cannot tie to a name adds one
+to an unnamed per-day count. Nothing else in the input (the rest of the command, other
+paths, arguments) is kept, and nothing else is read: not the call's output, not the
+mirrored `CommandExecution` record, not `apply_patch` or any other tool's input. A
+sentinel test plants secret-looking text and paths beside a `SKILL.md` path and
+asserts only the skill name reaches the output.
 
 The exact content-bearing fields excluded per harness were enumerated by probing
 the real logs; see `docs/research/harness-probe/`. Notable exclusions:
@@ -36,7 +48,8 @@ the real logs; see `docs/research/harness-probe/`. Notable exclusions:
   `session-store.db` text columns (`turns.user_message`, `turns.assistant_response`,
   `sessions.summary`). The collector does not open `session-store.db` at all, and
   never reads `~/.copilot/ide/*.lock`.
-- **Codex:** `function_call_output` / exec output strings and any message payloads.
+- **Codex:** `function_call_output` / exec output strings, any message payloads, and
+  all tool-call input except the `SKILL.md` path match described above.
 
 ## Honesty over completeness
 

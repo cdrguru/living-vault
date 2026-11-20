@@ -642,6 +642,8 @@ export function harnessFile(built: Built): HarnessUsageSnapshot {
         latency: "full",
         tokens: "full",
         cost: "modeled",
+        // codex.mjs: skill loads are inferred from a SKILL.md path in a shell call.
+        skills: "derived",
       },
       note: "Tool calls across sessions, deduped by call id. Successes and errors are partial: ~90% of fires record no structured outcome. Tokens are billable-new (cached input priced at the cache-read rate); cost is modeled at list prices, not billed.",
     },
@@ -691,6 +693,17 @@ export function harnessFile(built: Built): HarnessUsageSnapshot {
     },
   ] as const;
 
+  // Synthetic Codex skill loads: demo skill slugs (so Asset Detail shows a Codex line)
+  // plus one name with no demo asset (so the unresolved row shows). Small, seeded counts.
+  const DEMO_CODEX_SKILLS = ["sample-app-builder", "sample-data-modeler", "deneb-visuals", "skill-creator"];
+  const srand = rng(424242);
+  const codexSkillUses = DATES.flatMap((date) =>
+    DEMO_CODEX_SKILLS.flatMap((skill) => {
+      const loads = Math.floor(srand() * 4);
+      return loads > 0 ? [{ skill, date, loads }] : [];
+    }),
+  );
+
   const orand = rng(909090);
   const otherSources = others.map((o) => {
     const daily = DATES.map((date, i) => {
@@ -706,6 +719,7 @@ export function harnessFile(built: Built): HarnessUsageSnapshot {
         errors,
         latencyMs: 2200,
         tokens,
+        ...(o.source === "codex" ? { unattributedLoads: i % 4 === 0 ? 1 : 0 } : {}),
       };
     });
     const dsum = (key: "invocations" | "successes" | "errors" | "tokens") =>
@@ -739,6 +753,7 @@ export function harnessFile(built: Built): HarnessUsageSnapshot {
       componentsByModel: otherComponents,
       note: o.note,
       daily,
+      ...(o.source === "codex" ? { skillUses: codexSkillUses } : {}),
       tracked: { ...o.tracked },
     };
   });

@@ -27,6 +27,7 @@ const mkAsset = (over: Partial<AssetRow> & Pick<AssetRow, "id">): AssetRow => ({
 });
 
 const dataset: VaultDataset = {
+  routingStats: [],
   assets: [
     mkAsset({ id: "a1" }),
     mkAsset({ id: "a2" }),
@@ -57,7 +58,10 @@ const dataset: VaultDataset = {
     { bundleId: "b1", assetId: "a1" },
     { bundleId: "b1", assetId: "a3" },
   ],
+  assetRevisions: [],
   evalResults: [],
+  baselines: [],
+  interventions: [],
   utilization: [],
 };
 

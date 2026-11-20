@@ -1,9 +1,13 @@
 import type {
+  AssetRevisionRow,
   AssetRow,
+  BaselineRow,
   BundleRow,
   EvalResultRow,
+  InterventionRow,
   OriginRow,
   OwnerRow,
+  RoutingStatRow,
   TagRow,
   TelemetryMeta,
   UtilizationRow,
@@ -12,9 +16,9 @@ import type {
 
 /**
  * The Rayfin entity rows as returned by the Fabric backend. They diverge from the
- * UI row types in three documented, intentional ways: Asset and Utilization carry
- * native Date fields; the three join entities carry a surrogate uuid id that the UI
- * contract shape omits; and every foreign key arrives as its snake_case DB column
+ * UI rows can be built from either JSON date strings or stored Date fixtures.
+ * The three join entities carry a surrogate UUID that the UI contract omits.
+ * Each relationship-backed foreign key arrives under its snake_case DB column
  * (owner_id, origin_id, asset_id, tag_id, dependsOn_id, bundle_id) because each FK
  * backs a Rayfin @one() relationship whose source column DAB names <relationship>_id.
  * entitiesToDataset maps those back to the UI's camelCase fields. The dimension rows
@@ -27,22 +31,54 @@ export interface RayfinAssetEntity extends Omit<
 > {
   owner_id?: string;
   origin_id?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface RayfinUtilizationEntity extends Omit<
   UtilizationRow,
   "date" | "assetId"
 > {
   asset_id: string;
-  date: Date;
+  date: string | Date;
 }
 export interface RayfinEvalResultEntity extends Omit<
   EvalResultRow,
+  "date" | "assetId" | "inconclusive"
+> {
+  asset_id: string;
+  date: string | Date;
+  /** Absent on a live backend whose schema predates the 0007-equivalent apply;
+   *  the mapper defaults it to 0 (no inconclusive trials were recorded). */
+  inconclusive?: number;
+}
+export interface RayfinRoutingStatEntity extends Omit<
+  RoutingStatRow,
   "date" | "assetId"
 > {
   asset_id: string;
-  date: Date;
+  date: string | Date;
+}
+// Baseline references are bare @uuid scalars (no @one), so assetRevisionId stays
+// camelCase. Only createdAt diverges from the row shape.
+export interface RayfinBaselineEntity extends Omit<BaselineRow, "createdAt"> {
+  createdAt: string | Date;
+}
+export interface RayfinAssetRevisionEntity extends Omit<
+  AssetRevisionRow,
+  "createdAt" | "assetId"
+> {
+  asset_id: string;
+  createdAt: string | Date;
+}
+// Intervention references are bare @uuid scalars (no @one), so assetId stays camelCase
+// (no snake_case remap). Only the two date fields diverge from the row shape.
+export interface RayfinInterventionEntity extends Omit<
+  InterventionRow,
+  "date" | "recordedAt" | "effectiveScoreBefore"
+> {
+  date: string | Date;
+  recordedAt: string | Date;
+  effectiveScoreBefore?: number;
 }
 export interface RayfinAssetTagEntity {
   id: string;
@@ -71,10 +107,14 @@ export interface RayfinEntities {
   bundleMemberships: RayfinBundleMembershipEntity[];
   utilization: RayfinUtilizationEntity[];
   evalResults: RayfinEvalResultEntity[];
+  routingStats: RayfinRoutingStatEntity[];
+  baselines: RayfinBaselineEntity[];
+  assetRevisions: RayfinAssetRevisionEntity[];
+  interventions: RayfinInterventionEntity[];
 }
 
-const iso = (value: Date): string => new Date(value).toISOString();
-const isoDate = (value: Date): string =>
+const iso = (value: string | Date): string => new Date(value).toISOString();
+const isoDate = (value: string | Date): string =>
   new Date(value).toISOString().slice(0, 10);
 
 /**
@@ -95,9 +135,39 @@ export function entitiesToDataset(entities: RayfinEntities): VaultDataset {
       ...rest,
       assetId: asset_id,
       date: isoDate(rest.date),
+      // Pre-identity live rows carry no inconclusive column; absent means no
+      // inconclusive trials were recorded, which is exactly 0, not invented data.
+      inconclusive: rest.inconclusive ?? 0,
+    }),
+  );
+  const routingStats = entities.routingStats.map(
+    ({ asset_id, ...rest }): RoutingStatRow => ({
+      ...rest,
+      assetId: asset_id,
+      date: isoDate(rest.date),
+    }),
+  );
+  const baselines = entities.baselines.map(
+    (row): BaselineRow => ({ ...row, createdAt: iso(row.createdAt) }),
+  );
+  const assetRevisions = entities.assetRevisions.map(
+    ({ asset_id, ...rest }): AssetRevisionRow => ({
+      ...rest,
+      assetId: asset_id,
+      createdAt: iso(rest.createdAt),
+    }),
+  );
+  const interventions = entities.interventions.map(
+    (row): InterventionRow => ({
+      ...row,
+      date: isoDate(row.date),
+      recordedAt: iso(row.recordedAt),
+      effectiveScoreBefore: row.effectiveScoreBefore ?? null,
     }),
   );
   return {
+    assetRevisions,
+    interventions,
     assets: entities.assets.map(
       ({ owner_id, origin_id, ...rest }): AssetRow => ({
         ...rest,
@@ -127,6 +197,8 @@ export function entitiesToDataset(entities: RayfinEntities): VaultDataset {
     ),
     utilization,
     evalResults,
+    routingStats,
+    baselines,
     telemetryMeta: deriveLiveTelemetryMeta(utilization),
   };
 }
